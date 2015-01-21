@@ -11,6 +11,6 @@ Use Xcode.
 
 Currently only the touch screen can be used to control the emulator.
 
-####Background
+####Background:
 
-I am fascinated by emulation and low-level programming, so I wanted to create a more interesting emulator than a CHIP-8 one (which is one of my other repos).
+I am fascinated by emulation and low-level programming, and I wanted to create a more interesting emulator than a CHIP-8 one (which is one of my other repos). Also, the controls for a Gameboy aren't too terribly awkward using the touch screen, unlike a controller with shoulder/trigger buttons.
