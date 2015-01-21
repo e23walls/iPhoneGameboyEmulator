@@ -48,8 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9C79FC0C1A6D878700C76513 /* romDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = romDataController.h; path = ../romDataController.h; sourceTree = "<group>"; };
-		9C79FC0D1A6D878700C76513 /* romDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = romDataController.m; path = ../romDataController.m; sourceTree = "<group>"; };
+		9C79FC0C1A6D878700C76513 /* romDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = romDataController.h; sourceTree = "<group>"; };
+		9C79FC0D1A6D878700C76513 /* romDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = romDataController.m; sourceTree = "<group>"; };
 		9C79FC0F1A6D89F200C76513 /* rom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rom.h; sourceTree = "<group>"; };
 		9C79FC101A6D89F200C76513 /* rom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = rom.m; sourceTree = "<group>"; };
 		9C79FC251A6DAFC400C76513 /* START.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = START.png; sourceTree = "<group>"; };
