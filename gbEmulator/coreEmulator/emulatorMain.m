@@ -799,6 +799,7 @@
             
             break;
         case 0xB:
+            // Instruction with 0xCB prefix
             
             break;
         case 0xC:
@@ -922,6 +923,913 @@
     }
 }
 - (void) execute0xFInstruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+
+
+- (void) executeCBInstruction
+{
+    [self.currentState incrementPC];
+    unsigned char CBInstruction = self.ram[[self.currentState getPC]];
+    switch (CBInstruction & 0xF0) {
+        case 0:
+            [self CBexecute0x0Instruction:CBInstruction];
+            break;
+        case 1:
+            [self CBexecute0x1Instruction:CBInstruction];
+            break;
+        case 2:
+            [self CBexecute0x2Instruction:CBInstruction];
+            break;
+        case 3:
+            [self CBexecute0x3Instruction:CBInstruction];
+            break;
+        case 4:
+            [self CBexecute0x4Instruction:CBInstruction];
+            break;
+        case 5:
+            [self CBexecute0x5Instruction:CBInstruction];
+            break;
+        case 6:
+            [self CBexecute0x6Instruction:CBInstruction];
+            break;
+        case 7:
+            [self CBexecute0x7Instruction:CBInstruction];
+            break;
+        case 8:
+            [self CBexecute0x8Instruction:CBInstruction];
+            break;
+        case 9:
+            [self CBexecute0x9Instruction:CBInstruction];
+            break;
+        case 0xA:
+            [self CBexecute0xAInstruction:CBInstruction];
+            break;
+        case 0xB:
+            [self CBexecute0xBInstruction:CBInstruction];
+            break;
+        case 0xC:
+            [self CBexecute0xCInstruction:CBInstruction];
+            break;
+        case 0xD:
+            [self CBexecute0xDInstruction:CBInstruction];
+            break;
+        case 0xE:
+            [self CBexecute0xEInstruction:CBInstruction];
+            break;
+        case 0xF:
+            [self CBexecute0xFInstruction:CBInstruction];
+            break;
+    }
+}
+
+- (void) CBexecute0x0Instruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0x1Instruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0x2Instruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0x3Instruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0x4Instruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0x5Instruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0x6Instruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0x7Instruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0x8Instruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0x9Instruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0xAInstruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0xBInstruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0xCInstruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            // Instruction with 0xCB prefix
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0xDInstruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0xEInstruction:(unsigned char)currentInstruction
+{
+    switch (currentInstruction & 0x0F) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        case 5:
+            
+            break;
+        case 6:
+            
+            break;
+        case 7:
+            
+            break;
+        case 8:
+            
+            break;
+        case 9:
+            
+            break;
+        case 0xA:
+            
+            break;
+        case 0xB:
+            
+            break;
+        case 0xC:
+            
+            break;
+        case 0xD:
+            
+            break;
+        case 0xE:
+            
+            break;
+        case 0xF:
+            
+            break;
+    }
+}
+- (void) CBexecute0xFInstruction:(unsigned char)currentInstruction
 {
     switch (currentInstruction & 0x0F) {
         case 0:
