@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "rom.h"
+#import "emulatorMain.h"
 
 @interface ViewController : UIViewController <UIGestureRecognizerDelegate>
 {
     IBOutlet UIImageView * imageView;
     IBOutlet UILabel * romTitleLabel;
+    emulatorMain * emulator;
 }
 
 - (ViewController *) init;

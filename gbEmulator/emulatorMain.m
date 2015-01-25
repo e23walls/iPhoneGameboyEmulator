@@ -23,6 +23,7 @@
 - (emulatorMain *) initWithRom:(rom *) theRom
 {
     self = [super init];
+    self.keys = calloc(8, sizeof(int));
     self.currentRom = theRom;
     self.ram = (char *)malloc(RAMSIZE * sizeof(unsigned char));
     
@@ -61,6 +62,11 @@
     fclose(romFileHandler);
     
     return self;
+}
+
+- (void) runRom
+{
+    
 }
 
 @end

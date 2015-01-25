@@ -12,6 +12,13 @@
 
 @interface emulatorMain : NSObject
 
+/*
+ Keys:
+ [Start][Select][B][A][Down][Up][Left][Right]
+ */
+@property int * keys;
 - (emulatorMain *) initWithRom: (rom *) theRom;
+- (void) runRom;
+- (void) executeInstruction:(romState *) state;
 
 @end
