@@ -71,6 +71,9 @@
         [self executeInstruction];
     }
 }
+
+#pragma mark - Regular instruction processing
+
 - (void) executeInstruction
 {
     unsigned char currentInstruction = self.ram[self.currentState.getPC];
@@ -976,6 +979,7 @@
     }
 }
 
+#pragma mark - CB instruction methods
 
 - (void) executeCBInstruction
 {

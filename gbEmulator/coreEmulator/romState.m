@@ -28,6 +28,9 @@
 {
     F = (Z << 7) | (N << 6) | (H << 5) | (C << 4);
 }
+
+#pragma mark - PC methods
+
 - (void) setPC:(int)newPC
 {
     PC = newPC;
@@ -40,6 +43,9 @@
 {
     PC++;
 }
+
+#pragma mark - Regular register methods
+
 - (void) setA:(unsigned char) newA
 {
     A = newA;
