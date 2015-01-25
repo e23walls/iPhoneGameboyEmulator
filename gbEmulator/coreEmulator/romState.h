@@ -21,6 +21,7 @@
 - (romState *) init;
 - (void) setPC:(int)newPC;
 - (int) getPC;
+- (void) incrementPC;
 - (void) setA:(unsigned char) newA;
 - (unsigned char) getA;
 - (void) setF:(unsigned char) newF;

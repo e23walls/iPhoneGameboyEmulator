@@ -63,8 +63,8 @@
 		9C79FC2D1A6DAFC400C76513 /* up-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "up-arrow.png"; sourceTree = "<group>"; };
 		9C79FC381A6DC66B00C76513 /* romState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = romState.h; path = coreEmulator/romState.h; sourceTree = "<group>"; };
 		9C79FC391A6DC66B00C76513 /* romState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = romState.m; path = coreEmulator/romState.m; sourceTree = "<group>"; };
-		9C79FC3B1A6DF40400C76513 /* emulatorMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emulatorMain.h; sourceTree = "<group>"; };
-		9C79FC3C1A6DF40400C76513 /* emulatorMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = emulatorMain.m; sourceTree = "<group>"; };
+		9C79FC3B1A6DF40400C76513 /* emulatorMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = emulatorMain.h; path = coreEmulator/emulatorMain.h; sourceTree = "<group>"; };
+		9C79FC3C1A6DF40400C76513 /* emulatorMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = emulatorMain.m; path = coreEmulator/emulatorMain.m; sourceTree = "<group>"; };
 		9CB9CC081A6C9CC300DA02DD /* gbEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gbEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CB9CC0B1A6C9CC300DA02DD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9CB9CC0D1A6C9CC300DA02DD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };

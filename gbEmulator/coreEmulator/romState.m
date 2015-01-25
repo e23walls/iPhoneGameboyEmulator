@@ -36,6 +36,10 @@
 {
     return PC;
 }
+- (void) incrementPC
+{
+    PC++;
+}
 - (void) setA:(unsigned char) newA
 {
     A = newA;
