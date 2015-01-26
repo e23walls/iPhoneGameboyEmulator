@@ -8,6 +8,8 @@
 
 #import "romDataController.h"
 
+#define SIMULATOR
+
 @interface romDataController ()
 
 - (void) getListOfRomsFromFileSystem;
@@ -40,6 +42,9 @@ void (^displayAlert) (NSString *) = ^(NSString * romDirectory)
 //    NSString * romDir = @"/User/Media/ROMs/";
 //    NSString * romDirFull = @"/User/Media/ROMs/GAMEBOY/";
     NSString * romDirFull = [[@"~/Documents/ROMs" stringByExpandingTildeInPath] stringByAppendingString:@"/"];
+#ifdef SIMULATOR
+    romDirFull = [[@"/Users/emilywalls/Desktop/Waste of Time/Games/Emulators/GBC Roms" stringByExpandingTildeInPath] stringByAppendingString:@"/"];
+#endif
     NSLog(@"ROM directory: %@", romDirFull);
     
     // Get list of files at '/var/mobile/Media/ROMs/GAMEBOY/' and for each one with extension '.gb',

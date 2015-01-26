@@ -122,5 +122,9 @@ static rom * currentRom;
     [self.navigationController popToRootViewControllerAnimated:YES];
     [self.navigationController setNavigationBarHidden:NO];
 }
+- (IBAction)run:(id)sender
+{
+    [emulator runRom];
+}
 
 @end

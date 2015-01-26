@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "gbEmulator/romDataController.m"
-            timestampString = "443411525.084242"
+            timestampString = "443940258.85013"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "36"
-            endingLineNumber = "36"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
             landmarkName = "-getListOfRomsFromFileSystem"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "gbEmulator/romDataController.m"
-            timestampString = "443417133.181536"
+            timestampString = "443940258.85013"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
             landmarkName = "-addRomsObject:"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "gbEmulator/romDataController.m"
-            timestampString = "443417133.181536"
+            timestampString = "443940258.85013"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
             landmarkName = "-numberOfRoms"
             landmarkType = "5">
          </BreakpointContent>
@@ -58,12 +58,60 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "gbEmulator/romDataController.m"
-            timestampString = "443417133.181536"
+            timestampString = "443940258.85013"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "109"
-            endingLineNumber = "109"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
             landmarkName = "-objectInRomsAtIndex:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "gbEmulator/coreEmulator/emulatorMain.m"
+            timestampString = "443941718.575622"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "-runRom"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "gbEmulator/coreEmulator/emulatorMain.m"
+            timestampString = "443942204.39924"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "84"
+            endingLineNumber = "84"
+            landmarkName = "-executeInstruction"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "gbEmulator/coreEmulator/emulatorMain.m"
+            timestampString = "443942204.39924"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
+            landmarkName = "-execute0x0Instruction:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

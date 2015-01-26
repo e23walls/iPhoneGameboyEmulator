@@ -29,5 +29,6 @@
 - (IBAction)selectButton:(id)sender;
 - (IBAction)startButton:(id)sender;
 - (IBAction)stopButton:(id)sender;
+- (IBAction)run:(id)sender;
 
 @end

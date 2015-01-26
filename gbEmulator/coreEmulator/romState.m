@@ -24,7 +24,28 @@
     }
     return self;
 }
-- (void) setFlags:(bool)Z and:(bool)N and:(bool)H and:(bool)C
+
+#pragma mark - Flag methods
+// [Z][N][H][C][0][0][0][0]
+
+- (bool) getZFlag
+{
+    return (bool)(F & 0b10000000);
+}
+- (bool) getNFlag
+{
+    return (bool)(F & 0b01000000);
+}
+- (bool) getHFlag
+{
+    return (bool)(F & 0b00100000);
+}
+- (bool) getCFlag
+{
+    return (bool)(F & 0b00010000);
+}
+
+- (void) setFlags:(bool)Z N:(bool)N H:(bool)H C:(bool)C
 {
     F = (Z << 7) | (N << 6) | (H << 5) | (C << 4);
 }
@@ -109,6 +130,60 @@
 - (unsigned char) getL
 {
     return (unsigned char) (HL & 0x0F);
+}
+
+#pragma mark - Double register methods (big-endian)
+
+- (int16_t) getBC_big
+{
+    return BC;
+}
+- (void) setBC_big:(int16_t) newBC
+{
+    BC = newBC;
+}
+- (int16_t) getDE_big
+{
+    return DE;
+}
+- (void) setDE_big:(int16_t) newDE
+{
+    DE = newDE;
+}
+- (int16_t) getHL_big
+{
+    return HL;
+}
+- (void) setHL_big:(int16_t) newHL
+{
+    HL = newHL;
+}
+
+#pragma mark - Double register methods (little-endian)
+
+- (int16_t) getBC_little
+{
+    return ((BC & 0x0F) << 4) | ((BC & 0xF0) >> 4);
+}
+- (void) setBC_little:(int16_t) newBC
+{
+    BC = ((newBC & 0x0F) << 4) | ((newBC & 0xF0) >> 4);
+}
+- (int16_t) getDE_little
+{
+    return ((DE & 0x0F) << 4) | ((DE & 0xF0) >> 4);
+}
+- (void) setDE_little:(int16_t) newDE
+{
+    DE = ((newDE & 0x0F) << 4) | ((newDE & 0xF0) >> 4);
+}
+- (int16_t) getHL_little
+{
+    return ((HL & 0x0F) << 4) | ((HL & 0xF0) >> 4);
+}
+- (void) setHL_little:(int16_t) newHL
+{
+    HL = ((newHL & 0x0F) << 4) | ((newHL & 0xF0) >> 4);
 }
 
 @end
