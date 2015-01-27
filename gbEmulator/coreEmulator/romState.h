@@ -11,6 +11,7 @@
 @interface romState : NSObject
 {
     int PC;
+    int SP;
     unsigned char A;
     unsigned char F; // [Z][N][H][C][0][0][0][0]
     int16_t BC;
@@ -22,6 +23,8 @@
 - (void) setPC:(int)newPC;
 - (int) getPC;
 - (void) incrementPC;
+- (void) setSP:(int)newSP;
+- (int) getSP;
 - (void) setA:(unsigned char) newA;
 - (unsigned char) getA;
 - (void) setF:(unsigned char) newF;

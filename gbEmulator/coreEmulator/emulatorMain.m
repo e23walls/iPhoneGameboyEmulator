@@ -10,7 +10,7 @@
 #define K 1024
 #define RAMSIZE (2 * 8 * 8 * K) // 8K each, one for main RAM, one for VRAM
 
-#define DEBUG
+#define MYDEBUG
 
 @interface emulatorMain ()
 
@@ -72,7 +72,7 @@
 {
     for (; [self.currentState getPC] >= 0 && [self.currentState getPC] <= RAMSIZE; [self.currentState incrementPC])
     {
-#ifdef DEBUG
+#ifdef MYDEBUG
         printf("PC = %2x\n", [self.currentState getPC]);
 #endif
         [self executeInstruction];
@@ -139,34 +139,42 @@
 - (void) execute0x0Instruction:(unsigned char)currentInstruction
 {
     unsigned char prev = 0;
+    int prev_int = 0;
     unsigned char A = 0;
+    int16_t d16 = 0;
+    unsigned char d8 = 0;
+    bool Z = true;
+    bool N = true;
+    bool H = true;
+    bool C = true;
     switch (currentInstruction & 0x0F) {
         case 0:
             // No-op
-#ifdef DEBUG
+#ifdef MYDEBUG
             printf("0x%02x -- no-op\n", currentInstruction);
 #endif
             break;
         case 1:
             // LD BC, d16 -- Load 16-bit data into registers BC
             [self.currentState incrementPC];
-            int16_t d16 = (self.ram[[self.currentState getPC]] << 4) | self.ram[[self.currentState getPC] + 1];
+            d16 = (self.ram[[self.currentState getPC]] << 4) | self.ram[[self.currentState getPC] + 1];
+            [self.currentState incrementPC];
             [self.currentState setBC_big:d16];
-#ifdef DEBUG
+#ifdef MYDEBUG
             printf("0x%02x -- LD BC, d16 -- d16 = %i\n", currentInstruction, d16);
 #endif
             break;
         case 2:
-            // LD BC, A -- Load A into BC
-            [self.currentState setBC_little:[self.currentState getA]];
-#ifdef DEBUG
-            printf("0x%02x -- LD BC, A\n", currentInstruction);
+            // LD BC, A -- Load A into (BC)
+            self.ram[[self.currentState getBC_big]] = [self.currentState getA];
+#ifdef MYDEBUG
+            printf("0x%02x -- LD (BC), A\n", currentInstruction);
 #endif
             break;
         case 3:
             // INC BC -- increment BC
             [self.currentState setBC_big:([self.currentState getBC_big] + 1)];
-#ifdef DEBUG
+#ifdef MYDEBUG
             printf("0x%02x -- INC BC\n", currentInstruction);
 #endif
             break;
@@ -178,7 +186,7 @@
                                     N:false
                                     H:(prev > [self.currentState getB])
                                     C:([self.currentState getCFlag])];
-#ifdef DEBUG
+#ifdef MYDEBUG
             printf("0x%02x -- INC B\n", currentInstruction);
 #endif
             break;
@@ -190,53 +198,118 @@
                                       N:true
                                       H:(prev < [self.currentState getB])
                                       C:([self.currentState getCFlag])];
-#ifdef DEBUG
+#ifdef MYDEBUG
             printf("0x%02x -- DEC B\n", currentInstruction);
 #endif
             break;
         case 6:
             // LD B, d8 -- load following 8-bit data into B
             [self.currentState incrementPC];
-            unsigned char d8 = self.ram[[self.currentState getPC]];
+            d8 = self.ram[[self.currentState getPC]];
             [self.currentState setB:d8];
-#ifdef DEBUG
+#ifdef MYDEBUG
             printf("0x%02x -- LD B, d8 -- d8 = %i\n", currentInstruction, (int)d8);
 #endif
             break;
         case 7:
             // RLCA -- Rotate A left; C = bit 7
             A = [self.currentState getA];
-            bool C = (bool)([self.currentState getA] & 0b10000000);
+            C = (bool)([self.currentState getA] & 0b10000000);
             [self.currentState setA:([self.currentState getA] << 1)];
-            bool Z = [self.currentState getA] == 0;
+            Z = [self.currentState getA] == 0;
             [self.currentState setFlags:Z N:false H:false C:C];
-#ifdef DEBUG
+#ifdef MYDEBUG
             printf("0x%02x -- RLCA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
 #endif
             break;
         case 8:
-            // LD (a16), SP --
+            // LD (a16), SP -- put SP at address a16
+            [self.currentState incrementPC];
+            d16 = (self.ram[[self.currentState getPC]] << 4) | self.ram[[self.currentState getPC] + 1];
+            [self.currentState incrementPC];
+            self.ram[d16] = [self.currentState getSP];
+#ifdef MYDEBUG
+            printf("0x%02x -- LD (a16), SP -- put SP at %02x -- SP is %02x\n", currentInstruction, \
+                                d16, [self.currentState getSP]);
+#endif
             break;
         case 9:
-            
+            // ADD HL,BC -- add BC to HL
+            // H == carry from bit 11
+            // C == carry from bit 15
+            prev_int = [self.currentState getHL_big];
+            [self.currentState setHL_big:([self.currentState getBC_big]+[self.currentState getHL_big])];
+            Z = [self.currentState getZFlag];
+            C = ([self.currentState getBC_big] >= 0 && prev_int > [self.currentState getHL_big]) || \
+                    ([self.currentState getBC_big] < 0 && prev_int < [self.currentState getHL_big]);
+#warning H must be set to be the boolean valuation of the statement, "There is carry from bit 11"
+            H = 0;
+            [self.currentState setFlags:Z N:false H:H C:C];
+#ifdef MYDEBUG
+            printf("0x%02x -- ADD HL,BC -- add BC (%i) and HL (%i) = %i\n", currentInstruction, \
+                   [self.currentState getBC_big], prev, [self.currentState getHL_big]);
+#endif
             break;
         case 0xA:
-            
+            // LD A,(BC) -- load (BC) into A
+            [self.currentState setA:self.ram[[self.currentState getBC_big]]];
+#ifdef MYDEBUG
+            printf("0x%02x -- LD A,(BC) -- load (BC == %i -> %i) into A\n", currentInstruction, \
+                   [self.currentState getBC_big], (int)self.ram[[self.currentState getBC_big]]);
+#endif
             break;
         case 0xB:
-            
+            // DEC BC -- decrement BC
+            prev_int = [self.currentState getBC_big];
+            [self.currentState setBC_big:([self.currentState getBC_big] - 1)];
+#ifdef MYDEBUG
+            printf("0x%02x -- DEC BC -- BC was %i; BC is now %i\n", currentInstruction, \
+                   prev_int, [self.currentState getBC_big]);
+#endif
             break;
         case 0xC:
-            
+            // INC C -- increment C
+            prev = [self.currentState getC];
+            [self.currentState setC:([self.currentState getC] + 1)];
+            Z = [self.currentState getC] == 0;
+            H = [self.currentState getC] < prev;
+            [self.currentState setFlags:Z N:false H:H C:[self.currentState getCFlag]];
+#ifdef MYDEBUG
+            printf("0x%02x -- INC C -- C was %i; C is now %i\n", currentInstruction, \
+                   prev, (int)[self.currentState getC]);
+#endif
             break;
         case 0xD:
-            
+            // DEC C -- decrement C
+            prev = [self.currentState getC];
+            [self.currentState setC:([self.currentState getC] - 1)];
+            Z = [self.currentState getC] == 0;
+            H = [self.currentState getC] > prev;
+            [self.currentState setFlags:Z N:true H:H C:[self.currentState getCFlag]];
+#ifdef MYDEBUG
+            printf("0x%02x -- DEC C -- C was %i; C is now %i\n", currentInstruction, \
+                   prev, (int)[self.currentState getC]);
+#endif
             break;
         case 0xE:
-            
+            // LD C, d8 -- load immediate 8-bit data into C
+            [self.currentState incrementPC];
+            d8 = self.ram[[self.currentState getPC]];
+            [self.currentState setC:d8];
+#ifdef MYDEBUG
+            printf("0x%02x -- LD C, d8 -- d8 = %i\n", currentInstruction, (int)d8);
+#endif
             break;
         case 0xF:
-            
+            // RRCA -- rotate A right
+            A = [self.currentState getA];
+            C = (bool)([self.currentState getA] & 0b00000001);
+            [self.currentState setA:([self.currentState getA] >> 1)];
+            Z = [self.currentState getA] == 0;
+            [self.currentState setFlags:Z N:false H:false C:C];
+#ifdef MYDEBUG
+            printf("0x%02x -- RRCA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
+#endif
             break;
     }
 }

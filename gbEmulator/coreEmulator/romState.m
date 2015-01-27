@@ -65,6 +65,18 @@
     PC++;
 }
 
+#pragma mark - SP methods
+
+- (void) setSP:(int)newSP
+{
+    SP = newSP;
+}
+
+- (int) getSP
+{
+    return SP;
+}
+
 #pragma mark - Regular register methods
 
 - (void) setA:(unsigned char) newA
