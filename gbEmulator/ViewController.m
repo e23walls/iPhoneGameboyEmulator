@@ -68,58 +68,105 @@ static rom * currentRom;
  
  */
 
-- (IBAction)upButton:(id)sender
+- (IBAction)upButtonDown:(id)sender
 {
-    NSLog(@"User clicked up arrow!\n");
+    NSLog(@"User pressed up arrow!\n");
     // or (0000 0100)2 with [0xff00]
     emulator.keys[2] = 1;
 }
-- (IBAction)downButton:(id)sender
+- (IBAction)downButtonDown:(id)sender
 {
-    NSLog(@"User clicked down arrow!\n");
+    NSLog(@"User pressed down arrow!\n");
     // or (0000 1000)2 with [0xff00]
     emulator.keys[3] = 1;
 }
-- (IBAction)leftButton:(id)sender
+- (IBAction)leftButtonDown:(id)sender
 {
-    NSLog(@"User clicked left arrow!\n");
+    NSLog(@"User pressed left arrow!\n");
     // or (0000 0010)2 with [0xff00]
     emulator.keys[1] = 1;
 }
-- (IBAction)rightButton:(id)sender
+- (IBAction)rightButtonDown:(id)sender
 {
-    NSLog(@"User clicked right arrow!\n");
+    NSLog(@"User pressed right arrow!\n");
     // or (0000 0001)2 with [0xff00]
     emulator.keys[0] = 1;
 }
-- (IBAction)AButton:(id)sender
+- (IBAction)AButtonDown:(id)sender
 {
-    NSLog(@"User clicked 'A' button!\n");
+    NSLog(@"User pressed 'A' button!\n");
     // or (0000 0001)2 with [0xff00]
     emulator.keys[4] = 1;
 }
-- (IBAction)BButton:(id)sender
+- (IBAction)BButtonDown:(id)sender
 {
-    NSLog(@"User clicked 'B' button!\n");
+    NSLog(@"User pressed 'B' button!\n");
     // or (0000 0010)2 with [0xff00]
     emulator.keys[5] = 1;
 }
-- (IBAction)startButton:(id)sender
+- (IBAction)startButtonDown:(id)sender
 {
-    NSLog(@"User clicked 'Start' button!\n");
+    NSLog(@"User pressed 'Start' button!\n");
     // or (0000 1000)2 with [0xff00]
     emulator.keys[7] = 1;
 }
-- (IBAction)selectButton:(id)sender
+- (IBAction)selectButtonDown:(id)sender
 {
-    NSLog(@"User clicked 'Select' button!\n");
+    NSLog(@"User pressed 'Select' button!\n");
     // or (0000 0100)2 with [0xff00]
     emulator.keys[6] = 1;
+}
+- (IBAction)upButtonUp:(id)sender
+{
+    NSLog(@"User released 'Up' button!\n");
+    // or (0000 0100)2 with [0xff00]
+    emulator.keys[2] = 0;
+}
+- (IBAction)downButtonUp:(id)sender
+{
+    NSLog(@"User released down arrow!\n");
+    // or (0000 1000)2 with [0xff00]
+    emulator.keys[3] = 0;
+}
+- (IBAction)leftButtonUp:(id)sender
+{
+    NSLog(@"User released left arrow!\n");
+    // or (0000 0010)2 with [0xff00]
+    emulator.keys[1] = 0;
+}
+- (IBAction)rightButtonUp:(id)sender
+{
+    NSLog(@"User released right arrow!\n");
+    // or (0000 0001)2 with [0xff00]
+    emulator.keys[0] = 0;
+}
+- (IBAction)AButtonUp:(id)sender
+{
+    NSLog(@"User released 'A' button!\n");
+    // or (0000 0001)2 with [0xff00]
+    emulator.keys[4] = 0;
+}
+- (IBAction)BButtonUp:(id)sender
+{
+    NSLog(@"User released 'B' button!\n");
+    // or (0000 0010)2 with [0xff00]
+    emulator.keys[5] = 0;
+}
+- (IBAction)startButtonUp:(id)sender
+{
+    NSLog(@"User released 'Start' button!\n");
+    // or (0000 1000)2 with [0xff00]
+    emulator.keys[7] = 0;
+}
+- (IBAction)selectButtonUp:(id)sender
+{
+    NSLog(@"User released 'Select' button!\n");
+    // or (0000 0100)2 with [0xff00]
+    emulator.keys[6] = 0;
 }
 - (IBAction)stopButton:(id)sender
 {
     // Save state, then return
-#warning The app crashes when clicking this button
     [self.navigationController popToRootViewControllerAnimated:YES];
     [self.navigationController setNavigationBarHidden:NO];
 }

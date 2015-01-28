@@ -20,14 +20,22 @@
 - (ViewController *) init;
 - (ViewController *) initWithCurrentRom:(rom *) theRom;
 
-- (IBAction)upButton:(id)sender;
-- (IBAction)downButton:(id)sender;
-- (IBAction)leftButton:(id)sender;
-- (IBAction)rightButton:(id)sender;
-- (IBAction)AButton:(id)sender;
-- (IBAction)BButton:(id)sender;
-- (IBAction)selectButton:(id)sender;
-- (IBAction)startButton:(id)sender;
+- (IBAction)upButtonDown:(id)sender;
+- (IBAction)downButtonDown:(id)sender;
+- (IBAction)leftButtonDown:(id)sender;
+- (IBAction)rightButtonDown:(id)sender;
+- (IBAction)AButtonDown:(id)sender;
+- (IBAction)BButtonDown:(id)sender;
+- (IBAction)selectButtonDown:(id)sender;
+- (IBAction)startButtonDown:(id)sender;
+- (IBAction)upButtonUp:(id)sender;
+- (IBAction)downButtonUp:(id)sender;
+- (IBAction)leftButtonUp:(id)sender;
+- (IBAction)rightButtonUp:(id)sender;
+- (IBAction)AButtonUp:(id)sender;
+- (IBAction)BButtonUp:(id)sender;
+- (IBAction)selectButtonUp:(id)sender;
+- (IBAction)startButtonUp:(id)sender;
 - (IBAction)stopButton:(id)sender;
 - (IBAction)run:(id)sender;
 
