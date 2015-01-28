@@ -8,8 +8,6 @@
 
 #import "romDataController.h"
 
-#define SIMULATOR
-
 @interface romDataController ()
 
 - (void) getListOfRomsFromFileSystem;
@@ -42,7 +40,7 @@ void (^displayAlert) (NSString *) = ^(NSString * romDirectory)
 //    NSString * romDir = @"/User/Media/ROMs/";
 //    NSString * romDirFull = @"/User/Media/ROMs/GAMEBOY/";
     NSString * romDirFull = [[@"~/Documents/ROMs" stringByExpandingTildeInPath] stringByAppendingString:@"/"];
-#ifdef SIMULATOR
+#if TARGET_IPHONE_SIMULATOR
     romDirFull = [[@"/Users/emilywalls/Desktop/Waste of Time/Games/Emulators/GBC Roms" stringByExpandingTildeInPath] stringByAppendingString:@"/"];
 #endif
     NSLog(@"ROM directory: %@", romDirFull);

@@ -7,8 +7,10 @@
 //
 
 #import "emulatorMain.h"
+#include <sys/stat.h>
+
 #define K 1024
-#define RAMSIZE (2 * 8 * 8 * K) // 8K each, one for main RAM, one for VRAM
+#define RAMSIZE (64 * K)
 
 #define MYDEBUG
 
@@ -53,13 +55,20 @@
         }
         self.ram[counter] = (unsigned char)ch;
         counter++;
-        printf("%i: Read: %x\n", counter, (unsigned char)ch);
         if (hitEOF == NO)
         {
-            ch = fgetc(romFileHandler); // Only write the ROM data if it exists, else, write a series of 0s
+            ch = fgetc(romFileHandler);
         }
     }
     NSLog(@"Byte counter reached value: %i\n", counter);
+    if (hitEOF == YES)
+    {
+        NSLog(@"Warning: EOF was reached before RAM was filled.");
+    }
+    else
+    {
+        NSLog(@"As expected, EOF was not reached before end of RAM.");
+    }
     
     fclose(romFileHandler);
     NSLog(@"Setting up the ROM initial state...");
@@ -70,13 +79,17 @@
 
 - (void) runRom
 {
-    for (; [self.currentState getPC] >= 0 && [self.currentState getPC] <= RAMSIZE; [self.currentState incrementPC])
+    while ([self.currentState getPC] < RAMSIZE)
     {
 #ifdef MYDEBUG
         printf("PC = %2x\n", [self.currentState getPC]);
 #endif
         [self executeInstruction];
+        [self.currentState incrementPC];
     }
+#warning This might be causing a crash, for some reason, or Xcode is being dumb.
+    free(self.ram);
+    self.ram = nil;
 }
 
 #pragma mark - Regular instruction processing
@@ -141,7 +154,7 @@
     unsigned char prev = 0;
     int prev_int = 0;
     unsigned char A = 0;
-    int16_t d16 = 0;
+    unsigned short d16 = 0;
     unsigned char d8 = 0;
     bool Z = true;
     bool N = true;
@@ -157,7 +170,7 @@
         case 1:
             // LD BC, d16 -- Load 16-bit data into registers BC
             [self.currentState incrementPC];
-            d16 = (self.ram[[self.currentState getPC]] << 4) | self.ram[[self.currentState getPC] + 1];
+            d16 = (self.ram[[self.currentState getPC]] << 8) | self.ram[[self.currentState getPC] + 1];
             [self.currentState incrementPC];
             [self.currentState setBC_big:d16];
 #ifdef MYDEBUG
@@ -225,11 +238,11 @@
         case 8:
             // LD (a16), SP -- put SP at address a16
             [self.currentState incrementPC];
-            d16 = (self.ram[[self.currentState getPC]] << 4) | self.ram[[self.currentState getPC] + 1];
+            d16 = (self.ram[[self.currentState getPC]] << 8) | self.ram[[self.currentState getPC] + 1];
             [self.currentState incrementPC];
             self.ram[d16] = [self.currentState getSP];
 #ifdef MYDEBUG
-            printf("0x%02x -- LD (a16), SP -- put SP at %02x -- SP is %02x\n", currentInstruction, \
+            printf("0x%02x -- LD (a16), SP -- put SP at 0x%02x -- SP is %02x\n", currentInstruction, \
                                 d16, [self.currentState getSP]);
 #endif
             break;
@@ -297,7 +310,7 @@
             d8 = self.ram[[self.currentState getPC]];
             [self.currentState setC:d8];
 #ifdef MYDEBUG
-            printf("0x%02x -- LD C, d8 -- d8 = %i\n", currentInstruction, (int)d8);
+            printf("0x%02x -- LD C, d8 -- d8 = %i\n", currentInstruction, (short)d8);
 #endif
             break;
         case 0xF:

@@ -119,6 +119,7 @@ static rom * currentRom;
 - (IBAction)stopButton:(id)sender
 {
     // Save state, then return
+#warning The app crashes when clicking this button
     [self.navigationController popToRootViewControllerAnimated:YES];
     [self.navigationController setNavigationBarHidden:NO];
 }

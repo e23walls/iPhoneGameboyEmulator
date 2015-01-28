@@ -56,7 +56,7 @@
 {
     PC = newPC;
 }
-- (int) getPC
+- (unsigned int) getPC
 {
     return PC;
 }
@@ -72,7 +72,7 @@
     SP = newSP;
 }
 
-- (int) getSP
+- (unsigned int) getSP
 {
     return SP;
 }
