@@ -79,6 +79,7 @@
 
 - (void) runRom
 {
+#warning Something here is causing a crash
     while ([self.currentState getPC] < RAMSIZE)
     {
 #ifdef MYDEBUG
@@ -87,9 +88,7 @@
         [self executeInstruction];
         [self.currentState incrementPC];
     }
-#warning This might be causing a crash, for some reason, or Xcode is being dumb.
-    free(self.ram);
-    self.ram = nil;
+//    self.ram = nil;
 }
 
 #pragma mark - Regular instruction processing
@@ -328,30 +327,88 @@
 }
 - (void) execute0x1Instruction:(unsigned char)currentInstruction
 {
+    unsigned char prev = 0;
+    int prev_int = 0;
+    unsigned char A = 0;
+    unsigned short d16 = 0;
+    unsigned char d8 = 0;
+    bool Z = true;
+    bool N = true;
+    bool H = true;
+    bool C = true;
     switch (currentInstruction & 0x0F) {
         case 0:
-            
+            // STOP
+#warning Implement STOP instruction
+            // Wait for button press before changing processor and screen
             break;
         case 1:
-            
+            // LD DE, d16 -- Load d16 into DE
+            [self.currentState incrementPC];
+            d16 = (self.ram[[self.currentState getPC]] << 8) | self.ram[[self.currentState getPC] + 1];
+            [self.currentState incrementPC];
+            [self.currentState setDE_big:d16];
+#ifdef MYDEBUG
+            printf("0x%02x -- LD DE, d16 -- d16 = %i\n", currentInstruction, d16);
+#endif
             break;
         case 2:
-            
+            // LD (DE), A -- put A into (DE)
+            self.ram[[self.currentState getDE_big]] = [self.currentState getA];
+#ifdef MYDEBUG
+            printf("0x%02x -- LD (DE), A -- A = %i\n", currentInstruction, (int)[self.currentState getA]);
+#endif
             break;
         case 3:
-            
+            // INC DE -- Increment DE
+            [self.currentState setDE_big:([self.currentState getDE_big] + 1)];
+#ifdef MYDEBUG
+            printf("0x%02x -- INC DE\n", currentInstruction);
+#endif
             break;
         case 4:
-            
+            // INC D -- Increment D
+            prev = [self.currentState getD];
+            [self.currentState setD:([self.currentState getD] + 1)];
+            [self.currentState setFlags:([self.currentState getD] == 0)
+                                      N:false
+                                      H:(prev > [self.currentState getD])
+                                      C:([self.currentState getCFlag])];
+#ifdef MYDEBUG
+            printf("0x%02x -- INC D\n", currentInstruction);
+#endif
             break;
         case 5:
-            
+            // DEC D -- Decrement D
+            prev = [self.currentState getD];
+            [self.currentState setD:([self.currentState getD] - 1)];
+            [self.currentState setFlags:([self.currentState getD] == 0)
+                                      N:false
+                                      H:(prev < [self.currentState getD])
+                                      C:([self.currentState getCFlag])];
+#ifdef MYDEBUG
+            printf("0x%02x -- DEC D\n", currentInstruction);
+#endif
             break;
         case 6:
-            
+            // LD D, d8 -- load 8-bit immediate value into D
+            [self.currentState incrementPC];
+            d8 = self.ram[[self.currentState getPC]];
+            [self.currentState setD:d8];
+#ifdef MYDEBUG
+            printf("0x%02x -- LD D, d8 -- d8 = %i\n", currentInstruction, (int)d8);
+#endif
             break;
         case 7:
-            
+            // RLA -- Rotate A left through carry flag
+#warning Rotate, not shift
+            A = [self.currentState getA];
+            C = (bool)([self.currentState getA] & 0b10000000);
+            [self.currentState setA:([self.currentState getA] << 1)];
+            [self.currentState setFlags:false N:false H:false C:C];
+#ifdef MYDEBUG
+            printf("0x%02x -- RLA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
+#endif
             break;
         case 8:
             
