@@ -545,25 +545,65 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
                      currentInstruction, (int)d8, [self.currentState getPC]);
             break;
         case 9:
-            
+            // ADD HL,HL -- Add HL to HL
+            prev_int = [self.currentState getHL_big];
+            [self.currentState setHL_big:(2 * [self.currentState getHL_big])];
+            Z = [self.currentState getZFlag];
+            C = (prev_int >= 0 && prev_int > [self.currentState getHL_big]) || \
+            (prev_int < 0 && prev_int < [self.currentState getHL_big]);
+#warning H must be set to be the boolean valuation of the statement, "There is carry from bit 11"
+            H = 0;
+            [self.currentState setFlags:Z N:false H:H C:C];
+            PRINTDBG("0x%02x -- ADD HL,HL -- add HL (%i) to itself = %i\n", currentInstruction, \
+                        prev_int, [self.currentState getHL_big]);
             break;
         case 0xA:
-            
+            // LD A,(HL+) -- Put value at address at HL, (HL), into A, and increment HL
+            [self.currentState setA:self.ram[(unsigned short)[self.currentState getHL_big]]];
+            [self.currentState setHL_big:([self.currentState getHL_big]+1)];
+            PRINTDBG("0x%02x -- LD A,(HL+) -- HL is now 0x%02x; A = 0x%02x\n", currentInstruction, \
+                        [self.currentState getHL_big], [self.currentState getA]);
             break;
         case 0xB:
-            
+            // DEC HL -- Decrement HL
+            prev_int = [self.currentState getHL_big];
+            [self.currentState setHL_big:([self.currentState getHL_big] - 1)];
+            PRINTDBG("0x%02x -- DEC HL -- HL was %i; HL is now %i\n", currentInstruction, \
+                     prev_int, [self.currentState getHL_big]);
             break;
         case 0xC:
-            
+            // INC L -- Increment L
+            prev = [self.currentState getL];
+            [self.currentState setL:([self.currentState getL] + 1)];
+            [self.currentState setFlags:([self.currentState getL] == 0)
+                                      N:false
+                                      H:(prev > [self.currentState getL])
+                                      C:([self.currentState getCFlag])];
+            PRINTDBG("0x%02x -- INC L\n", currentInstruction);
             break;
         case 0xD:
-            
+            // DEC L -- Decrement L
+            prev = [self.currentState getL];
+            [self.currentState setL:([self.currentState getL] - 1)];
+            Z = [self.currentState getL] == 0;
+            H = [self.currentState getL] > prev;
+            [self.currentState setFlags:Z N:true H:H C:[self.currentState getCFlag]];
+            PRINTDBG("0x%02x -- DEC L -- L was %i; L is now %i\n", currentInstruction, \
+                     prev, (int)[self.currentState getL]);
             break;
         case 0xE:
-            
+            // LD L,d8 -- Load 8-bit immediate data into L
+            [self.currentState incrementPC];
+            d8 = self.ram[[self.currentState getPC]];
+            [self.currentState setL:d8];
+            PRINTDBG("0x%02x -- LD L, d8 -- d8 = %i\n", currentInstruction, (short)d8);
             break;
         case 0xF:
-            
+            // CPL -- Complement A
+            prev = [self.currentState getA];
+            [self.currentState setA:([self.currentState getA] ^ 0xff)];
+            [self.currentState setFlags:[self.currentState getZFlag] N:true H:true C:[self.currentState getCFlag]];
+            PRINTDBG("0x%02x -- CPL A -- A was %i; A is now %i\n", currentInstruction, prev, [self.currentState getA]);
             break;
     }
 }
