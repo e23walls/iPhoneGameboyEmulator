@@ -159,11 +159,11 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 
 - (void) execute0x0Instruction:(unsigned char)currentInstruction
 {
-    unsigned char prev = 0;
+    int8_t prev = 0;
     int prev_int = 0;
-    unsigned char A = 0;
+    int8_t A = 0;
     unsigned short d16 = 0;
-    unsigned char d8 = 0;
+    int8_t d8 = 0;
     bool Z = true;
     bool H = true;
     bool C = true;
@@ -312,11 +312,11 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 }
 - (void) execute0x1Instruction:(unsigned char)currentInstruction
 {
-    unsigned char prev = 0;
+    int8_t prev = 0;
     int prev_int = 0;
-    unsigned char A = 0;
+    int8_t A = 0;
     unsigned short d16 = 0;
-    unsigned char d8 = 0;
+    int8_t d8 = 0;
     bool Z = true;
     bool H = true;
     bool C = true;
@@ -389,7 +389,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             // JR r8 (8-bit signed data, added to PC)
             [self.currentState incrementPC];
             d8 = self.ram[[self.currentState getPC]];
-            [self.currentState addToPC:(int)d8];
+            [self.currentState addToPC:d8];
             PRINTDBG("0x%02x -- JR r8 (r8 = %d) -- PC is now %02x\n",
                    currentInstruction, (int)d8, [self.currentState getPC]);
             break;
@@ -463,11 +463,11 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 }
 - (void) execute0x2Instruction:(unsigned char)currentInstruction
 {
-    unsigned char prev = 0;
+    int8_t prev = 0;
     int prev_int = 0;
-    unsigned char A = 0;
+    int8_t A = 0;
     unsigned short d16 = 0;
-    unsigned char d8 = 0;
+    int8_t d8 = 0;
     bool Z = true;
     bool H = true;
     bool C = true;
@@ -479,10 +479,10 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             d8 = self.ram[(unsigned short)[self.currentState getPC]];
             if ([self.currentState getZFlag] == false)
             {
-                [self.currentState addToPC:(int)d8];
+                [self.currentState addToPC:d8];
             }
-            PRINTDBG("0x%02x -- JR NZ, r8 -- if !Z, PC += 0x%02x; PC is now 0x%02x\n",
-                   currentInstruction, (int)d8, [self.currentState getPC]);
+            PRINTDBG("0x%02x -- JR NZ, r8 -- if !Z, PC += %i; PC is now 0x%02x\n",
+                   currentInstruction, (int8_t)d8, [self.currentState getPC]);
             break;
         case 1:
             // LD HL,d16 -- Load d16 into HL
@@ -541,8 +541,8 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             {
                 [self.currentState addToPC:d8];
             }
-            PRINTDBG("0x%02x -- JR Z, r8 -- if Z, PC += 0x%02x; PC is now 0x%02x\n",
-                     currentInstruction, (int)d8, [self.currentState getPC]);
+            PRINTDBG("0x%02x -- JR Z, r8 -- if Z, PC += %i; PC is now 0x%02x\n",
+                     currentInstruction, (int8_t)d8, [self.currentState getPC]);
             break;
         case 9:
             // ADD HL,HL -- Add HL to HL

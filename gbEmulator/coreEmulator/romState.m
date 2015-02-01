@@ -68,7 +68,7 @@
 {
     PC++;
 }
-- (void) addToPC:(int)offset
+- (void) addToPC:(int8_t)offset
 {
     PC += offset;
 }
