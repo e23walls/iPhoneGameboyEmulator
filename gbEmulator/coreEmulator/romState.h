@@ -12,8 +12,8 @@
 {
     unsigned int PC;
     unsigned int SP;
-    unsigned char A;
-    unsigned char F; // [Z][N][H][C][0][0][0][0]
+    int8_t A;
+    int8_t F; // [Z][N][H][C][0][0][0][0]
     int16_t BC;
     int16_t DE;
     int16_t HL;
@@ -26,22 +26,22 @@
 - (void) addToPC:(int8_t)offset;
 - (void) setSP:(int)newSP;
 - (unsigned int) getSP;
-- (void) setA:(unsigned char) newA;
-- (unsigned char) getA;
-- (void) setF:(unsigned char) newF;
-- (unsigned char) getF;
-- (void) setB: (unsigned char) newB;
-- (unsigned char) getB;
-- (void) setC: (unsigned char) newC;
-- (unsigned char) getC;
-- (void) setD: (unsigned char) newD;
-- (unsigned char) getD;
-- (void) setE: (unsigned char) newE;
-- (unsigned char) getE;
-- (void) setH: (unsigned char) newH;
-- (unsigned char) getH;
-- (void) setL: (unsigned char) newL;
-- (unsigned char) getL;
+- (void) setA:(int8_t) newA;
+- (int8_t) getA;
+- (void) setF:(int8_t) newF;
+- (int8_t) getF;
+- (void) setB: (int8_t) newB;
+- (int8_t) getB;
+- (void) setC: (int8_t) newC;
+- (int8_t) getC;
+- (void) setD: (int8_t) newD;
+- (int8_t) getD;
+- (void) setE: (int8_t) newE;
+- (int8_t) getE;
+- (void) setH: (int8_t) newH;
+- (int8_t) getH;
+- (void) setL: (int8_t) newL;
+- (int8_t) getL;
 - (int16_t) getBC_big;
 - (void) setBC_big:(int16_t) newBC;
 - (int16_t) getBC_little;

@@ -87,69 +87,69 @@
 
 #pragma mark - Regular register methods
 
-- (void) setA:(unsigned char) newA
+- (void) setA:(int8_t) newA
 {
     A = newA;
 }
-- (unsigned char) getA
+- (int8_t) getA
 {
     return A;
 }
-- (void) setF:(unsigned char) newF
+- (void) setF:(int8_t) newF
 {
     F = newF;
 }
-- (unsigned char) getF
+- (int8_t) getF
 {
     return F;
 }
-- (void) setB: (unsigned char) newB
+- (void) setB: (int8_t) newB
 {
     BC = (int16_t)((newB << 8) | (BC & 0x0F));
 }
-- (unsigned char) getB
+- (int8_t) getB
 {
-    return (unsigned char) (BC >> 8);
+    return (int8_t) (BC >> 8);
 }
-- (void) setC: (unsigned char) newC
+- (void) setC: (int8_t) newC
 {
     BC = (int16_t) (newC | (BC & 0xF0));
 }
-- (unsigned char) getC
+- (int8_t) getC
 {
-    return (unsigned char) (BC & 0x0F);
+    return (int8_t) (BC & 0x0F);
 }
-- (void) setD: (unsigned char) newD
+- (void) setD: (int8_t) newD
 {
     DE = (int16_t)((newD << 8) | (DE & 0x0F));
 }
-- (unsigned char) getD
+- (int8_t) getD
 {
-    return (unsigned char) (DE >> 8);
+    return (int8_t) (DE >> 8);
 }
-- (void) setE: (unsigned char) newE
+- (void) setE: (int8_t) newE
 {
     DE = (int16_t) newE | (DE & 0xF0);
 }
-- (unsigned char) getE
+- (int8_t) getE
 {
-    return (unsigned char) (DE & 0x0F);
+    return (int8_t) (DE & 0x0F);
 }
-- (void) setH: (unsigned char) newH
+- (void) setH: (int8_t) newH
 {
     HL = (int16_t)((newH << 8) | (HL & 0x0F));
 }
-- (unsigned char) getH
+- (int8_t) getH
 {
-    return (unsigned char) (HL >> 8);
+    return (int8_t) (HL >> 8);
 }
-- (void) setL: (unsigned char) newL
+- (void) setL: (int8_t) newL
 {
     HL = (int16_t)( newL | (HL & 0xF0));
 }
-- (unsigned char) getL
+- (int8_t) getL
 {
-    return (unsigned char) (HL & 0x0F);
+    return (int8_t) (HL & 0x0F);
 }
 
 #pragma mark - Double register methods (big-endian)

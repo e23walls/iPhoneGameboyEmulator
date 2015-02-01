@@ -245,13 +245,15 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             // ADD HL,BC -- add BC to HL
             // H == carry from bit 11
             // C == carry from bit 15
+            prev = [self.currentState getHL_little] & 0xf;
             prev_int = [self.currentState getHL_big];
             [self.currentState setHL_big:([self.currentState getBC_big]+[self.currentState getHL_big])];
             Z = [self.currentState getZFlag];
             C = ([self.currentState getBC_big] >= 0 && prev_int > [self.currentState getHL_big]) || \
                     ([self.currentState getBC_big] < 0 && prev_int < [self.currentState getHL_big]);
-#warning H must be set to be the boolean valuation of the statement, "There is carry from bit 11"
-            H = 0;
+#warning This could be wrong
+            H = ((([self.currentState getHL_little] & 0xf) > 0) & ([self.currentState getHL_little]) & 0xf < prev) |
+                    ((([self.currentState getHL_little] & 0xf) < 0) & ([self.currentState getHL_little]) & 0xf > prev);
             [self.currentState setFlags:Z N:false H:H C:C];
             PRINTDBG("0x%02x -- ADD HL,BC -- add BC (%i) and HL (%i) = %i\n", currentInstruction, \
                    [self.currentState getBC_big], prev_int, [self.currentState getHL_big]);
@@ -396,13 +398,15 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
         case 9:
             // ADD HL,DE -- add DE to HL
             // H = carry from bit 11; C = carry from bit 15; reset N; leave Z alone
+            prev = [self.currentState getHL_little] & 0xf;
             prev_int = [self.currentState getHL_big];
             [self.currentState setHL_big:([self.currentState getDE_big]+[self.currentState getHL_big])];
             Z = [self.currentState getZFlag];
             C = ([self.currentState getDE_big] >= 0 && prev_int > [self.currentState getHL_big]) || \
             ([self.currentState getDE_big] < 0 && prev_int < [self.currentState getHL_big]);
-#warning H must be set to be the boolean valuation of the statement, "There is carry from bit 11"
-            H = 0;
+#warning This could be wrong
+            H = ((([self.currentState getHL_little] & 0xf) > 0) & ([self.currentState getHL_little]) & 0xf < prev) |
+            ((([self.currentState getHL_little] & 0xf) < 0) & ([self.currentState getHL_little]) & 0xf > prev);
             [self.currentState setFlags:Z N:false H:H C:C];
             PRINTDBG("0x%02x -- ADD HL,DE -- add DE (%i) and HL (%i) = %i\n", currentInstruction, \
                    [self.currentState getDE_big], prev_int, [self.currentState getHL_big]);
@@ -465,13 +469,11 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 {
     int8_t prev = 0;
     int prev_int = 0;
-    int8_t A = 0;
     unsigned short d16 = 0;
     int8_t d8 = 0;
     bool Z = true;
     bool H = true;
     bool C = true;
-    bool temp = true;
     switch (currentInstruction & 0x0F) {
         case 0:
             // JR NZ,r8 -- If !Z, add r8 to PC
@@ -496,6 +498,9 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             // LD (HL+),A -- Put A into (HL), and increment HL
             self.ram[(unsigned short)[self.currentState getHL_big]] = [self.currentState getA];
             [self.currentState setHL_big:([self.currentState getHL_big] + 1)];
+            PRINTDBG("0x%02x -- LD (HL+),A -- HL = %i; (HL) = %i; A = %i\n", currentInstruction,
+                        [self.currentState getHL_big], self.ram[[self.currentState getHL_big]],
+                     [self.currentState getA]);
             break;
         case 3:
             // INC HL -- Increment HL
@@ -546,13 +551,15 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             break;
         case 9:
             // ADD HL,HL -- Add HL to HL
+            prev = [self.currentState getHL_little] & 0xf;
             prev_int = [self.currentState getHL_big];
             [self.currentState setHL_big:(2 * [self.currentState getHL_big])];
             Z = [self.currentState getZFlag];
             C = (prev_int >= 0 && prev_int > [self.currentState getHL_big]) || \
             (prev_int < 0 && prev_int < [self.currentState getHL_big]);
-#warning H must be set to be the boolean valuation of the statement, "There is carry from bit 11"
-            H = 0;
+#warning This could be wrong
+            H = ((([self.currentState getHL_little] & 0xf) > 0) & ([self.currentState getHL_little]) & 0xf < prev) |
+            ((([self.currentState getHL_little] & 0xf) < 0) & ([self.currentState getHL_little]) & 0xf > prev);
             [self.currentState setFlags:Z N:false H:H C:C];
             PRINTDBG("0x%02x -- ADD HL,HL -- add HL (%i) to itself = %i\n", currentInstruction, \
                         prev_int, [self.currentState getHL_big]);
