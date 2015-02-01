@@ -172,14 +172,6 @@
                                     <action selector="stopButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Ltj-Nf-7rP"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="middle.png" translatesAutoresizingMaskIntoConstraints="NO" id="ayM-hS-18G">
-                                <rect key="frame" x="54" y="437" width="58" height="58"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="JYu-M9-YGV" appends="YES" id="tDc-wc-teT"/>
-                                </connections>
-                            </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="B" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y0E-cD-zXY">
                                 <rect key="frame" x="219" y="487" width="12" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -210,6 +202,14 @@
                                     <action selector="run:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="xGA-yb-kwU"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eRj-vK-rK9">
+                                <rect key="frame" x="53" y="437" width="58" height="58"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="middle.png">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted" image="middle.png"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.89193560804490057" green="0.89781095018934431" blue="0.912109375" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
@@ -219,8 +219,18 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <connections>
+                        <outlet property="aButton" destination="Gmk-nt-Ne1" id="0Qa-hq-V1n"/>
+                        <outlet property="bButton" destination="QmZ-ea-co7" id="1Hc-VB-0h4"/>
+                        <outlet property="downButton" destination="5I4-yp-8ii" id="IUv-9J-agg"/>
                         <outlet property="imageView" destination="Okn-ET-9lX" id="san-iV-jlU"/>
+                        <outlet property="leftButton" destination="iOP-Yt-RlK" id="mb8-Za-uzz"/>
+                        <outlet property="middle" destination="eRj-vK-rK9" id="iUk-sB-zuk"/>
+                        <outlet property="rightButton" destination="Zu7-5G-ilt" id="Cin-9M-OEQ"/>
                         <outlet property="romTitleLabel" destination="9qT-1I-aQ0" id="H6U-Kd-JUH"/>
+                        <outlet property="runButton" destination="VR1-jg-IlV" id="etS-bj-epy"/>
+                        <outlet property="selectButton" destination="Frw-8q-KsD" id="Ysz-5L-ns0"/>
+                        <outlet property="startButton" destination="K8D-Th-cRy" id="erd-dB-mKa"/>
+                        <outlet property="upButton" destination="8TL-MY-f8M" id="ice-fs-oIx"/>
                         <outlet property="view" destination="kh9-bI-dsS" id="vm2-on-bC3"/>
                     </connections>
                 </viewController>
@@ -255,7 +265,7 @@
         <image name="START.png" width="46" height="19"/>
         <image name="down-arrow.png" width="44" height="56"/>
         <image name="left-arrow.png" width="56" height="44"/>
-        <image name="middle.png" width="44" height="44"/>
+        <image name="middle.png" width="65" height="65"/>
         <image name="right-arrow.png" width="56" height="44"/>
         <image name="up-arrow.png" width="44" height="56"/>
     </resources>

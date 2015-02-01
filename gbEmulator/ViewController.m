@@ -10,6 +10,9 @@
 #import "ViewController.h"
 
 @interface ViewController ()
+{
+    bool isRunningRom;
+}
 
 @end
 
@@ -20,10 +23,6 @@ static rom * currentRom;
 - (ViewController *) init
 {
     self = [super init];
-    if (self != nil)
-    {
-        romTitleLabel.text = @"Undefined ROM";
-    }
     return self;
 }
 - (ViewController *) initWithCurrentRom:(rom *)theRom
@@ -42,6 +41,7 @@ static rom * currentRom;
 	// Do any additional setup after loading the view, typically from a nib.
     romTitleLabel.text = currentRom.romName;
     emulator = [[emulatorMain alloc] initWithRom:currentRom];
+    [self romNotRunning];
 }
 
 - (void)didReceiveMemoryWarning
@@ -167,12 +167,56 @@ static rom * currentRom;
 - (IBAction)stopButton:(id)sender
 {
     // Save state, then return
+    printf("Returning to previous view controller\n");
     [self.navigationController popToRootViewControllerAnimated:YES];
+    printf("Hiding navigation bar\n");
     [self.navigationController setNavigationBarHidden:NO];
 }
 - (IBAction)run:(id)sender
 {
-    [emulator runRom];
+    if (isRunningRom == false)
+    {
+        [self romIsRunning];
+        [emulator runRom];
+        [self romNotRunning];
+    }
+    else
+    {
+        [self romNotRunning];
+#warning Pause the ROM's execution!
+        // Something like [emulator pauseRom];
+    }
+}
+
+- (void) romIsRunning
+{
+    isRunningRom = true;
+    runButton.titleLabel.text = @"Pause";
+    [self.view setNeedsDisplay];
+    [leftButton setEnabled:YES];
+    [rightButton setEnabled:YES];
+    [upButton setEnabled:YES];
+    [downButton setEnabled:YES];
+    [aButton setEnabled:YES];
+    [bButton setEnabled:YES];
+    [selectButton setEnabled:YES];
+    [startButton setEnabled:YES];
+    [middle setEnabled:YES];
+}
+- (void) romNotRunning
+{
+    isRunningRom = false;
+    runButton.titleLabel.text = @"Run";
+    [self.view setNeedsDisplay];
+    [leftButton setEnabled:NO];
+    [rightButton setEnabled:NO];
+    [upButton setEnabled:NO];
+    [downButton setEnabled:NO];
+    [aButton setEnabled:NO];
+    [bButton setEnabled:NO];
+    [selectButton setEnabled:NO];
+    [startButton setEnabled:NO];
+    [middle setEnabled:NO];
 }
 
 @end

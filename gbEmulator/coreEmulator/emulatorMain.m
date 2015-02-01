@@ -9,9 +9,6 @@
 #import "emulatorMain.h"
 #include <sys/stat.h>
 
-#define K 1024
-#define RAMSIZE (64 * K) // For readability purposes
-
 #define MYDEBUG
 
 #ifdef MYDEBUG
@@ -19,6 +16,9 @@
 #else
 #define PRINTDBG(...) ;
 #endif
+
+const int k = 1024;
+const int ramsize = 64 * k; // For readability purposes; an unsigned short spans the same set of integers.
 
 @interface emulatorMain ()
 
@@ -33,66 +33,71 @@
 - (emulatorMain *) initWithRom:(rom *) theRom
 {
     self = [super init];
-    self.keys = calloc(8, sizeof(int));
-    self.currentRom = theRom;
-    self.ram = (char *)malloc(RAMSIZE * sizeof(unsigned char));
-    
-    // Load the ROM file into RAM
-    
-    FILE * romFileHandler = fopen([self.currentRom.fullPath cStringUsingEncoding:NSUTF8StringEncoding], "rb");
-    if (romFileHandler == NULL)
+    if (self != nil)
     {
-        printf("Some error occurred when opening the ROM.\n");
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Could not load ROM!" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
-        [alert show];
-    }
-    NSLog(@"Loading the ROM '%@'\nLocation: %@\n", self.currentRom.romName, self.currentRom.fullPath);
-    int ch;
-    BOOL hitEOF = NO;
-    int counter = 0;
-    ch = fgetc(romFileHandler);
-    while (counter < RAMSIZE)
-    {
-        if (ch == EOF)
+        self.keys = calloc(8, sizeof(int));
+        self.currentRom = theRom;
+        self.ram = (char *)malloc(ramsize * sizeof(char));
+        
+        // Load the ROM file into RAM
+        
+        FILE * romFileHandler = fopen([self.currentRom.fullPath cStringUsingEncoding:NSUTF8StringEncoding], "rb");
+        if (romFileHandler == NULL)
         {
-            hitEOF = YES;
-            ch = 0;
-            printf("HIT EOF!\n");
+            printf("Some error occurred when opening the ROM.\n");
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Could not load ROM!" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
+            [alert show];
         }
-        self.ram[counter] = (unsigned char)ch;
-        counter++;
-        if (hitEOF == NO)
+        NSLog(@"Loading the ROM '%@'\nLocation: %@\n", self.currentRom.romName, self.currentRom.fullPath);
+        int ch = 0;
+        BOOL hitEOF = NO;
+        int counter = 0;
+        ch = fgetc(romFileHandler);
+        while (counter < ramsize)
         {
-            ch = fgetc(romFileHandler);
+            if (ch == EOF)
+            {
+                hitEOF = YES;
+                ch = 0;
+                printf("HIT EOF!\n");
+            }
+            self.ram[counter] = (unsigned char)ch;
+            counter++;
+            if (hitEOF == NO)
+            {
+                ch = fgetc(romFileHandler);
+            }
         }
-    }
-    NSLog(@"Byte counter reached value: %i\n", counter);
-    if (hitEOF == YES)
-    {
-        NSLog(@"Warning: EOF was reached before RAM was filled.");
+        NSLog(@"Byte counter reached value: %i\n", counter);
+        if (hitEOF == YES)
+        {
+            NSLog(@"Warning: EOF was reached before RAM was filled.");
+        }
+        else
+        {
+            NSLog(@"As expected, EOF was not reached before end of RAM.");
+        }
+        
+        fclose(romFileHandler);
+        NSLog(@"Setting up the ROM initial state...");
+        self.currentState = [[romState alloc] init];
     }
     else
     {
-        NSLog(@"As expected, EOF was not reached before end of RAM.");
+        NSLog(@"Error! Couldn't allocate memory for emulator\n");
     }
-    
-    fclose(romFileHandler);
-    NSLog(@"Setting up the ROM initial state...");
-    self.currentState = [[romState alloc] init];
-    
     return self;
 }
 
 - (void) runRom
 {
-#warning Something here is causing a crash in the simulator, but not on a real device
-    while ([self.currentState getPC] < RAMSIZE)
+#warning Something here/after here is causing a crash in the simulator, but not on a real device. Probably related to view controller transition.
+    while ([self.currentState getPC] < ramsize)
     {
-        PRINTDBG("PC = 0x%2x\n", [self.currentState getPC]);
+        PRINTDBG("PC = 0x%02x\n", [self.currentState getPC]);
         [self executeInstruction];
         [self.currentState incrementPC];
     }
-    self.ram = nil;
 }
 
 #pragma mark - Regular instruction processing
@@ -178,9 +183,9 @@
             break;
         case 2:
             // LD BC, A -- Load A into (BC)
-            // Use index % RAMSIZE for case where the number is negative, since it should
+            // Cast to unsigned short for case where the number is negative, since it should
             // be interpreted unsigned, but becomes too large a value. -1 should be interpreted as RAMSIZE-1
-            self.ram[[self.currentState getBC_big] % RAMSIZE] = [self.currentState getA];
+            self.ram[(unsigned short)[self.currentState getBC_big]] = [self.currentState getA];
             PRINTDBG("0x%02x -- LD (BC), A -- A is now %d\n", currentInstruction, [self.currentState getA]);
             break;
         case 3:
@@ -253,9 +258,9 @@
             break;
         case 0xA:
             // LD A,(BC) -- load (BC) into A
-            [self.currentState setA:self.ram[([self.currentState getBC_big] % RAMSIZE)]];
+            [self.currentState setA:self.ram[(unsigned short)[self.currentState getBC_big]]];
             PRINTDBG("0x%02x -- LD A,(BC) -- load (BC == %i -> %i) into A\n", currentInstruction, \
-                   [self.currentState getBC_big], (int)self.ram[[self.currentState getBC_big] % RAMSIZE]);
+                   [self.currentState getBC_big], (int)self.ram[(unsigned short)[self.currentState getBC_big]]);
             break;
         case 0xB:
             // DEC BC -- decrement BC
@@ -332,7 +337,7 @@
             break;
         case 2:
             // LD (DE), A -- put A into (DE)
-            self.ram[[self.currentState getDE_big] % RAMSIZE] = [self.currentState getA];
+            self.ram[(unsigned short)[self.currentState getDE_big]] = [self.currentState getA];
             PRINTDBG("0x%02x -- LD (DE), A -- A = %i\n", currentInstruction, (int)[self.currentState getA]);
             break;
         case 3:
@@ -370,7 +375,6 @@
         case 7:
             // RLA -- Rotate A left through carry flag -- Does this mean take previous C value for A[0]? Else, what's
             // the difference between it and the RLCA instruction?
-#warning Double-check this rotate is correct
             A = [self.currentState getA];
             temp = [self.currentState getCFlag];
             C = (bool)([self.currentState getA] & 0b10000000);
@@ -405,9 +409,9 @@
             break;
         case 0xA:
             // LD A,(DE) - load (DE) into A
-            [self.currentState setA:(self.ram[[self.currentState getDE_big] % RAMSIZE])];
+            [self.currentState setA:(self.ram[(unsigned short)[self.currentState getDE_big]])];
             PRINTDBG("0x%02x -- LD A,(DE) -- load (DE == %i -> %i) into A\n", currentInstruction, \
-                   [self.currentState getDE_big], (int)self.ram[[self.currentState getDE_big] % RAMSIZE]);
+                   [self.currentState getDE_big], (int)self.ram[(unsigned short)[self.currentState getDE_big]]);
             break;
         case 0xB:
             // DEC DE -- Decrement DE
@@ -472,7 +476,7 @@
         case 0:
             // JR NZ,r8 -- If !Z, add r8 to PC
             [self.currentState incrementPC];
-            d8 = self.ram[([self.currentState getPC] % RAMSIZE)];
+            d8 = self.ram[(unsigned short)[self.currentState getPC]];
             if ([self.currentState getZFlag] == false)
             {
                 [self.currentState addToPC:(int)d8];
@@ -490,7 +494,7 @@
             break;
         case 2:
             // LD (HL+),A -- Put A into (HL), and increment HL
-            self.ram[[self.currentState getHL_big] % RAMSIZE] = [self.currentState getA];
+            self.ram[(unsigned short)[self.currentState getHL_big]] = [self.currentState getA];
             [self.currentState setHL_big:([self.currentState getHL_big] + 1)];
             break;
         case 3:

@@ -11,8 +11,6 @@
 #import "rom.h"
 #import "romDataController.h"
 
-//#define LS @"/bin/ls"
-
 @interface gbTableViewController ()
 
 @end

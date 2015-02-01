@@ -22,6 +22,10 @@
         DE = 0;
         HL = 0;
     }
+    else
+    {
+        printf("Error! Couldn't allocate memory for ROM state\n");
+    }
     return self;
 }
 
@@ -101,7 +105,7 @@
 }
 - (void) setB: (unsigned char) newB
 {
-    BC = (int16_t)(newB << 8) | (BC & 0x0F);
+    BC = (int16_t)((newB << 8) | (BC & 0x0F));
 }
 - (unsigned char) getB
 {
@@ -109,7 +113,7 @@
 }
 - (void) setC: (unsigned char) newC
 {
-    BC = (int16_t) newC | (BC & 0xF0);
+    BC = (int16_t) (newC | (BC & 0xF0));
 }
 - (unsigned char) getC
 {
@@ -117,7 +121,7 @@
 }
 - (void) setD: (unsigned char) newD
 {
-    DE = (newD << 8) | (DE & 0x0F);
+    DE = (int16_t)((newD << 8) | (DE & 0x0F));
 }
 - (unsigned char) getD
 {
@@ -133,7 +137,7 @@
 }
 - (void) setH: (unsigned char) newH
 {
-    HL = (newH << 8) | (HL & 0x0F);
+    HL = (int16_t)((newH << 8) | (HL & 0x0F));
 }
 - (unsigned char) getH
 {
@@ -141,7 +145,7 @@
 }
 - (void) setL: (unsigned char) newL
 {
-    HL = (int16_t) newL | (HL & 0xF0);
+    HL = (int16_t)( newL | (HL & 0xF0));
 }
 - (unsigned char) getL
 {

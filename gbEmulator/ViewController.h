@@ -13,7 +13,17 @@
 @interface ViewController : UIViewController <UIGestureRecognizerDelegate>
 {
     IBOutlet UIImageView * imageView;
+    IBOutlet UIButton * middle;
     IBOutlet UILabel * romTitleLabel;
+    IBOutlet UIButton * runButton;
+    IBOutlet UIButton * leftButton;
+    IBOutlet UIButton * upButton;
+    IBOutlet UIButton * rightButton;
+    IBOutlet UIButton * downButton;
+    IBOutlet UIButton * aButton;
+    IBOutlet UIButton * bButton;
+    IBOutlet UIButton * startButton;
+    IBOutlet UIButton * selectButton;
     emulatorMain * emulator;
 }
 
