@@ -178,6 +178,8 @@ static rom * currentRom;
     {
         [self romIsRunning];
         [emulator runRom];
+        // Until the emulator isn't just a giant for-loop, it won't be clear that this actually
+        // does change the button's text. But commenting out this following line shows it does.
         [self romNotRunning];
     }
     else
@@ -191,7 +193,7 @@ static rom * currentRom;
 - (void) romIsRunning
 {
     isRunningRom = true;
-    runButton.titleLabel.text = @"Pause";
+    [runButton setTitle:@"Pause" forState:UIControlStateNormal];
     [self.view setNeedsDisplay];
     [leftButton setEnabled:YES];
     [rightButton setEnabled:YES];
@@ -206,7 +208,7 @@ static rom * currentRom;
 - (void) romNotRunning
 {
     isRunningRom = false;
-    runButton.titleLabel.text = @"Run";
+    [runButton setTitle:@"Run" forState:UIControlStateNormal];
     [self.view setNeedsDisplay];
     [leftButton setEnabled:NO];
     [rightButton setEnabled:NO];
