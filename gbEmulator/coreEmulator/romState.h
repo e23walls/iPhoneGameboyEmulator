@@ -23,6 +23,7 @@
 - (void) setPC:(int)newPC;
 - (unsigned int) getPC;
 - (void) incrementPC;
+- (void) addToPC:(int)offset;
 - (void) setSP:(int)newSP;
 - (unsigned int) getSP;
 - (void) setA:(unsigned char) newA;

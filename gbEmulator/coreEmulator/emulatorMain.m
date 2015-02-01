@@ -10,9 +10,15 @@
 #include <sys/stat.h>
 
 #define K 1024
-#define RAMSIZE (64 * K)
+#define RAMSIZE (64 * K) // For readability purposes
 
 #define MYDEBUG
+
+#ifdef MYDEBUG
+#define PRINTDBG(...) printf(__VA_ARGS__)
+#else
+#define PRINTDBG(...) ;
+#endif
 
 @interface emulatorMain ()
 
@@ -82,9 +88,7 @@
 #warning Something here is causing a crash in the simulator, but not on a real device
     while ([self.currentState getPC] < RAMSIZE)
     {
-#ifdef MYDEBUG
-        printf("PC = 0x%2x\n", [self.currentState getPC]);
-#endif
+        PRINTDBG("PC = 0x%2x\n", [self.currentState getPC]);
         [self executeInstruction];
         [self.currentState incrementPC];
     }
@@ -162,9 +166,7 @@
     switch (currentInstruction & 0x0F) {
         case 0:
             // No-op
-#ifdef MYDEBUG
-            printf("0x%02x -- no-op\n", currentInstruction);
-#endif
+            PRINTDBG("0x%02x -- no-op\n", currentInstruction);
             break;
         case 1:
             // LD BC, d16 -- Load 16-bit data into registers BC
@@ -172,25 +174,19 @@
             d16 = (self.ram[[self.currentState getPC] + 1] << 8) | self.ram[[self.currentState getPC]];
             [self.currentState incrementPC];
             [self.currentState setBC_big:d16];
-#ifdef MYDEBUG
-            printf("0x%02x -- LD BC, d16 -- d16 = %i\n", currentInstruction, d16);
-#endif
+            PRINTDBG("0x%02x -- LD BC, d16 -- d16 = %i\n", currentInstruction, d16);
             break;
         case 2:
             // LD BC, A -- Load A into (BC)
             // Use index % RAMSIZE for case where the number is negative, since it should
             // be interpreted unsigned, but becomes too large a value. -1 should be interpreted as RAMSIZE-1
             self.ram[[self.currentState getBC_big] % RAMSIZE] = [self.currentState getA];
-#ifdef MYDEBUG
-            printf("0x%02x -- LD (BC), A -- A is now %d\n", currentInstruction, [self.currentState getA]);
-#endif
+            PRINTDBG("0x%02x -- LD (BC), A -- A is now %d\n", currentInstruction, [self.currentState getA]);
             break;
         case 3:
             // INC BC -- increment BC
             [self.currentState setBC_big:([self.currentState getBC_big] + 1)];
-#ifdef MYDEBUG
-            printf("0x%02x -- INC BC\n", currentInstruction);
-#endif
+            PRINTDBG("0x%02x -- INC BC\n", currentInstruction);
             break;
         case 4:
             // INC B -- increment B and set flags
@@ -200,9 +196,7 @@
                                     N:false
                                     H:(prev > [self.currentState getB])
                                     C:([self.currentState getCFlag])];
-#ifdef MYDEBUG
-            printf("0x%02x -- INC B\n", currentInstruction);
-#endif
+            PRINTDBG("0x%02x -- INC B\n", currentInstruction);
             break;
         case 5:
             // DEC B -- decrement B and set flags
@@ -212,18 +206,14 @@
                                       N:true
                                       H:(prev < [self.currentState getB])
                                       C:([self.currentState getCFlag])];
-#ifdef MYDEBUG
-            printf("0x%02x -- DEC B\n", currentInstruction);
-#endif
+            PRINTDBG("0x%02x -- DEC B\n", currentInstruction);
             break;
         case 6:
             // LD B, d8 -- load following 8-bit data into B
             [self.currentState incrementPC];
             d8 = self.ram[[self.currentState getPC]];
             [self.currentState setB:d8];
-#ifdef MYDEBUG
-            printf("0x%02x -- LD B, d8 -- d8 = %i\n", currentInstruction, (int)d8);
-#endif
+            PRINTDBG("0x%02x -- LD B, d8 -- d8 = %i\n", currentInstruction, (int)d8);
             break;
         case 7:
             // RLCA -- Rotate A left; C = bit 7, A'[0] = A[7]
@@ -235,9 +225,7 @@
                 [self.currentState setA:([self.currentState getA] & 0b11111110)];
             Z = [self.currentState getA] == 0;
             [self.currentState setFlags:false N:false H:false C:C];
-#ifdef MYDEBUG
-            printf("0x%02x -- RLCA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
-#endif
+            PRINTDBG("0x%02x -- RLCA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
             break;
         case 8:
             // LD (a16), SP -- put SP at address a16
@@ -245,10 +233,8 @@
             d16 = (self.ram[[self.currentState getPC] + 1] << 8) | self.ram[[self.currentState getPC]];
             [self.currentState incrementPC];
             self.ram[d16] = [self.currentState getSP];
-#ifdef MYDEBUG
-            printf("0x%02x -- LD (a16), SP -- put SP at 0x%02x -- SP is %02x -- [SP] = 0x%02x\n", currentInstruction, \
+            PRINTDBG("0x%02x -- LD (a16), SP -- put SP at 0x%02x -- SP is %02x -- [SP] = 0x%02x\n", currentInstruction, \
                                 d16, [self.currentState getSP], self.ram[d16]);
-#endif
             break;
         case 9:
             // ADD HL,BC -- add BC to HL
@@ -262,27 +248,21 @@
 #warning H must be set to be the boolean valuation of the statement, "There is carry from bit 11"
             H = 0;
             [self.currentState setFlags:Z N:false H:H C:C];
-#ifdef MYDEBUG
-            printf("0x%02x -- ADD HL,BC -- add BC (%i) and HL (%i) = %i\n", currentInstruction, \
+            PRINTDBG("0x%02x -- ADD HL,BC -- add BC (%i) and HL (%i) = %i\n", currentInstruction, \
                    [self.currentState getBC_big], prev_int, [self.currentState getHL_big]);
-#endif
             break;
         case 0xA:
             // LD A,(BC) -- load (BC) into A
             [self.currentState setA:self.ram[([self.currentState getBC_big] % RAMSIZE)]];
-#ifdef MYDEBUG
-            printf("0x%02x -- LD A,(BC) -- load (BC == %i -> %i) into A\n", currentInstruction, \
+            PRINTDBG("0x%02x -- LD A,(BC) -- load (BC == %i -> %i) into A\n", currentInstruction, \
                    [self.currentState getBC_big], (int)self.ram[[self.currentState getBC_big] % RAMSIZE]);
-#endif
             break;
         case 0xB:
             // DEC BC -- decrement BC
             prev_int = [self.currentState getBC_big];
             [self.currentState setBC_big:([self.currentState getBC_big] - 1)];
-#ifdef MYDEBUG
-            printf("0x%02x -- DEC BC -- BC was %i; BC is now %i\n", currentInstruction, \
+            PRINTDBG("0x%02x -- DEC BC -- BC was %i; BC is now %i\n", currentInstruction, \
                    prev_int, [self.currentState getBC_big]);
-#endif
             break;
         case 0xC:
             // INC C -- increment C
@@ -291,10 +271,8 @@
             Z = [self.currentState getC] == 0;
             H = [self.currentState getC] < prev;
             [self.currentState setFlags:Z N:false H:H C:[self.currentState getCFlag]];
-#ifdef MYDEBUG
-            printf("0x%02x -- INC C -- C was %i; C is now %i\n", currentInstruction, \
+            PRINTDBG("0x%02x -- INC C -- C was %i; C is now %i\n", currentInstruction, \
                    prev, (int)[self.currentState getC]);
-#endif
             break;
         case 0xD:
             // DEC C -- decrement C
@@ -303,19 +281,15 @@
             Z = [self.currentState getC] == 0;
             H = [self.currentState getC] > prev;
             [self.currentState setFlags:Z N:true H:H C:[self.currentState getCFlag]];
-#ifdef MYDEBUG
-            printf("0x%02x -- DEC C -- C was %i; C is now %i\n", currentInstruction, \
+            PRINTDBG("0x%02x -- DEC C -- C was %i; C is now %i\n", currentInstruction, \
                    prev, (int)[self.currentState getC]);
-#endif
             break;
         case 0xE:
             // LD C, d8 -- load immediate 8-bit data into C
             [self.currentState incrementPC];
             d8 = self.ram[[self.currentState getPC]];
             [self.currentState setC:d8];
-#ifdef MYDEBUG
-            printf("0x%02x -- LD C, d8 -- d8 = %i\n", currentInstruction, (short)d8);
-#endif
+            PRINTDBG("0x%02x -- LD C, d8 -- d8 = %i\n", currentInstruction, (short)d8);
             break;
         case 0xF:
             // RRCA -- rotate A right
@@ -327,9 +301,7 @@
             C ? [self.currentState setA:([self.currentState getA] | 0b10000000)] :
             [self.currentState setA:([self.currentState getA] & 0b01111111)];
             [self.currentState setFlags:false N:false H:false C:C];
-#ifdef MYDEBUG
-            printf("0x%02x -- RRCA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
-#endif
+            PRINTDBG("0x%02x -- RRCA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
             break;
     }
 }
@@ -356,23 +328,17 @@
             d16 = (self.ram[[self.currentState getPC] + 1] << 8) | self.ram[[self.currentState getPC]];
             [self.currentState incrementPC];
             [self.currentState setDE_big:d16];
-#ifdef MYDEBUG
-            printf("0x%02x -- LD DE, d16 -- d16 = %i\n", currentInstruction, d16);
-#endif
+            PRINTDBG("0x%02x -- LD DE, d16 -- d16 = %i\n", currentInstruction, d16);
             break;
         case 2:
             // LD (DE), A -- put A into (DE)
             self.ram[[self.currentState getDE_big] % RAMSIZE] = [self.currentState getA];
-#ifdef MYDEBUG
-            printf("0x%02x -- LD (DE), A -- A = %i\n", currentInstruction, (int)[self.currentState getA]);
-#endif
+            PRINTDBG("0x%02x -- LD (DE), A -- A = %i\n", currentInstruction, (int)[self.currentState getA]);
             break;
         case 3:
             // INC DE -- Increment DE
             [self.currentState setDE_big:([self.currentState getDE_big] + 1)];
-#ifdef MYDEBUG
-            printf("0x%02x -- INC DE\n", currentInstruction);
-#endif
+            PRINTDBG("0x%02x -- INC DE\n", currentInstruction);
             break;
         case 4:
             // INC D -- Increment D
@@ -382,9 +348,7 @@
                                       N:false
                                       H:(prev > [self.currentState getD])
                                       C:([self.currentState getCFlag])];
-#ifdef MYDEBUG
-            printf("0x%02x -- INC D\n", currentInstruction);
-#endif
+            PRINTDBG("0x%02x -- INC D\n", currentInstruction);
             break;
         case 5:
             // DEC D -- Decrement D
@@ -394,18 +358,14 @@
                                       N:true
                                       H:(prev < [self.currentState getD])
                                       C:([self.currentState getCFlag])];
-#ifdef MYDEBUG
-            printf("0x%02x -- DEC D\n", currentInstruction);
-#endif
+            PRINTDBG("0x%02x -- DEC D\n", currentInstruction);
             break;
         case 6:
             // LD D, d8 -- load 8-bit immediate value into D
             [self.currentState incrementPC];
             d8 = self.ram[[self.currentState getPC]];
             [self.currentState setD:d8];
-#ifdef MYDEBUG
-            printf("0x%02x -- LD D, d8 -- d8 = %i\n", currentInstruction, (int)d8);
-#endif
+            PRINTDBG("0x%02x -- LD D, d8 -- d8 = %i\n", currentInstruction, (int)d8);
             break;
         case 7:
             // RLA -- Rotate A left through carry flag -- Does this mean take previous C value for A[0]? Else, what's
@@ -419,19 +379,15 @@
             temp ? [self.currentState setA:([self.currentState getA] | 1)] :
             [self.currentState setA:([self.currentState getA] & 0b11111110)];
             [self.currentState setFlags:false N:false H:false C:C];
-#ifdef MYDEBUG
-            printf("0x%02x -- RLA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
-#endif
+            PRINTDBG("0x%02x -- RLA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
             break;
         case 8:
             // JR r8 (8-bit signed data, added to PC)
             [self.currentState incrementPC];
             d8 = self.ram[[self.currentState getPC]];
-            [self.currentState setPC:([self.currentState getPC] + (int)d8)];
-#ifdef MYDEBUG
-            printf("0x%02x -- JR r8 (r8 = %d) -- PC is now %02x\n",
+            [self.currentState addToPC:(int)d8];
+            PRINTDBG("0x%02x -- JR r8 (r8 = %d) -- PC is now %02x\n",
                    currentInstruction, (int)d8, [self.currentState getPC]);
-#endif
             break;
         case 9:
             // ADD HL,DE -- add DE to HL
@@ -444,27 +400,21 @@
 #warning H must be set to be the boolean valuation of the statement, "There is carry from bit 11"
             H = 0;
             [self.currentState setFlags:Z N:false H:H C:C];
-#ifdef MYDEBUG
-            printf("0x%02x -- ADD HL,DE -- add DE (%i) and HL (%i) = %i\n", currentInstruction, \
+            PRINTDBG("0x%02x -- ADD HL,DE -- add DE (%i) and HL (%i) = %i\n", currentInstruction, \
                    [self.currentState getDE_big], prev_int, [self.currentState getHL_big]);
-#endif
             break;
         case 0xA:
             // LD A,(DE) - load (DE) into A
             [self.currentState setA:(self.ram[[self.currentState getDE_big] % RAMSIZE])];
-#ifdef MYDEBUG
-            printf("0x%02x -- LD A,(DE) -- load (DE == %i -> %i) into A\n", currentInstruction, \
+            PRINTDBG("0x%02x -- LD A,(DE) -- load (DE == %i -> %i) into A\n", currentInstruction, \
                    [self.currentState getDE_big], (int)self.ram[[self.currentState getDE_big] % RAMSIZE]);
-#endif
             break;
         case 0xB:
             // DEC DE -- Decrement DE
             prev_int = [self.currentState getDE_big];
             [self.currentState setDE_big:([self.currentState getDE_big] - 1)];
-#ifdef MYDEBUG
-            printf("0x%02x -- DEC DE -- DE was %i; DE is now %i\n", currentInstruction, \
-                   prev_int, [self.currentState getDE_big]);
-#endif
+            PRINTDBG("0x%02x -- DEC DE -- DE was %i; DE is now %i\n", currentInstruction, \
+                     prev_int, [self.currentState getDE_big]);
             break;
         case 0xC:
             // INC E -- Increment E
@@ -474,9 +424,7 @@
                                       N:false
                                       H:(prev > [self.currentState getE])
                                       C:([self.currentState getCFlag])];
-#ifdef MYDEBUG
-            printf("0x%02x -- INC E\n", currentInstruction);
-#endif
+            PRINTDBG("0x%02x -- INC E\n", currentInstruction);
             break;
         case 0xD:
             // DEC E -- Decrement E
@@ -485,19 +433,15 @@
             Z = [self.currentState getE] == 0;
             H = [self.currentState getE] > prev;
             [self.currentState setFlags:Z N:true H:H C:[self.currentState getCFlag]];
-#ifdef MYDEBUG
-            printf("0x%02x -- DEC E -- E was %i; E is now %i\n", currentInstruction, \
+            PRINTDBG("0x%02x -- DEC E -- E was %i; E is now %i\n", currentInstruction, \
                    prev, (int)[self.currentState getE]);
-#endif
             break;
         case 0xE:
             // LD E,d8 -- Load immediate 8-bit data into E
             [self.currentState incrementPC];
             d8 = self.ram[[self.currentState getPC]];
             [self.currentState setE:d8];
-#ifdef MYDEBUG
-            printf("0x%02x -- LD E, d8 -- d8 = %i\n", currentInstruction, (short)d8);
-#endif
+            PRINTDBG("0x%02x -- LD E, d8 -- d8 = %i\n", currentInstruction, (short)d8);
             break;
         case 0xF:
             // RRA -- Rotate accumulator right through carry flag
@@ -509,9 +453,7 @@
             temp ? [self.currentState setA:([self.currentState getA] | 0b10000000)] :
             [self.currentState setA:([self.currentState getA] & 0b01111111)];
             [self.currentState setFlags:false N:false H:false C:C];
-#ifdef MYDEBUG
-            printf("0x%02x -- RRA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
-#endif
+            PRINTDBG("0x%02x -- RRA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
             break;
     }
 }
@@ -533,12 +475,10 @@
             d8 = self.ram[([self.currentState getPC] % RAMSIZE)];
             if ([self.currentState getZFlag] == false)
             {
-                [self.currentState setPC:([self.currentState getPC] + (int)d8)];
+                [self.currentState addToPC:(int)d8];
             }
-#ifdef MYDEBUG
-            printf("0x%02x -- JR NZ, r8 -- if !Z, PC += 0x%02x; PC is now 0x%02x\n",
+            PRINTDBG("0x%02x -- JR NZ, r8 -- if !Z, PC += 0x%02x; PC is now 0x%02x\n",
                    currentInstruction, (int)d8, [self.currentState getPC]);
-#endif
             break;
         case 1:
             // LD HL,d16 -- Load d16 into HL
@@ -546,9 +486,7 @@
             d16 = (self.ram[[self.currentState getPC] + 1] << 8) | self.ram[[self.currentState getPC]];
             [self.currentState incrementPC];
             [self.currentState setHL_big:d16];
-#ifdef MYDEBUG
-            printf("0x%02x -- LD HL, d16 -- d16 = %i\n", currentInstruction, d16);
-#endif
+            PRINTDBG("0x%02x -- LD HL, d16 -- d16 = %i\n", currentInstruction, d16);
             break;
         case 2:
             // LD (HL+),A -- Put A into (HL), and increment HL
@@ -558,9 +496,7 @@
         case 3:
             // INC HL -- Increment HL
             [self.currentState setHL_big:([self.currentState getHL_big] + 1)];
-#ifdef MYDEBUG
-            printf("0x%02x -- INC HL\n", currentInstruction);
-#endif
+            PRINTDBG("0x%02x -- INC HL\n", currentInstruction);
             break;
         case 4:
             // INC H -- Increment H
@@ -570,9 +506,7 @@
                                       N:false
                                       H:(prev > [self.currentState getH])
                                       C:([self.currentState getCFlag])];
-#ifdef MYDEBUG
-            printf("0x%02x -- INC H\n", currentInstruction);
-#endif
+            PRINTDBG("0x%02x -- INC H\n", currentInstruction);
             break;
         case 5:
             // DEC H -- Decrement H
@@ -582,24 +516,29 @@
                                       N:true
                                       H:(prev < [self.currentState getH])
                                       C:([self.currentState getCFlag])];
-#ifdef MYDEBUG
-            printf("0x%02x -- DEC H\n", currentInstruction);
-#endif
+            PRINTDBG("0x%02x -- DEC H\n", currentInstruction);
             break;
         case 6:
             // LD H,d8 -- Load 8-bit immediate data into H
             [self.currentState incrementPC];
             d8 = self.ram[[self.currentState getPC]];
             [self.currentState setH:d8];
-#ifdef MYDEBUG
-            printf("0x%02x -- LD H, d8 -- d8 = %i\n", currentInstruction, (int)d8);
-#endif
+            PRINTDBG("0x%02x -- LD H, d8 -- d8 = %i\n", currentInstruction, (int)d8);
             break;
         case 7:
             // DAA -- Decimal adjust register A; adjust A so that correct BCD obtained
+#warning Do this eventually!!!
             break;
         case 8:
-            
+            // JR Z,r8 -- If Z, add r8 to PC
+            [self.currentState incrementPC];
+            d8 = self.ram[[self.currentState getPC]];
+            if ([self.currentState getZFlag])
+            {
+                [self.currentState addToPC:d8];
+            }
+            PRINTDBG("0x%02x -- JR Z, r8 -- if Z, PC += 0x%02x; PC is now 0x%02x\n",
+                     currentInstruction, (int)d8, [self.currentState getPC]);
             break;
         case 9:
             

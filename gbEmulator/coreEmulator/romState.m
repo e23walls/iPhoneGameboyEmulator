@@ -64,6 +64,10 @@
 {
     PC++;
 }
+- (void) addToPC:(int)offset
+{
+    PC += offset;
+}
 
 #pragma mark - SP methods
 
