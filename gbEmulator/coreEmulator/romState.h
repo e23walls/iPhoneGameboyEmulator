@@ -10,8 +10,8 @@
 
 @interface romState : NSObject
 {
-    unsigned int PC;
-    unsigned int SP;
+    unsigned short PC;
+    unsigned short SP;
     int8_t A;
     int8_t F; // [Z][N][H][C][0][0][0][0]
     int16_t BC;
@@ -20,12 +20,12 @@
 }
 
 - (romState *) init;
-- (void) setPC:(int)newPC;
-- (unsigned int) getPC;
+- (void) setPC:(unsigned short)newPC;
+- (unsigned short) getPC;
 - (void) incrementPC;
 - (void) addToPC:(int8_t)offset;
-- (void) setSP:(int)newSP;
-- (unsigned int) getSP;
+- (void) setSP:(unsigned short)newSP;
+- (unsigned short) getSP;
 - (void) setA:(int8_t) newA;
 - (int8_t) getA;
 - (void) setF:(int8_t) newF;

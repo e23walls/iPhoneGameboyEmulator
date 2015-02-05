@@ -229,7 +229,10 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             C ? [self.currentState setA:([self.currentState getA] | 1)] :
                 [self.currentState setA:([self.currentState getA] & 0b11111110)];
             Z = [self.currentState getA] == 0;
-            [self.currentState setFlags:false N:false H:false C:C];
+            [self.currentState setFlags:false
+                                      N:false
+                                      H:false
+                                      C:C];
             PRINTDBG("0x%02x -- RLCA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
             break;
         case 8:
@@ -254,7 +257,10 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 #warning This could be wrong
             H = ((([self.currentState getHL_little] & 0xf) > 0) & ([self.currentState getHL_little]) & 0xf < prev) |
                     ((([self.currentState getHL_little] & 0xf) < 0) & ([self.currentState getHL_little]) & 0xf > prev);
-            [self.currentState setFlags:Z N:false H:H C:C];
+            [self.currentState setFlags:Z
+                                      N:false
+                                      H:H
+                                      C:C];
             PRINTDBG("0x%02x -- ADD HL,BC -- add BC (%i) and HL (%i) = %i\n", currentInstruction, \
                    [self.currentState getBC_big], prev_int, [self.currentState getHL_big]);
             break;
@@ -277,7 +283,10 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             [self.currentState setC:([self.currentState getC] + 1)];
             Z = [self.currentState getC] == 0;
             H = [self.currentState getC] < prev;
-            [self.currentState setFlags:Z N:false H:H C:[self.currentState getCFlag]];
+            [self.currentState setFlags:Z
+                                      N:false
+                                      H:H
+                                      C:[self.currentState getCFlag]];
             PRINTDBG("0x%02x -- INC C -- C was %i; C is now %i\n", currentInstruction, \
                    prev, (int)[self.currentState getC]);
             break;
@@ -287,7 +296,10 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             [self.currentState setC:([self.currentState getC] - 1)];
             Z = [self.currentState getC] == 0;
             H = [self.currentState getC] > prev;
-            [self.currentState setFlags:Z N:true H:H C:[self.currentState getCFlag]];
+            [self.currentState setFlags:Z
+                                      N:true
+                                      H:H
+                                      C:[self.currentState getCFlag]];
             PRINTDBG("0x%02x -- DEC C -- C was %i; C is now %i\n", currentInstruction, \
                    prev, (int)[self.currentState getC]);
             break;
@@ -307,7 +319,10 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             // Set MSb of A to its previous LSb
             C ? [self.currentState setA:([self.currentState getA] | 0b10000000)] :
             [self.currentState setA:([self.currentState getA] & 0b01111111)];
-            [self.currentState setFlags:false N:false H:false C:C];
+            [self.currentState setFlags:false
+                                      N:false
+                                      H:false
+                                      C:C];
             PRINTDBG("0x%02x -- RRCA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
             break;
     }
@@ -384,7 +399,10 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             // Set LSb of A to its previous C-value
             temp ? [self.currentState setA:([self.currentState getA] | 1)] :
             [self.currentState setA:([self.currentState getA] & 0b11111110)];
-            [self.currentState setFlags:false N:false H:false C:C];
+            [self.currentState setFlags:false
+                                      N:false
+                                      H:false
+                                      C:C];
             PRINTDBG("0x%02x -- RLA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
             break;
         case 8:
@@ -407,7 +425,10 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 #warning This could be wrong
             H = ((([self.currentState getHL_little] & 0xf) > 0) & ([self.currentState getHL_little]) & 0xf < prev) |
             ((([self.currentState getHL_little] & 0xf) < 0) & ([self.currentState getHL_little]) & 0xf > prev);
-            [self.currentState setFlags:Z N:false H:H C:C];
+            [self.currentState setFlags:Z
+                                      N:false
+                                      H:H
+                                      C:C];
             PRINTDBG("0x%02x -- ADD HL,DE -- add DE (%i) and HL (%i) = %i\n", currentInstruction, \
                    [self.currentState getDE_big], prev_int, [self.currentState getHL_big]);
             break;
@@ -440,7 +461,10 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             [self.currentState setE:([self.currentState getE] - 1)];
             Z = [self.currentState getE] == 0;
             H = [self.currentState getE] > prev;
-            [self.currentState setFlags:Z N:true H:H C:[self.currentState getCFlag]];
+            [self.currentState setFlags:Z
+                                      N:true
+                                      H:H
+                                      C:[self.currentState getCFlag]];
             PRINTDBG("0x%02x -- DEC E -- E was %i; E is now %i\n", currentInstruction, \
                    prev, (int)[self.currentState getE]);
             break;
@@ -460,7 +484,10 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             // Set MSb of A to its previous C-value
             temp ? [self.currentState setA:([self.currentState getA] | 0b10000000)] :
             [self.currentState setA:([self.currentState getA] & 0b01111111)];
-            [self.currentState setFlags:false N:false H:false C:C];
+            [self.currentState setFlags:false
+                                      N:false
+                                      H:false
+                                      C:C];
             PRINTDBG("0x%02x -- RRA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
             break;
     }
@@ -560,7 +587,10 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 #warning This could be wrong
             H = ((([self.currentState getHL_little] & 0xf) > 0) & ([self.currentState getHL_little]) & 0xf < prev) |
             ((([self.currentState getHL_little] & 0xf) < 0) & ([self.currentState getHL_little]) & 0xf > prev);
-            [self.currentState setFlags:Z N:false H:H C:C];
+            [self.currentState setFlags:Z
+                                      N:false
+                                      H:H
+                                      C:C];
             PRINTDBG("0x%02x -- ADD HL,HL -- add HL (%i) to itself = %i\n", currentInstruction, \
                         prev_int, [self.currentState getHL_big]);
             break;
@@ -594,7 +624,10 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             [self.currentState setL:([self.currentState getL] - 1)];
             Z = [self.currentState getL] == 0;
             H = [self.currentState getL] > prev;
-            [self.currentState setFlags:Z N:true H:H C:[self.currentState getCFlag]];
+            [self.currentState setFlags:Z
+                                      N:true
+                                      H:H
+                                      C:[self.currentState getCFlag]];
             PRINTDBG("0x%02x -- DEC L -- L was %i; L is now %i\n", currentInstruction, \
                      prev, (int)[self.currentState getL]);
             break;
@@ -609,61 +642,171 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             // CPL -- Complement A
             prev = [self.currentState getA];
             [self.currentState setA:([self.currentState getA] ^ 0xff)];
-            [self.currentState setFlags:[self.currentState getZFlag] N:true H:true C:[self.currentState getCFlag]];
+            [self.currentState setFlags:[self.currentState getZFlag]
+                                      N:true
+                                      H:true
+                                      C:[self.currentState getCFlag]];
             PRINTDBG("0x%02x -- CPL A -- A was %i; A is now %i\n", currentInstruction, prev, [self.currentState getA]);
             break;
     }
 }
 - (void) execute0x3Instruction:(unsigned char)currentInstruction
 {
+    int8_t prev = 0;
+    int prev_int = 0;
+    unsigned short d16 = 0;
+    int8_t d8 = 0;
+    bool Z = true;
+    bool H = true;
+    bool C = true;
     switch (currentInstruction & 0x0F) {
         case 0:
-            
+            // JR NC,r8 -- If !C, add 8-bit immediate data to PC
+            [self.currentState incrementPC];
+            d8 = self.ram[[self.currentState getPC]];
+            if (![self.currentState getCFlag])
+            {
+                [self.currentState addToPC:d8];
+            }
+            PRINTDBG("0x%02x -- JR NC, r8 -- if !C, PC += %i; PC is now 0x%02x\n",
+                     currentInstruction, (int8_t)d8, [self.currentState getPC]);
             break;
         case 1:
-            
+            // LD SP,d16 -- load immediate 16-bit data into SP
+            [self.currentState incrementPC];
+            d16 = (self.ram[[self.currentState getPC] + 1] << 8) | self.ram[[self.currentState getPC]];
+            [self.currentState incrementPC];
+            [self.currentState setSP:d16];
+            PRINTDBG("0x%02x -- LD SP, d16 -- d16 = %i\n", currentInstruction, d16);
             break;
         case 2:
-            
+            // LD (HL-),A -- put A into (HL), and decrement HL
+            self.ram[(unsigned short)[self.currentState getHL_big]] = [self.currentState getA];
+            [self.currentState setHL_big:([self.currentState getHL_big] - 1)];
+            PRINTDBG("0x%02x -- LD (HL-),A -- HL = %i; (HL) = %i; A = %i\n", currentInstruction,
+                     [self.currentState getHL_big], self.ram[[self.currentState getHL_big]],
+                     [self.currentState getA]);
             break;
         case 3:
-            
+            // INC SP -- Increment SP
+            [self.currentState setSP:([self.currentState getSP] + 1)];
+            PRINTDBG("0x%02x -- INC SP\n", currentInstruction);
             break;
         case 4:
-            
+            // INC (HL) -- Increment (HL)
+            prev = self.ram[[self.currentState getHL_big]];
+            self.ram[[self.currentState getHL_big]] += 1;
+            [self.currentState setFlags:(self.ram[[self.currentState getHL_big]] == 0)
+                                      N:false
+                                      H:(prev > self.ram[[self.currentState getHL_big]])
+                                      C:([self.currentState getCFlag])];
+            PRINTDBG("0x%02x -- INC (HL)\n", currentInstruction);
             break;
         case 5:
-            
+            // DEC (HL) -- Decrement (HL)
+            prev = self.ram[[self.currentState getHL_big]];
+            self.ram[[self.currentState getHL_big]] -= 1;
+            [self.currentState setFlags:(self.ram[[self.currentState getHL_big]] == 0)
+                                      N:true
+                                      H:(prev < self.ram[[self.currentState getHL_big]])
+                                      C:([self.currentState getCFlag])];
+            PRINTDBG("0x%02x -- DEC (HL)\n", currentInstruction);
             break;
         case 6:
-            
+            // LD (HL),d8 -- Load 8-bit immediate data into (HL)
+            [self.currentState incrementPC];
+            d8 = self.ram[[self.currentState getPC]];
+            self.ram[[self.currentState getHL_big]] = d8;
+            PRINTDBG("0x%02x -- LD (HL), d8 -- d8 = %i\n", currentInstruction, (int)d8);
             break;
         case 7:
-            
+            // SCF -- Set carry flag
+            [self.currentState setFlags:[self.currentState getZFlag]
+                                      N:false
+                                      H:false
+                                      C:true];
+            PRINTDBG("0x%02x -- SCF\n", currentInstruction);
             break;
         case 8:
-            
+            // JR C,r8 -- If C, add 8-bit immediate data to PC
+            [self.currentState incrementPC];
+            d8 = self.ram[[self.currentState getPC]];
+            if ([self.currentState getCFlag])
+            {
+                [self.currentState addToPC:d8];
+            }
+            PRINTDBG("0x%02x -- JR C, r8 -- if C, PC += %i; PC is now 0x%02x\n",
+                     currentInstruction, (int8_t)d8, [self.currentState getPC]);
             break;
         case 9:
-            
+            // ADD HL,SP -- Add SP to HL
+            // H = carry from bit 11; C = carry from bit 15; reset N; leave Z alone
+            prev = [self.currentState getHL_little] & 0xf;
+            prev_int = [self.currentState getHL_big];
+            [self.currentState setHL_big:([self.currentState getSP]+[self.currentState getHL_big])];
+            Z = [self.currentState getZFlag];
+            C = (prev_int > [self.currentState getSP]);
+#warning This could be wrong
+            H = ((([self.currentState getHL_little] & 0xf) > 0) & ([self.currentState getHL_little]) & 0xf < prev) |
+            ((([self.currentState getHL_little] & 0xf) < 0) & ([self.currentState getHL_little]) & 0xf > prev);
+            [self.currentState setFlags:Z
+                                      N:false
+                                      H:H
+                                      C:C];
+            PRINTDBG("0x%02x -- ADD HL,SP -- add SP (%i) and HL (%i) = %i\n", currentInstruction, \
+                     [self.currentState getSP], prev_int, [self.currentState getHL_big]);
             break;
         case 0xA:
-            
+            // LD A,(HL-) -- Put value at address at HL, (HL), into A, and decrement HL
+            [self.currentState setA:self.ram[(unsigned short)[self.currentState getHL_big]]];
+            [self.currentState setHL_big:([self.currentState getHL_big]-1)];
+            PRINTDBG("0x%02x -- LD A,(HL-) -- HL is now 0x%02x; A = 0x%02x\n", currentInstruction, \
+                     [self.currentState getHL_big], [self.currentState getA]);
             break;
         case 0xB:
-            
+            // DEC SP -- Decrement SP
+            prev_int = [self.currentState getSP];
+            [self.currentState setHL_big:([self.currentState getSP] - 1)];
+            PRINTDBG("0x%02x -- DEC SP -- SP was %i; SP is now %i\n", currentInstruction, \
+                     prev_int, [self.currentState getSP]);
             break;
         case 0xC:
-            
+            // INC A -- Increment A
+            prev = [self.currentState getA];
+            [self.currentState setA:([self.currentState getA] + 1)];
+            [self.currentState setFlags:([self.currentState getA] == 0)
+                                      N:false
+                                      H:(prev > [self.currentState getA])
+                                      C:([self.currentState getCFlag])];
+            PRINTDBG("0x%02x -- INC A\n", currentInstruction);
             break;
         case 0xD:
-            
+            // DEC A -- Decrement A
+            prev = [self.currentState getA];
+            [self.currentState setA:([self.currentState getA] - 1)];
+            Z = [self.currentState getA] == 0;
+            H = [self.currentState getA] > prev;
+            [self.currentState setFlags:Z
+                                      N:true
+                                      H:H
+                                      C:[self.currentState getCFlag]];
+            PRINTDBG("0x%02x -- DEC A -- A was %i; A is now %i\n", currentInstruction, \
+                     prev, (int)[self.currentState getA]);
             break;
         case 0xE:
-            
+            // LD A,d8 -- Load 8-bit immediate data into A
+            [self.currentState incrementPC];
+            d8 = self.ram[[self.currentState getPC]];
+            [self.currentState setA:d8];
+            PRINTDBG("0x%02x -- LD A, d8 -- d8 = %i\n", currentInstruction, (short)d8);
             break;
         case 0xF:
-            
+            // CCF -- Complement carry flag
+            [self.currentState setFlags:[self.currentState getZFlag]
+                                      N:false
+                                      H:false
+                                      C:![self.currentState getCFlag]];
+            PRINTDBG("0x%02x -- CCF\n", currentInstruction);
             break;
     }
 }

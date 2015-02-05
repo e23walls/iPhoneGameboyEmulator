@@ -56,11 +56,11 @@
 
 #pragma mark - PC methods
 
-- (void) setPC:(int)newPC
+- (void) setPC:(unsigned short)newPC
 {
     PC = newPC;
 }
-- (unsigned int) getPC
+- (unsigned short) getPC
 {
     return PC;
 }
@@ -75,12 +75,12 @@
 
 #pragma mark - SP methods
 
-- (void) setSP:(int)newSP
+- (void) setSP:(unsigned short)newSP
 {
     SP = newSP;
 }
 
-- (unsigned int) getSP
+- (unsigned short) getSP
 {
     return SP;
 }
