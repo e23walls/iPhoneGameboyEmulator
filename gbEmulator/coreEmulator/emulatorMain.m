@@ -813,12 +813,6 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 - (void) execute0x4Instruction:(unsigned char)currentInstruction
 {
     int8_t prev = 0;
-    int prev_int = 0;
-    unsigned short d16 = 0;
-    int8_t d8 = 0;
-    bool Z = true;
-    bool H = true;
-    bool C = true;
     switch (currentInstruction & 0x0F) {
         case 0:
             // LD B,B -- Load B into B (effectively a no-op?)
@@ -930,54 +924,115 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 }
 - (void) execute0x5Instruction:(unsigned char)currentInstruction
 {
+    int8_t prev = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
-            
+            // LD D,B -- Load B into D
+            prev = [self.currentState getD];
+            [self.currentState setD:[self.currentState getB]];
+            PRINTDBG("0x%02x -- LD D,B -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, \
+                     prev, [self.currentState getD]);
             break;
         case 1:
-            
+            // LD D,C -- Load C into D
+            prev = [self.currentState getD];
+            [self.currentState setC:[self.currentState getB]];
+            PRINTDBG("0x%02x -- LD D,C -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, \
+                     prev, [self.currentState getD]);
             break;
         case 2:
-            
+            // LD D,D -- Load D into D -- No-op
+            PRINTDBG("0x%02x -- LD D,D\n", currentInstruction);
             break;
         case 3:
-            
+            // LD D,E -- Load E into D
+            prev = [self.currentState getD];
+            [self.currentState setD:[self.currentState getE]];
+            PRINTDBG("0x%02x -- LD D,E -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, \
+                     prev, [self.currentState getD]);
             break;
         case 4:
-            
+            // LD D,H -- Load H into D
+            prev = [self.currentState getD];
+            [self.currentState setD:[self.currentState getH]];
+            PRINTDBG("0x%02x -- LD D,H -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, \
+                     prev, [self.currentState getD]);
             break;
         case 5:
-            
+            // LD D,L -- Load L into D
+            prev = [self.currentState getD];
+            [self.currentState setD:[self.currentState getL]];
+            PRINTDBG("0x%02x -- LD D,L -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, \
+                     prev, [self.currentState getD]);
             break;
         case 6:
-            
+            // LD D,(HL) -- Load (HL) into D
+            prev = [self.currentState getD];
+            [self.currentState setD:self.ram[[self.currentState getHL_big]]];
+            PRINTDBG("0x%02x -- LD D,(HL) -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, \
+                     prev, [self.currentState getD]);
             break;
         case 7:
-            
+            // LD D,A -- Load A into D
+            prev = [self.currentState getD];
+            [self.currentState setD:[self.currentState getA]];
+            PRINTDBG("0x%02x -- LD D,A -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, \
+                     prev, [self.currentState getD]);
             break;
         case 8:
-            
+            // LD E,B -- Load B into E
+            prev = [self.currentState getE];
+            [self.currentState setE:[self.currentState getB]];
+            PRINTDBG("0x%02x -- LD E,B -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, \
+                     prev, [self.currentState getE]);
             break;
         case 9:
-            
+            // LD E,C -- Load C into E
+            prev = [self.currentState getE];
+            [self.currentState setE:[self.currentState getC]];
+            PRINTDBG("0x%02x -- LD E,C -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, \
+                     prev, [self.currentState getE]);
             break;
         case 0xA:
-            
+            // LD E,D -- Load D into E
+            prev = [self.currentState getE];
+            [self.currentState setE:[self.currentState getD]];
+            PRINTDBG("0x%02x -- LD E,D -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, \
+                     prev, [self.currentState getE]);
             break;
         case 0xB:
-            
+            // LD E,E -- Load E into E -- No-op
+            prev = [self.currentState getE];
+            [self.currentState setE:[self.currentState getB]];
+            PRINTDBG("0x%02x -- LD E,E\n", currentInstruction);
             break;
         case 0xC:
-            
+            // LD E,H -- Load H into E; A very Canadian instruction
+            prev = [self.currentState getE];
+            [self.currentState setE:[self.currentState getH]];
+            PRINTDBG("0x%02x -- Load, eh? -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, \
+                     prev, [self.currentState getE]);
             break;
         case 0xD:
-            
+            // LD E,L -- Load L into E
+            prev = [self.currentState getE];
+            [self.currentState setE:[self.currentState getL]];
+            PRINTDBG("0x%02x -- LD E,L -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, \
+                     prev, [self.currentState getE]);
             break;
         case 0xE:
-            
+            // LD E,(HL) -- Load (HL) into E
+            prev = [self.currentState getE];
+            [self.currentState setE:self.ram[[self.currentState getHL_big]]];
+            PRINTDBG("0x%02x -- LD E,(HL) -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, \
+                     prev, [self.currentState getE]);
             break;
         case 0xF:
-            
+            // LD E,A -- Load A into E
+            prev = [self.currentState getE];
+            [self.currentState setE:[self.currentState getA]];
+            PRINTDBG("0x%02x -- LD E,A -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, \
+                     prev, [self.currentState getE]);
             break;
     }
 }
@@ -1337,7 +1392,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             break;
         case 0xB:
             // Instruction with 0xCB prefix
-            
+            [self executeCBInstruction];
             break;
         case 0xC:
             
