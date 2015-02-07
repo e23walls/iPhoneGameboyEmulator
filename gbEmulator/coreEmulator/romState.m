@@ -21,7 +21,7 @@
         BC = 0;
         DE = 0;
         HL = 0;
-        SP = 0xfffe; // Highest RAM location
+        SP = 0xFFFE; // Highest word location in RAM
     }
     else
     {
@@ -106,7 +106,7 @@
 }
 - (void) setB: (int8_t) newB
 {
-    BC = (int16_t)((newB << 8) | (BC & 0x0F));
+    BC = (int16_t)((newB << 8) | (BC & 0x0FF));
 }
 - (int8_t) getB
 {
@@ -114,15 +114,15 @@
 }
 - (void) setC: (int8_t) newC
 {
-    BC = (int16_t) (newC | (BC & 0xF0));
+    BC = (int16_t) (newC | (BC & 0xFF00));
 }
 - (int8_t) getC
 {
-    return (int8_t) (BC & 0x0F);
+    return (int8_t) (BC & 0x00FF);
 }
 - (void) setD: (int8_t) newD
 {
-    DE = (int16_t)((newD << 8) | (DE & 0x0F));
+    DE = (int16_t)((newD << 8) | (DE & 0x00FF));
 }
 - (int8_t) getD
 {
@@ -130,38 +130,38 @@
 }
 - (void) setE: (int8_t) newE
 {
-    DE = (int16_t) newE | (DE & 0xF0);
+    DE = (int16_t) (newE | (DE & 0xFF00));
 }
 - (int8_t) getE
 {
-    return (int8_t) (DE & 0x0F);
+    return (int8_t) (DE & 0x00FF);
 }
 - (void) setH: (int8_t) newH
 {
-    HL = (int16_t)((newH << 8) | (HL & 0x0F));
+    HL = (int16_t)((newH << 8) | (HL & 0x0FF));
 }
 - (int8_t) getH
 {
-    return (int8_t) (HL >> 8);
+    return (int8_t) ((HL & 0xFF00) >> 8);
 }
 - (void) setL: (int8_t) newL
 {
-    HL = (int16_t)( newL | (HL & 0xF0));
+    HL = (int16_t)(newL | ((HL & 0xFF00)));
 }
 - (int8_t) getL
 {
-    return (int8_t) (HL & 0x0F);
+    return (int8_t) (HL & 0x00FF);
 }
 
 #pragma mark - Double register methods (big-endian)
 
 - (int16_t) getAF_big
 {
-    return (A >> 8) | F;
+    return (A << 8) | F;
 }
 - (int16_t) getAF_little
 {
-    return (F >> 8) | A;
+    return (F << 8) | A;
 }
 
 - (int16_t) getBC_big
@@ -193,27 +193,27 @@
 
 - (int16_t) getBC_little
 {
-    return ((BC & 0x0F) << 4) | ((BC & 0xF0) >> 4);
+    return ((BC & 0x00FF) << 8) | ((BC & 0xFF00) >> 8);
 }
 - (void) setBC_little:(int16_t) newBC
 {
-    BC = ((newBC & 0x0F) << 4) | ((newBC & 0xF0) >> 4);
+    BC = ((newBC & 0x00FF) << 8) | ((newBC & 0xFF00) >> 8);
 }
 - (int16_t) getDE_little
 {
-    return ((DE & 0x0F) << 4) | ((DE & 0xF0) >> 4);
+    return ((DE & 0x00FF) << 8) | ((DE & 0xFF00) >> 8);
 }
 - (void) setDE_little:(int16_t) newDE
 {
-    DE = ((newDE & 0x0F) << 4) | ((newDE & 0xF0) >> 4);
+    DE = ((newDE & 0x00FF) << 8) | ((newDE & 0xFF00) >> 8);
 }
 - (int16_t) getHL_little
 {
-    return ((HL & 0x0F) << 4) | ((HL & 0xF0) >> 4);
+    return ((HL & 0x00FF) << 8) | ((HL & 0xFF00) >> 8);
 }
 - (void) setHL_little:(int16_t) newHL
 {
-    HL = ((newHL & 0x0F) << 4) | ((newHL & 0xF0) >> 4);
+    HL = ((newHL & 0x00FF) << 8) | ((newHL & 0xFF00) >> 8);
 }
 
 @end

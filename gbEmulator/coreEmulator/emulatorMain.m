@@ -170,6 +170,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 {
     int8_t prev = 0;
     int prev_int = 0;
+    short prev_short = 0;
     int8_t A = 0;
     unsigned short d16 = 0;
     int8_t d8 = 0;
@@ -185,7 +186,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
         case 1:
             // LD BC, d16 -- Load 16-bit data into registers BC
             [self.currentState incrementPC];
-            d16 = (self.ram[[self.currentState getPC] + 1] << 8) | self.ram[[self.currentState getPC]];
+            d16 = (self.ram[[self.currentState getPC] + 1] << 8) | (self.ram[[self.currentState getPC]] & 0x00ff);
             [self.currentState incrementPC];
             [self.currentState setBC_big:d16];
             PRINTDBG("0x%02x -- LD BC, d16 -- d16 = %i\n", currentInstruction, d16);
@@ -245,13 +246,17 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             PRINTDBG("0x%02x -- RLCA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
             break;
         case 8:
-            // LD (a16), SP -- put SP at address a16
+            // LD (a16), SP -- put (SP) at address a16
             [self.currentState incrementPC];
-            d16 = (self.ram[[self.currentState getPC] + 1] << 8) | self.ram[[self.currentState getPC]];
+            d16 = (self.ram[[self.currentState getPC] + 1] << 8) | (self.ram[[self.currentState getPC]] & 0xff);
             [self.currentState incrementPC];
-            self.ram[d16] = [self.currentState getSP];
-            PRINTDBG("0x%02x -- LD (a16), SP -- put SP at 0x%02x -- SP is %02x -- [SP] = 0x%02x\n", currentInstruction, \
-                                d16, [self.currentState getSP], self.ram[d16]);
+            prev_short =  (self.ram[d16+1] << 8) | (self.ram[d16] & 0x0ff);
+            self.ram[d16] = self.ram[[self.currentState getSP]+1];
+            self.ram[d16+1] = self.ram[[self.currentState getSP]];
+            PRINTDBG("0x%02x -- LD (a16), SP -- put (SP = 0x%02x) at [d16 = 0x%02x] -- [SP] is 0x%02x -- [d16] was 0x%02x; now 0x%02x\n", \
+                        currentInstruction, [self.currentState getSP], d16, \
+                        (self.ram[[self.currentState getSP]] & 0x0ff) | (self.ram[[self.currentState getSP]+1] << 8), \
+                        prev_short, (self.ram[d16+1] & 0x0ff) | (self.ram[d16] << 8));
             break;
         case 9:
             // ADD HL,BC -- add BC to HL
@@ -360,7 +365,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
         case 1:
             // LD DE, d16 -- Load d16 into DE
             [self.currentState incrementPC];
-            d16 = (self.ram[[self.currentState getPC] + 1] << 8) | self.ram[[self.currentState getPC]];
+            d16 = (self.ram[[self.currentState getPC] + 1] << 8) | (self.ram[[self.currentState getPC]] & 0x0ff);
             [self.currentState incrementPC];
             [self.currentState setDE_big:d16];
             PRINTDBG("0x%02x -- LD DE, d16 -- d16 = %i\n", currentInstruction, d16);
@@ -531,7 +536,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
         case 1:
             // LD HL,d16 -- Load d16 into HL
             [self.currentState incrementPC];
-            d16 = (self.ram[[self.currentState getPC] + 1] << 8) | self.ram[[self.currentState getPC]];
+            d16 = (self.ram[[self.currentState getPC] + 1] << 8) | (self.ram[[self.currentState getPC]] & 0x0ff);
             [self.currentState incrementPC];
             [self.currentState setHL_big:d16];
             PRINTDBG("0x%02x -- LD HL, d16 -- d16 = %i\n", currentInstruction, d16);
@@ -691,7 +696,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
         case 1:
             // LD SP,d16 -- load immediate 16-bit data into SP
             [self.currentState incrementPC];
-            d16 = (self.ram[[self.currentState getPC] + 1] << 8) | self.ram[[self.currentState getPC]];
+            d16 = (self.ram[[self.currentState getPC] + 1] << 8) | (self.ram[[self.currentState getPC]] & 0x0ff);
             [self.currentState incrementPC];
             [self.currentState setSP:d16];
             PRINTDBG("0x%02x -- LD SP, d16 -- d16 = %i\n", currentInstruction, d16);
@@ -1057,6 +1062,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 - (void) execute0x6Instruction:(unsigned char)currentInstruction
 {
     int8_t prev = 0;
+    short prev_short = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
             // LD H,B -- Load B into H
@@ -1100,9 +1106,11 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
         case 6:
             // LD H,(HL) -- Load (HL) into H
             prev = [self.currentState getH];
+            prev_short = [self.currentState getHL_big];
             [self.currentState setH:self.ram[[self.currentState getHL_big]]];
-            PRINTDBG("0x%02x -- LD H,(HL) -- H was 0x%02x; H is now 0x%02x\n", currentInstruction, \
-                     prev, [self.currentState getH]);
+            PRINTDBG("0x%02x -- LD H,(HL) -- H was 0x%02x; HL was 0x%04x; (HL) was 0x%02x; H is now 0x%02x\n", \
+                     currentInstruction, prev & 0x0ff, prev_short & 0x0ffff, \
+                     self.ram[prev_short] & 0x0ff, [self.currentState getH] & 0x0ff);
             break;
         case 7:
             // LD H,A -- Load A into H
@@ -1518,9 +1526,8 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             break;
         case 1:
             // POP BC -- Pop two bytes from SP into BC, and increment SP twice
-#warning The data might be saved as little-endian in the register too
             d16 = ((self.ram[[self.currentState getSP]] & 0x00ff) << 8) | \
-                        ((self.ram[[self.currentState getSP]+1] & 0xff00) >> 8);
+                        (((self.ram[[self.currentState getSP]+1] & 0xff00) >> 8) & 0x0ff);
             [self.currentState setBC_big:d16];
             [self.currentState setSP:([self.currentState getSP] + 2)];
             PRINTDBG("0x%02x -- POP BC -- BC = 0x%02x -- SP is now at 0x%02x\n", currentInstruction,
@@ -1555,9 +1562,8 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             break;
         case 9:
             // RET -- return from subroutine; pop two bytes from SP and go to that address
-#warning The data might be saved as little-endian in the register too
             d16 = ((self.ram[[self.currentState getSP]] & 0x00ff) << 8) | \
-                    ((self.ram[[self.currentState getSP]+1] & 0xff00) >> 8);
+                    (((self.ram[[self.currentState getSP]+1] & 0xff00) >> 8) & 0x0ff);
             [self.currentState setSP:([self.currentState getSP]+2)];
             [self.currentState setPC:(unsigned short)d16];
             PRINTDBG("0x%02x -- RET -- PC is now 0x%02x\n", currentInstruction,
@@ -1594,9 +1600,8 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             break;
         case 1:
             // POP DE - Pop two bytes from SP into DE, and increment SP twice
-#warning The data might be saved as little-endian in the register too
             d16 = ((self.ram[[self.currentState getSP]] & 0x00ff) << 8) | \
-                    ((self.ram[[self.currentState getSP]+1] & 0xff00) >> 8);
+                    (((self.ram[[self.currentState getSP]+1] & 0xff00) >> 8) & 0x0ff);
             [self.currentState setDE_big:d16];
             [self.currentState setSP:([self.currentState getSP] + 2)];
             PRINTDBG("0x%02x -- POP DE -- DE = 0x%02x -- SP is now at 0x%02x\n", currentInstruction,
@@ -1661,9 +1666,8 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             break;
         case 1:
             // POP HL - Pop two bytes from SP into HL, and increment SP twice
-#warning The data might be saved as little-endian in the register too
             d16 = ((self.ram[[self.currentState getSP]] & 0x00ff) << 8) | \
-                    ((self.ram[[self.currentState getSP]+1] & 0xff00) >> 8);
+                    (((self.ram[[self.currentState getSP]+1] & 0xff00) >> 8) & 0x0ff);
             [self.currentState setHL_big:d16];
             [self.currentState setSP:([self.currentState getSP] + 2)];
             PRINTDBG("0x%02x -- POP HL -- HL = 0x%02x -- SP is now at 0x%02x\n", currentInstruction,
