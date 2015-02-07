@@ -21,6 +21,7 @@
         BC = 0;
         DE = 0;
         HL = 0;
+        SP = 0xfffe; // Highest RAM location
     }
     else
     {
