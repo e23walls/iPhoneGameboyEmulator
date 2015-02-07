@@ -85,6 +85,7 @@ static rom * currentRom;
     NSLog(@"User pressed up arrow!\n");
     // or (0000 0100)2 with [0xff00]
     emulator.keys[2] = 1;
+    emulator.buttons ^= 0b00000100;
     PRINTKEYS();
 }
 - (IBAction)downButtonDown:(id)sender
@@ -92,6 +93,7 @@ static rom * currentRom;
     NSLog(@"User pressed down arrow!\n");
     // or (0000 1000)2 with [0xff00]
     emulator.keys[3] = 1;
+    emulator.buttons ^= 0b00001000;
     PRINTKEYS();
 }
 - (IBAction)leftButtonDown:(id)sender
@@ -99,6 +101,7 @@ static rom * currentRom;
     NSLog(@"User pressed left arrow!\n");
     // or (0000 0010)2 with [0xff00]
     emulator.keys[1] = 1;
+    emulator.buttons ^= 0b00000010;
     PRINTKEYS();
 }
 - (IBAction)rightButtonDown:(id)sender
@@ -106,6 +109,7 @@ static rom * currentRom;
     NSLog(@"User pressed right arrow!\n");
     // or (0000 0001)2 with [0xff00]
     emulator.keys[0] = 1;
+    emulator.buttons ^= 0b00000001;
     PRINTKEYS();
 }
 - (IBAction)AButtonDown:(id)sender
@@ -113,6 +117,7 @@ static rom * currentRom;
     NSLog(@"User pressed 'A' button!\n");
     // or (0000 0001)2 with [0xff00]
     emulator.keys[4] = 1;
+    emulator.buttons ^= 0b00010000;
     PRINTKEYS();
 }
 - (IBAction)BButtonDown:(id)sender
@@ -120,6 +125,7 @@ static rom * currentRom;
     NSLog(@"User pressed 'B' button!\n");
     // or (0000 0010)2 with [0xff00]
     emulator.keys[5] = 1;
+    emulator.buttons ^= 0b00100000;
     PRINTKEYS();
 }
 - (IBAction)startButtonDown:(id)sender
@@ -127,6 +133,7 @@ static rom * currentRom;
     NSLog(@"User pressed 'Start' button!\n");
     // or (0000 1000)2 with [0xff00]
     emulator.keys[7] = 1;
+    emulator.buttons ^= 0b10000000;
     PRINTKEYS();
 }
 - (IBAction)selectButtonDown:(id)sender
@@ -134,6 +141,7 @@ static rom * currentRom;
     NSLog(@"User pressed 'Select' button!\n");
     // or (0000 0100)2 with [0xff00]
     emulator.keys[6] = 1;
+    emulator.buttons ^= 0b01000000;
     PRINTKEYS();
 }
 - (IBAction)upButtonUp:(id)sender
@@ -141,6 +149,7 @@ static rom * currentRom;
     NSLog(@"User released 'Up' button!\n");
     // or (0000 0100)2 with [0xff00]
     emulator.keys[2] = 0;
+    emulator.buttons ^= 0b00000100;
     PRINTKEYS();
 }
 - (IBAction)downButtonUp:(id)sender
@@ -148,6 +157,7 @@ static rom * currentRom;
     NSLog(@"User released down arrow!\n");
     // or (0000 1000)2 with [0xff00]
     emulator.keys[3] = 0;
+    emulator.buttons ^= 0b00001000;
     PRINTKEYS();
 }
 - (IBAction)leftButtonUp:(id)sender
@@ -155,6 +165,7 @@ static rom * currentRom;
     NSLog(@"User released left arrow!\n");
     // or (0000 0010)2 with [0xff00]
     emulator.keys[1] = 0;
+    emulator.buttons ^= 0b00000010;
     PRINTKEYS();
 }
 - (IBAction)rightButtonUp:(id)sender
@@ -162,6 +173,7 @@ static rom * currentRom;
     NSLog(@"User released right arrow!\n");
     // or (0000 0001)2 with [0xff00]
     emulator.keys[0] = 0;
+    emulator.buttons ^= 0b00000001;
     PRINTKEYS();
 }
 - (IBAction)AButtonUp:(id)sender
@@ -169,6 +181,7 @@ static rom * currentRom;
     NSLog(@"User released 'A' button!\n");
     // or (0000 0001)2 with [0xff00]
     emulator.keys[4] = 0;
+    emulator.buttons ^= 0b00010000;
     PRINTKEYS();
 }
 - (IBAction)BButtonUp:(id)sender
@@ -176,6 +189,7 @@ static rom * currentRom;
     NSLog(@"User released 'B' button!\n");
     // or (0000 0010)2 with [0xff00]
     emulator.keys[5] = 0;
+    emulator.buttons ^= 0b00100000;
     PRINTKEYS();
 }
 - (IBAction)startButtonUp:(id)sender
@@ -183,6 +197,7 @@ static rom * currentRom;
     NSLog(@"User released 'Start' button!\n");
     // or (0000 1000)2 with [0xff00]
     emulator.keys[7] = 0;
+    emulator.buttons ^= 0b10000000;
     PRINTKEYS();
 }
 - (IBAction)selectButtonUp:(id)sender
@@ -190,6 +205,7 @@ static rom * currentRom;
     NSLog(@"User released 'Select' button!\n");
     // or (0000 0100)2 with [0xff00]
     emulator.keys[6] = 0;
+    emulator.buttons ^= 0b00100000;
     PRINTKEYS();
 }
 - (IBAction)stopButton:(id)sender

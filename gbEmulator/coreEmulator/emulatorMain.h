@@ -17,6 +17,7 @@
  [Start][Select][B][A][Down][Up][Left][Right]
  */
 @property int * keys;
+@property int8_t buttons;
 - (emulatorMain *) initWithRom: (rom *) theRom;
 - (void) runRom;
 

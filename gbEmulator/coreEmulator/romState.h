@@ -42,6 +42,8 @@
 - (int8_t) getH;
 - (void) setL: (int8_t) newL;
 - (int8_t) getL;
+- (int16_t) getAF_big;
+- (int16_t) getAF_little;
 - (int16_t) getBC_big;
 - (void) setBC_big:(int16_t) newBC;
 - (int16_t) getBC_little;

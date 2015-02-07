@@ -21,6 +21,9 @@ const int k = 1024;
 const int ramsize = 64 * k; // For readability purposes; an unsigned short spans the same set of integers.
 
 @interface emulatorMain ()
+{
+    bool incrementPC;
+}
 
 @property char * ram;
 @property rom * currentRom;
@@ -35,6 +38,8 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
     self = [super init];
     if (self != nil)
     {
+        incrementPC = true;
+        self.buttons = 0b00000000;
         self.keys = calloc(8, sizeof(int));
         self.currentRom = theRom;
         self.ram = (char *)malloc(ramsize * sizeof(char));
@@ -95,8 +100,12 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
     while ([self.currentState getPC] < ramsize)
     {
         PRINTDBG("PC = 0x%02x\n", [self.currentState getPC]);
+        incrementPC = true;
         [self executeInstruction];
-        [self.currentState incrementPC];
+        if (incrementPC)
+        {
+            [self.currentState incrementPC];
+        }
     }
 }
 
@@ -338,11 +347,15 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
     bool H = true;
     bool C = true;
     bool temp = true;
+    int8_t previousButtons = self.buttons;
     switch (currentInstruction & 0x0F) {
         case 0:
             // STOP
-#warning Implement STOP instruction
             // Wait for button press before changing processor and screen
+#warning Figure this out
+            while ((self.buttons ^ previousButtons) == 0)
+            {/* Do nothing but wait */}
+            PRINTDBG("0x%02x -- STOP\n", currentInstruction);
             break;
         case 1:
             // LD DE, d16 -- Load d16 into DE
@@ -412,6 +425,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             [self.currentState addToPC:d8];
             PRINTDBG("0x%02x -- JR r8 (r8 = %d) -- PC is now %02x\n",
                    currentInstruction, (int)d8, [self.currentState getPC]);
+            incrementPC = false;
             break;
         case 9:
             // ADD HL,DE -- add DE to HL
@@ -512,6 +526,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             }
             PRINTDBG("0x%02x -- JR NZ, r8 -- if !Z, PC += %i; PC is now 0x%02x\n",
                    currentInstruction, (int8_t)d8, [self.currentState getPC]);
+            incrementPC = false;
             break;
         case 1:
             // LD HL,d16 -- Load d16 into HL
@@ -575,6 +590,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             }
             PRINTDBG("0x%02x -- JR Z, r8 -- if Z, PC += %i; PC is now 0x%02x\n",
                      currentInstruction, (int8_t)d8, [self.currentState getPC]);
+            incrementPC = false;
             break;
         case 9:
             // ADD HL,HL -- Add HL to HL
@@ -670,6 +686,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             }
             PRINTDBG("0x%02x -- JR NC, r8 -- if !C, PC += %i; PC is now 0x%02x\n",
                      currentInstruction, (int8_t)d8, [self.currentState getPC]);
+            incrementPC = false;
             break;
         case 1:
             // LD SP,d16 -- load immediate 16-bit data into SP
@@ -737,6 +754,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             }
             PRINTDBG("0x%02x -- JR C, r8 -- if C, PC += %i; PC is now 0x%02x\n",
                      currentInstruction, (int8_t)d8, [self.currentState getPC]);
+            incrementPC = false;
             break;
         case 9:
             // ADD HL,SP -- Add SP to HL
@@ -1369,6 +1387,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 }
 - (void) execute0xAInstruction:(unsigned char)currentInstruction
 {
+    int8_t prev = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
             
@@ -1416,15 +1435,32 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             
             break;
         case 0xF:
-            
+            // XOR A -- A <- A ^ A
+            prev = [self.currentState getA];
+            [self.currentState setA:(prev ^ prev)];
+            [self.currentState setFlags:([self.currentState getA] == 0)
+                                      N:false
+                                      H:false
+                                      C:false];
+            PRINTDBG("0x%02x -- XOR A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+                     prev, [self.currentState getA]);
             break;
     }
 }
 - (void) execute0xBInstruction:(unsigned char)currentInstruction
 {
+    int8_t prev = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
-            
+            // OR B -- A <- A | B
+            prev = [self.currentState getA];
+            [self.currentState setA:([self.currentState getA] | [self.currentState getB])];
+            [self.currentState setFlags:([self.currentState getA] == 0)
+                                      N:false
+                                      H:false
+                                      C:false];
+            PRINTDBG("0x%02x -- OR B -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+                     prev, [self.currentState getA]);
             break;
         case 1:
             
@@ -1475,12 +1511,18 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 }
 - (void) execute0xCInstruction:(unsigned char)currentInstruction
 {
+    int16_t d16 = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
             
             break;
         case 1:
-            
+            // POP BC -- Pop two bytes from SP into BC, and increment SP twice
+            d16 = (([self.currentState getSP] & 0x00ff) << 8) | (([self.currentState getSP] & 0xff00) >> 8);
+            [self.currentState setBC_big:d16];
+            [self.currentState setSP:([self.currentState getSP] + 2)];
+            PRINTDBG("0x%02x -- POP BC -- BC = 0x%02x -- SP is now at 0x%02x\n", currentInstruction,
+                     [self.currentState getBC_big], [self.currentState getSP]);
             break;
         case 2:
             
@@ -1492,7 +1534,13 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             
             break;
         case 5:
-            
+            // PUSH BC -- push BC onto SP, and decrement SP twice
+            d16 = [self.currentState getBC_little];
+            self.ram[[self.currentState getSP]] = d16 & 0xff00;
+            self.ram[[self.currentState getSP]+1] = d16 & 0x00ff;
+            [self.currentState setSP:([self.currentState getSP] - 2)];
+            PRINTDBG("0x%02x -- PUSH BC -- BC = 0x%02x -- SP is now at 0x%02x\n", currentInstruction,
+                     [self.currentState getBC_big], [self.currentState getSP]);
             break;
         case 6:
             
@@ -1504,7 +1552,13 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             
             break;
         case 9:
-            
+            // RET -- return from subroutine; pop two bytes from SP and go to that address
+            d16 = (self.ram[[self.currentState getSP] + 1] << 8) | self.ram[[self.currentState getSP]];
+            [self.currentState setSP:([self.currentState getSP]+2)];
+            [self.currentState setPC:(unsigned short)d16];
+            PRINTDBG("0x%02x -- RET -- PC is now 0x%02x\n", currentInstruction,
+                     [self.currentState getPC]);
+            incrementPC = false;
             break;
         case 0xA:
             
@@ -1529,12 +1583,18 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 }
 - (void) execute0xDInstruction:(unsigned char)currentInstruction
 {
+    int16_t d16 = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
             
             break;
         case 1:
-            
+            // POP DE - Pop two bytes from SP into DE, and increment SP twice
+            d16 = (([self.currentState getSP] & 0x00ff) << 8) | (([self.currentState getSP] & 0xff00) >> 8);
+            [self.currentState setDE_big:d16];
+            [self.currentState setSP:([self.currentState getSP] + 2)];
+            PRINTDBG("0x%02x -- POP DE -- DE = 0x%02x -- SP is now at 0x%02x\n", currentInstruction,
+                     [self.currentState getDE_big], [self.currentState getSP]);
             break;
         case 2:
             
@@ -1546,7 +1606,13 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             
             break;
         case 5:
-            
+            // PUSH DE -- push BC onto SP, and decrement SP twice
+            d16 = [self.currentState getDE_little];
+            self.ram[[self.currentState getSP]] = d16 & 0xff00;
+            self.ram[[self.currentState getSP]+1] = d16 & 0x00ff;
+            [self.currentState setSP:([self.currentState getSP] - 2)];
+            PRINTDBG("0x%02x -- PUSH DE -- DE = 0x%02x -- SP is now at 0x%02x\n", currentInstruction,
+                     [self.currentState getDE_big], [self.currentState getSP]);
             break;
         case 6:
             
@@ -1582,12 +1648,18 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 }
 - (void) execute0xEInstruction:(unsigned char)currentInstruction
 {
+    int16_t d16 = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
             
             break;
         case 1:
-            
+            // POP HL - Pop two bytes from SP into HL, and increment SP twice
+            d16 = (([self.currentState getSP] & 0x00ff) << 8) | (([self.currentState getSP] & 0xff00) >> 8);
+            [self.currentState setHL_big:d16];
+            [self.currentState setSP:([self.currentState getSP] + 2)];
+            PRINTDBG("0x%02x -- POP HL -- HL = 0x%02x -- SP is now at 0x%02x\n", currentInstruction,
+                     [self.currentState getHL_big], [self.currentState getSP]);
             break;
         case 2:
             
@@ -1599,7 +1671,13 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             
             break;
         case 5:
-            
+            // PUSH HL -- push HL onto SP, and decrement SP twice
+            d16 = [self.currentState getHL_little];
+            self.ram[[self.currentState getSP]] = d16 & 0xff00;
+            self.ram[[self.currentState getSP]+1] = d16 & 0x00ff;
+            [self.currentState setSP:([self.currentState getSP] - 2)];
+            PRINTDBG("0x%02x -- PUSH HL -- HL = 0x%02x -- SP is now at 0x%02x\n", currentInstruction,
+                     [self.currentState getHL_big], [self.currentState getSP]);
             break;
         case 6:
             
@@ -1635,12 +1713,18 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
 }
 - (void) execute0xFInstruction:(unsigned char)currentInstruction
 {
+    int16_t d16 = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
             
             break;
         case 1:
-            
+            // POP AF -- Pop two bytes from SP into AF, and increment SP twice
+            [self.currentState setA:(([self.currentState getSP] & 0xff00) >> 8)];
+            [self.currentState setF:(([self.currentState getSP] & 0x00ff) << 8)];
+            [self.currentState setSP:([self.currentState getSP] + 2)];
+            PRINTDBG("0x%02x -- POP AF -- AF = 0x%02x -- SP is now at 0x%02x\n", currentInstruction,
+                     [self.currentState getAF_big], [self.currentState getSP]);
             break;
         case 2:
             
@@ -1652,7 +1736,13 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             
             break;
         case 5:
-            
+            // PUSH AF -- push AF onto SP, and decrement SP twice
+            d16 = [self.currentState getAF_little];
+            self.ram[[self.currentState getSP]] = d16 & 0xff00;
+            self.ram[[self.currentState getSP]+1] = d16 & 0x00ff;
+            [self.currentState setSP:([self.currentState getSP] - 2)];
+            PRINTDBG("0x%02x -- PUSH AF -- AF = 0x%02x -- SP is now at 0x%02x\n", currentInstruction,
+                     [self.currentState getAF_big], [self.currentState getSP]);
             break;
         case 6:
             

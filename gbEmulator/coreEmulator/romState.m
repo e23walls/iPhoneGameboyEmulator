@@ -154,6 +154,15 @@
 
 #pragma mark - Double register methods (big-endian)
 
+- (int16_t) getAF_big
+{
+    return (A >> 8) | F;
+}
+- (int16_t) getAF_little
+{
+    return (F >> 8) | A;
+}
+
 - (int16_t) getBC_big
 {
     return BC;
