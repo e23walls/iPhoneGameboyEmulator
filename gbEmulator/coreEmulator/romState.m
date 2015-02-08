@@ -86,6 +86,11 @@
     return SP;
 }
 
+- (void) addToSP:(int8_t)offset
+{
+    SP += offset;
+}
+
 #pragma mark - Regular register methods
 
 - (void) setA:(int8_t) newA

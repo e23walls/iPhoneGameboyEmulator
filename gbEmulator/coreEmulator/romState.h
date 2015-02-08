@@ -26,6 +26,7 @@
 - (void) addToPC:(int8_t)offset;
 - (void) setSP:(unsigned short)newSP;
 - (unsigned short) getSP;
+- (void) addToSP:(int8_t)offset;
 - (void) setA:(int8_t) newA;
 - (int8_t) getA;
 - (void) setF:(int8_t) newF;
