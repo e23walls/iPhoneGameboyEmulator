@@ -127,11 +127,11 @@ const int biosSize = 256;
 {
     if (maybe == true)
     {
-        self.ram[0xffff] = 1;
+        self.ram[0x0ffff] = 1;
     }
     else
     {
-        self.ram[0xffff] = 0;
+        self.ram[0x0ffff] = 0;
     }
 }
 
@@ -292,13 +292,13 @@ const int biosSize = 256;
             [self.currentState incrementPC];
             d16 = (self.ram[[self.currentState getPC] + 1] << 8) | (self.ram[[self.currentState getPC]] & 0xff);
             [self.currentState incrementPC];
-            prev_short =  (self.ram[d16+1] << 8) | (self.ram[d16] & 0x0ff);
-            self.ram[d16] = self.ram[[self.currentState getSP]+1];
-            self.ram[d16+1] = self.ram[[self.currentState getSP]];
+            prev_short =  (self.ram[(unsigned short)(d16+1)] << 8) | (self.ram[(unsigned short)d16] & 0x0ff);
+            self.ram[(unsigned short)d16] = self.ram[(unsigned short)([self.currentState getSP]+1)];
+            self.ram[(unsigned short)(d16+1)] = self.ram[[self.currentState getSP]];
             PRINTDBG("0x%02x -- LD (a16), SP -- put (SP = 0x%02x) at [d16 = 0x%02x] -- [SP] is 0x%02x -- [d16] was 0x%02x; now 0x%02x\n", \
                         currentInstruction, [self.currentState getSP], d16, \
                         (self.ram[[self.currentState getSP]] & 0x0ff) | (self.ram[[self.currentState getSP]+1] << 8), \
-                        prev_short, (self.ram[d16+1] & 0x0ff) | (self.ram[d16] << 8));
+                        prev_short, (self.ram[(unsigned short)(d16+1)] & 0x0ff) | (self.ram[(unsigned short)d16] << 8));
             break;
         case 9:
             // ADD HL,BC -- add BC to HL
@@ -567,7 +567,7 @@ const int biosSize = 256;
         case 0:
             // JR NZ,r8 -- If !Z, add r8 to PC
             [self.currentState incrementPC];
-            d8 = self.ram[(unsigned short)[self.currentState getPC]];
+            d8 = self.ram[[self.currentState getPC]];
             if ([self.currentState getZFlag] == false)
             {
                 [self.currentState addToPC:d8];
@@ -590,7 +590,7 @@ const int biosSize = 256;
             self.ram[(unsigned short)[self.currentState getHL_big]] = [self.currentState getA];
             [self.currentState setHL_big:([self.currentState getHL_big] + 1)];
             PRINTDBG("0x%02x -- LD (HL+),A -- HL = 0x%02x; (HL) = 0x%02x; A = %i\n", currentInstruction,
-                        [self.currentState getHL_big], self.ram[[self.currentState getHL_big]],
+                        [self.currentState getHL_big], self.ram[(unsigned short)[self.currentState getHL_big]],
                      [self.currentState getA]);
             break;
         case 3:
@@ -751,7 +751,7 @@ const int biosSize = 256;
             self.ram[(unsigned short)[self.currentState getHL_big]] = [self.currentState getA];
             [self.currentState setHL_big:([self.currentState getHL_big] - 1)];
             PRINTDBG("0x%02x -- LD (HL-),A -- HL = 0x%02x; (HL) = 0x%02x; A = 0x%02x\n", currentInstruction,
-                     [self.currentState getHL_big], self.ram[[self.currentState getHL_big]],
+                     [self.currentState getHL_big], self.ram[(unsigned short)[self.currentState getHL_big]],
                      [self.currentState getA]);
             break;
         case 3:
@@ -763,19 +763,19 @@ const int biosSize = 256;
             // INC (HL) -- Increment (HL)
             prev = self.ram[[self.currentState getHL_big]];
             self.ram[[self.currentState getHL_big]] += 1;
-            [self.currentState setFlags:(self.ram[[self.currentState getHL_big]] == 0)
+            [self.currentState setFlags:(self.ram[(unsigned short)[self.currentState getHL_big]] == 0)
                                       N:false
-                                      H:(prev > self.ram[[self.currentState getHL_big]])
+                                      H:(prev > self.ram[(unsigned short)[self.currentState getHL_big]])
                                       C:([self.currentState getCFlag])];
             PRINTDBG("0x%02x -- INC (HL)\n", currentInstruction);
             break;
         case 5:
             // DEC (HL) -- Decrement (HL)
-            prev = self.ram[[self.currentState getHL_big]];
-            self.ram[[self.currentState getHL_big]] -= 1;
-            [self.currentState setFlags:(self.ram[[self.currentState getHL_big]] == 0)
+            prev = self.ram[(unsigned short)[self.currentState getHL_big]];
+            self.ram[(unsigned short)[self.currentState getHL_big]] -= 1;
+            [self.currentState setFlags:(self.ram[(unsigned short)[self.currentState getHL_big]] == 0)
                                       N:true
-                                      H:(prev < self.ram[[self.currentState getHL_big]])
+                                      H:(prev < self.ram[(unsigned short)[self.currentState getHL_big]])
                                       C:([self.currentState getCFlag])];
             PRINTDBG("0x%02x -- DEC (HL)\n", currentInstruction);
             break;
@@ -783,7 +783,7 @@ const int biosSize = 256;
             // LD (HL),d8 -- Load 8-bit immediate data into (HL)
             [self.currentState incrementPC];
             d8 = self.ram[[self.currentState getPC]];
-            self.ram[[self.currentState getHL_big]] = d8;
+            self.ram[(unsigned short)[self.currentState getHL_big]] = d8;
             PRINTDBG("0x%02x -- LD (HL), d8 -- d8 = 0x%02x\n", currentInstruction, (int)d8);
             break;
         case 7:
@@ -924,7 +924,7 @@ const int biosSize = 256;
         case 6:
             // LD B,(HL) -- Load (HL) into B
             prev = [self.currentState getB];
-            [self.currentState setB:self.ram[[self.currentState getHL_big]]];
+            [self.currentState setB:self.ram[(unsigned short)[self.currentState getHL_big]]];
             PRINTDBG("0x%02x -- LD B,(HL) -- B was 0x%02x; B is now 0x%02x\n", currentInstruction, \
                      prev, [self.currentState getB]);
             break;
@@ -977,7 +977,7 @@ const int biosSize = 256;
         case 0xE:
             // LD C,(HL)
             prev = [self.currentState getC];
-            [self.currentState setC:self.ram[[self.currentState getHL_big]]];
+            [self.currentState setC:self.ram[(unsigned short)[self.currentState getHL_big]]];
             PRINTDBG("0x%02x -- LD C,(HL) -- C was 0x%02x; C is now 0x%02x\n", currentInstruction, \
                      prev, [self.currentState getC]);
             break;
@@ -1036,7 +1036,7 @@ const int biosSize = 256;
         case 6:
             // LD D,(HL) -- Load (HL) into D
             prev = [self.currentState getD];
-            [self.currentState setD:self.ram[[self.currentState getHL_big]]];
+            [self.currentState setD:self.ram[(unsigned short)[self.currentState getHL_big]]];
             PRINTDBG("0x%02x -- LD D,(HL) -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, \
                      prev, [self.currentState getD]);
             break;
@@ -1091,7 +1091,7 @@ const int biosSize = 256;
         case 0xE:
             // LD E,(HL) -- Load (HL) into E
             prev = [self.currentState getE];
-            [self.currentState setE:self.ram[[self.currentState getHL_big]]];
+            [self.currentState setE:self.ram[(unsigned short)[self.currentState getHL_big]]];
             PRINTDBG("0x%02x -- LD E,(HL) -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, \
                      prev, [self.currentState getE]);
             break;
@@ -1152,10 +1152,10 @@ const int biosSize = 256;
             // LD H,(HL) -- Load (HL) into H
             prev = [self.currentState getH];
             prev_short = [self.currentState getHL_big];
-            [self.currentState setH:self.ram[[self.currentState getHL_big]]];
+            [self.currentState setH:self.ram[(unsigned short)[self.currentState getHL_big]]];
             PRINTDBG("0x%02x -- LD H,(HL) -- H was 0x%02x; HL was 0x%04x; (HL) was 0x%02x; H is now 0x%02x\n", \
                      currentInstruction, prev & 0xff, prev_short & 0xffff, \
-                     self.ram[prev_short] & 0xff, [self.currentState getH] & 0xff);
+                     self.ram[(unsigned short)prev_short] & 0xff, [self.currentState getH] & 0xff);
             break;
         case 7:
             // LD H,A -- Load A into H
@@ -1206,7 +1206,7 @@ const int biosSize = 256;
         case 0xE:
             // LD L,(HL) -- Load (HL) into L
             prev = [self.currentState getL];
-            [self.currentState setL:self.ram[[self.currentState getHL_big]]];
+            [self.currentState setL:self.ram[(unsigned short)[self.currentState getHL_big]]];
             PRINTDBG("0x%02x -- LD L,(HL) -- L was 0x%02x; L is now 0x%02x\n", currentInstruction, \
                      prev, [self.currentState getL]);
             break;
@@ -1225,45 +1225,45 @@ const int biosSize = 256;
     switch (currentInstruction & 0x0F) {
         case 0:
             // LD (HL),B -- Load B into (HL)
-            prev = self.ram[[self.currentState getHL_big]];
-            self.ram[[self.currentState getHL_big]] = [self.currentState getB];
+            prev = self.ram[(unsigned short)[self.currentState getHL_big]];
+            self.ram[(unsigned short)[self.currentState getHL_big]] = [self.currentState getB];
             PRINTDBG("0x%02x -- LD (HL),B -- (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction, \
-                     prev, self.ram[[self.currentState getHL_big]]);
+                     prev, self.ram[(unsigned short)[self.currentState getHL_big]]);
             break;
         case 1:
             // LD (HL),C -- Load C into (HL)
-            prev = self.ram[[self.currentState getHL_big]];
-            self.ram[[self.currentState getHL_big]] = [self.currentState getC];
+            prev = self.ram[(unsigned short)[self.currentState getHL_big]];
+            self.ram[(unsigned short)[self.currentState getHL_big]] = [self.currentState getC];
             PRINTDBG("0x%02x -- LD (HL),C -- (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction, \
-                     prev, self.ram[[self.currentState getHL_big]]);
+                     prev, self.ram[(unsigned short)[self.currentState getHL_big]]);
             break;
         case 2:
             // LD (HL),D -- Load D into (HL)
-            prev = self.ram[[self.currentState getHL_big]];
-            self.ram[[self.currentState getHL_big]] = [self.currentState getD];
+            prev = self.ram[(unsigned short)[self.currentState getHL_big]];
+            self.ram[(unsigned short)[self.currentState getHL_big]] = [self.currentState getD];
             PRINTDBG("0x%02x -- LD (HL),D -- (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction, \
-                     prev, self.ram[[self.currentState getHL_big]]);
+                     prev, self.ram[(unsigned short)[self.currentState getHL_big]]);
             break;
         case 3:
             // LD (HL),E -- Load E into (HL)
-            prev = self.ram[[self.currentState getHL_big]];
-            self.ram[[self.currentState getHL_big]] = [self.currentState getE];
+            prev = self.ram[(unsigned short)[self.currentState getHL_big]];
+            self.ram[(unsigned short)[self.currentState getHL_big]] = [self.currentState getE];
             PRINTDBG("0x%02x -- LD (HL),E -- (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction, \
-                     prev, self.ram[[self.currentState getHL_big]]);
+                     prev, self.ram[(unsigned short)[self.currentState getHL_big]]);
             break;
         case 4:
             // LD (HL),H -- Load H into (HL)
-            prev = self.ram[[self.currentState getHL_big]];
-            self.ram[[self.currentState getHL_big]] = [self.currentState getH];
+            prev = self.ram[(unsigned short)[self.currentState getHL_big]];
+            self.ram[(unsigned short)[self.currentState getHL_big]] = [self.currentState getH];
             PRINTDBG("0x%02x -- LD (HL),H -- (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction, \
-                     prev, self.ram[[self.currentState getHL_big]]);
+                     prev, self.ram[(unsigned short)[self.currentState getHL_big]]);
             break;
         case 5:
             // LD (HL),L -- Load L into (HL)
-            prev = self.ram[[self.currentState getHL_big]];
-            self.ram[[self.currentState getHL_big]] = [self.currentState getL];
+            prev = self.ram[(unsigned short)[self.currentState getHL_big]];
+            self.ram[(unsigned short)[self.currentState getHL_big]] = [self.currentState getL];
             PRINTDBG("0x%02x -- LD (HL),L -- (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction, \
-                     prev, self.ram[[self.currentState getHL_big]]);
+                     prev, self.ram[(unsigned short)[self.currentState getHL_big]]);
             break;
         case 6:
             // HALT -- Power down CPU until interrupt occurs
@@ -1272,10 +1272,10 @@ const int biosSize = 256;
             break;
         case 7:
             // LD (HL),A -- Load A into (HL)
-            prev = self.ram[[self.currentState getHL_big]];
-            self.ram[[self.currentState getHL_big]] = [self.currentState getA];
+            prev = self.ram[(unsigned short)[self.currentState getHL_big]];
+            self.ram[(unsigned short)[self.currentState getHL_big]] = [self.currentState getA];
             PRINTDBG("0x%02x -- LD (HL),A -- (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction, \
-                     prev, self.ram[[self.currentState getHL_big]]);
+                     prev, self.ram[(unsigned short)[self.currentState getHL_big]]);
             break;
         case 8:
             // LD A,B -- Load B into A
@@ -1322,7 +1322,7 @@ const int biosSize = 256;
         case 0xE:
             // LD A,(HL) -- Load (HL) into A
             prev = [self.currentState getA];
-            [self.currentState setA:self.ram[[self.currentState getHL_big]]];
+            [self.currentState setA:self.ram[(unsigned short)[self.currentState getHL_big]]];
             PRINTDBG("0x%02x -- LD A,(HL) -- A was 0x%02x; A is now 0x%02x\n", currentInstruction, \
                      prev, [self.currentState getA]);
             break;
@@ -1441,7 +1441,7 @@ const int biosSize = 256;
             // ADD A,(HL) -- Add (HL) to A
             prev = [self.currentState getA];
             prev_short = [self.currentState getA];
-            d8 = self.ram[[self.currentState getHL_big]];
+            d8 = self.ram[(unsigned short)[self.currentState getHL_big]];
             [self.currentState setA:([self.currentState getA] + d8)];
             other_short = d8 + prev;
             C = ((other_short & 0xFF00) ^ (prev_short & 0xFF00)) != 0;
@@ -1793,6 +1793,7 @@ const int biosSize = 256;
             break;
         case 0xB:
             // Instruction with 0xCB prefix
+            PRINTDBG("CB instruction...\n");
             [self executeCBInstruction];
             break;
         case 0xC:
