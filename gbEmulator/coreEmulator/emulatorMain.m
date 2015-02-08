@@ -18,7 +18,8 @@
 #endif
 
 const int k = 1024;
-const int ramsize = 64 * k; // For readability purposes; an unsigned short spans the same set of integers.
+const int ramSize = 64 * k; // For readability purposes; an unsigned short spans the same set of integers.
+const int biosSize = 256;
 
 // At some point, it'd be nice if the print statements didn't sign-extend negative values out to 32-bits.
 // To fix this, simply AND the value being printed with 0xFF, if it's one byte, and 0xFFFF if it's two bytes.
@@ -43,12 +44,27 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
     self = [super init];
     if (self != nil)
     {
-        interruptsEnabled = true; // Double-check initial state
         incrementPC = true;
         self.buttons = 0b00000000;
         self.keys = calloc(8, sizeof(int));
         self.currentRom = theRom;
-        self.ram = (char *)malloc(ramsize * sizeof(char));
+        self.ram = (char *)malloc(ramSize * sizeof(char));
+        char bios[] = {0x31, 0xfe, 0xff, 0xaf, 0x21, 0xff, 0x9f, 0x32, 0xcb, 0x7c, 0x20, 0xfb, 0x21, 0x26, \
+            0xff, 0x0e, 0x11, 0x3e, 0x80, 0x32, 0xe2, 0x0c, 0x3e, 0xf3, 0xe2, 0x32, 0x3e, 0x77, 0x77, 0x3e, 0xfc, \
+            0xe0, 0x47, 0x11, 0x04, 0x01, 0x21, 0x10, 0x80, 0x1a, 0xcd, 0x95, 0x00, 0xcd, 0x96, 0x00, 0x13, 0x7b, \
+            0xfe, 0x34, 0x20, 0xf3, 0x11, 0xd8, 0x00, 0x06, 0x08, 0x1a, 0x13, 0x22, 0x23, 0x05, 0x20, 0xf9, 0x3e, \
+            0x19, 0xea, 0x10, 0x99, 0x21, 0x2f, 0x99, 0x0e, 0x0c, 0x3d, 0x28, 0x08, 0x32, 0x0d, 0x20, 0xf9, 0x2e, \
+            0x0f, 0x18, 0xf3, 0x67, 0x3e, 0x64, 0x57, 0xe0, 0x42, 0x3e, 0x91, 0xe0, 0x40, 0x04, 0x1e, 0x02, 0x0e, \
+            0x0c, 0xf0, 0x44, 0xfe, 0x90, 0x20, 0xfa, 0x0d, 0x20, 0xf7, 0x1d, 0x20, 0xf2, 0x0e, 0x13, 0x24, 0x7c, \
+            0x1e, 0x83, 0xfe, 0x62, 0x28, 0x06, 0x1e, 0xc1, 0xfe, 0x64, 0x20, 0x06, 0x7b, 0xe2, 0x0c, 0x3e, 0x87, \
+            0xe2, 0xf0, 0x42, 0x90, 0xe0, 0x42, 0x15, 0x20, 0xd2, 0x05, 0x20, 0x4f, 0x16, 0x20, 0x18, 0xcb, 0x4f, \
+            0x06, 0x04, 0xc5, 0xcb, 0x11, 0x17, 0xc1, 0xcb, 0x11, 0x17, 0x05, 0x20, 0xf5, 0x22, 0x23, 0x22, 0x23, \
+            0xc9, 0xce, 0xed, 0x66, 0x66, 0xcc, 0x0d, 0x00, 0x0b, 0x03, 0x73, 0x00, 0x83, 0x00, 0x0c, 0x00, 0x0d, \
+            0x00, 0x08, 0x11, 0x1f, 0x88, 0x89, 0x00, 0x0e, 0xdc, 0xcc, 0x6e, 0xe6, 0xdd, 0xdd, 0xd9, 0x99, 0xbb, \
+            0xbb, 0x67, 0x63, 0x6e, 0x0e, 0xec, 0xcc, 0xdd, 0xdc, 0x99, 0x9f, 0xbb, 0xb9, 0x33, 0x3e, 0x3c, 0x42, \
+            0xb9, 0xa5, 0xb9, 0xa5, 0x42, 0x3c, 0x21, 0x04, 0x01, 0x11, 0xa8, 0x00, 0x1a, 0x13, 0xbe, 0x20, 0xfe, \
+            0x23, 0x7d, 0xfe, 0x34, 0x20, 0xf5, 0x06, 0x19, 0x78, 0x86, 0x23, 0x05, 0x20, 0xfb, 0x86, 0x20, 0xfe, \
+            0x3e, 0x01, 0xe0, 0x50};
         
         // Load the ROM file into RAM
         
@@ -56,7 +72,8 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
         if (romFileHandler == NULL)
         {
             printf("Some error occurred when opening the ROM.\n");
-            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Could not load ROM!" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Could not load ROM!" \
+                                            delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
             [alert show];
         }
         NSLog(@"Loading the ROM '%@'\nLocation: %@\n", self.currentRom.romName, self.currentRom.fullPath);
@@ -64,7 +81,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
         BOOL hitEOF = NO;
         int counter = 0;
         ch = fgetc(romFileHandler);
-        while (counter < ramsize)
+        while (counter < ramSize)
         {
             if (ch == EOF)
             {
@@ -92,6 +109,12 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
         fclose(romFileHandler);
         NSLog(@"Setting up the ROM initial state...");
         self.currentState = [[romState alloc] init];
+        [self enableInterrupts:false];
+        NSLog(@"Loading BIOS into RAM...");
+        for (int i = 0; i < biosSize; i++)
+        {
+            self.ram[i] = bios[i];
+        }
     }
     else
     {
@@ -100,10 +123,22 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
     return self;
 }
 
+- (void) enableInterrupts:(bool)maybe
+{
+    if (maybe == true)
+    {
+        self.ram[0xffff] = 1;
+    }
+    else
+    {
+        self.ram[0xffff] = 0;
+    }
+}
+
 - (void) runRom
 {
 #warning Something here/after here is causing a crash in the simulator, but not on a real device. Probably related to view controller transition.
-    while ([self.currentState getPC] < ramsize)
+    while ([self.currentState getPC] < ramSize)
     {
         PRINTDBG("PC = 0x%02x\n", [self.currentState getPC]);
         incrementPC = true;
@@ -435,7 +470,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             [self.currentState incrementPC];
             d8 = self.ram[[self.currentState getPC]];
             [self.currentState addToPC:d8];
-            PRINTDBG("0x%02x -- JR r8 (r8 = %d) -- PC is now %02x\n",
+            PRINTDBG("0x%02x -- JR r8 (r8 = %d) -- PC is now 0x%02x\n",
                    currentInstruction, (int)d8, [self.currentState getPC]);
             incrementPC = false;
             break;
@@ -547,13 +582,14 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             d16 = (self.ram[[self.currentState getPC] + 1] << 8) | (self.ram[[self.currentState getPC]] & 0x0ff);
             [self.currentState incrementPC];
             [self.currentState setHL_big:d16];
-            PRINTDBG("0x%02x -- LD HL, d16 -- d16 = %i\n", currentInstruction, d16);
+            PRINTDBG("0x%02x -- LD HL, d16 -- d16 = 0x%02x; HL = 0x%02x\n", currentInstruction, d16, \
+                     [self.currentState getHL_big]);
             break;
         case 2:
             // LD (HL+),A -- Put A into (HL), and increment HL
             self.ram[(unsigned short)[self.currentState getHL_big]] = [self.currentState getA];
             [self.currentState setHL_big:([self.currentState getHL_big] + 1)];
-            PRINTDBG("0x%02x -- LD (HL+),A -- HL = %i; (HL) = %i; A = %i\n", currentInstruction,
+            PRINTDBG("0x%02x -- LD (HL+),A -- HL = 0x%02x; (HL) = 0x%02x; A = %i\n", currentInstruction,
                         [self.currentState getHL_big], self.ram[[self.currentState getHL_big]],
                      [self.currentState getA]);
             break;
@@ -714,7 +750,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             // LD (HL-),A -- put A into (HL), and decrement HL
             self.ram[(unsigned short)[self.currentState getHL_big]] = [self.currentState getA];
             [self.currentState setHL_big:([self.currentState getHL_big] - 1)];
-            PRINTDBG("0x%02x -- LD (HL-),A -- HL = %i; (HL) = %i; A = %i\n", currentInstruction,
+            PRINTDBG("0x%02x -- LD (HL-),A -- HL = 0x%02x; (HL) = 0x%02x; A = 0x%02x\n", currentInstruction,
                      [self.currentState getHL_big], self.ram[[self.currentState getHL_big]],
                      [self.currentState getA]);
             break;
@@ -748,7 +784,7 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
             [self.currentState incrementPC];
             d8 = self.ram[[self.currentState getPC]];
             self.ram[[self.currentState getHL_big]] = d8;
-            PRINTDBG("0x%02x -- LD (HL), d8 -- d8 = %i\n", currentInstruction, (int)d8);
+            PRINTDBG("0x%02x -- LD (HL), d8 -- d8 = 0x%02x\n", currentInstruction, (int)d8);
             break;
         case 7:
             // SCF -- Set carry flag
@@ -1910,11 +1946,11 @@ const int ramsize = 64 * k; // For readability purposes; an unsigned short spans
         case 9:
             // RETI -- RET + enable interrupts
             d16 = ((self.ram[[self.currentState getSP]] & 0x00ff) << 8) | \
-            (((self.ram[[self.currentState getSP]+1] & 0xff00) >> 8) & 0x0ff);
+                (((self.ram[[self.currentState getSP]+1] & 0xff00) >> 8) & 0x0ff);
             [self.currentState setSP:([self.currentState getSP]+2)];
             [self.currentState setPC:(unsigned short)d16];
             incrementPC = false;
-            interruptsEnabled = true;
+            [self enableInterrupts:true];
             PRINTDBG("0x%02x -- RETI -- PC is now 0x%02x\n", currentInstruction,
                      [self.currentState getPC]);
             break;
