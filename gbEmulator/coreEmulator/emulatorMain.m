@@ -1498,6 +1498,7 @@ const int biosSize = 256;
 }
 - (void) execute0x9Instruction:(unsigned char)currentInstruction
 {
+    int8_t prev = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
             
@@ -1545,7 +1546,25 @@ const int biosSize = 256;
             
             break;
         case 0xF:
-            
+            // SBC A,A -- Subtract A + carry flag from A, so A = 0 - C-flag
+            prev = [self.currentState getA];
+            if ([self.currentState getCFlag] == true)
+            {
+                [self.currentState setA:-1];
+            }
+            else
+            {
+                [self.currentState setA:0];
+            }
+#warning Figure out how to set flags here
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if no borrow from bit 4.
+             C - Set if no borrow.
+             */
+            PRINTDBG("0x%02x -- SBC A,A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+                        prev, [self.currentState getA]);
             break;
     }
 }
@@ -2081,7 +2100,7 @@ const int biosSize = 256;
             // JP (HL) -- Jump to address in register HL
             [self.currentState incrementPC];
             d16 = (([self.currentState getHL_big] & 0x00ff) << 8) | \
-            ((([self.currentState getHL_big] & 0xff00) >> 8) & 0x0ff);
+                ((([self.currentState getHL_big] & 0xff00) >> 8) & 0x0ff);
             [self.currentState incrementPC];
             [self.currentState setPC:d16];
             incrementPC = false;
@@ -2089,7 +2108,14 @@ const int biosSize = 256;
                      currentInstruction, d16 & 0xffff, [self.currentState getPC]);
             break;
         case 0xA:
-            // LD (a16),A --
+            // LD (a16),A -- Put A into (a16)
+            [self.currentState incrementPC];
+            d16 = (([self.currentState getPC] & 0x00ff) << 8) | \
+                ((([self.currentState getPC] & 0xff00) >> 8) & 0x0ff);
+            [self.currentState incrementPC];
+            self.ram[(unsigned short)d16] = [self.currentState getA];
+            PRINTDBG("0x%02x -- LD (a16),A -- A = 0x%02x; a16 = 0x%02x\n", currentInstruction,
+                     [self.currentState getA], self.ram[(unsigned short)d16]);
             break;
         case 0xB:
             
@@ -2664,7 +2690,13 @@ const int biosSize = 256;
             
             break;
         case 0xC:
-            
+            // BIT 7,H -- test 7th bit of H register
+            [self.currentState setFlags:(bool)([self.currentState getH] & (int8_t)0b10000000)
+                                      N:false
+                                      H:true
+                                      C:[self.currentState getCFlag]];
+            PRINTDBG("0xCB%02x -- BIT 7,H -- H is 0x%02x -- Z is now %i\n", currentInstruction, \
+                     [self.currentState getH], [self.currentState getZFlag]);
             break;
         case 0xD:
             
