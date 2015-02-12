@@ -136,6 +136,17 @@ const int biosSize = 256;
         self.ram[0x0ffff] = 0;
     }
 }
+- (void) setKeysInMemory
+{
+    if (self.ram[0xff00] & 0b00100000) // a, b, start, select
+    {
+        self.ram[0xff00] |= (self.buttons & 0b11110000) >> 4;
+    }
+    else if (self.ram[0xff00] & 0b00010000) // arrows
+    {
+        self.ram[0xff00] |= self.buttons & 0b00001111;
+    }
+}
 
 - (void) runRom
 {
@@ -165,6 +176,7 @@ const int biosSize = 256;
         {
             interruptsEnabled--;
         }
+        [self setKeysInMemory];
         [self executeInstruction];
         if (incrementPC)
         {
