@@ -663,6 +663,7 @@ const int biosSize = 256;
         case 7:
             // DAA -- Decimal adjust register A; adjust A so that correct BCD obtained
 #warning Do this eventually!!!
+            PRINTDBG("0x%02x - DAA -- this needs to be done sometime\n", currentInstruction);
             break;
         case 8:
             // JR Z,r8 -- If Z, add r8 to PC
