@@ -1543,7 +1543,22 @@ const int biosSize = 256;
             
             break;
         case 6:
-            
+            // SUB (HL) -- Subtract (HL) from A
+            d8 = self.ram[(unsigned short)[self.currentState getHL_big]];
+            prev = [self.currentState getA];
+            [self.currentState setA:([self.currentState getA]-d8)];
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if no borrow from bit 4.
+             C - Set if no borrow.
+             */
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:true
+                                      H:!((char)(prev & 0xf) < (char)(((d8 & 0xf) & 0xf)))
+                                      C:!(prev < d8)];
+            PRINTDBG("0x%02x -- SUB (HL) -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+                     prev, [self.currentState getA]);
             break;
         case 7:
             
@@ -1559,13 +1574,18 @@ const int biosSize = 256;
             {
                 [self.currentState setA:([self.currentState getA]-[self.currentState getB])];
             }
-#warning Figure out how to set flags here
             /*
              Z - Set if result is zero.
              N - Set.
              H - Set if no borrow from bit 4.
              C - Set if no borrow.
              */
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:true
+                                      H:!((char)(prev & 0xf) < (char)((([self.currentState getB] & 0xf + \
+                                                                      ([self.currentState getCFlag] ? 1 : 0)) & 0xf)))
+                                      C:!((char)(prev) < (char)([self.currentState getB] + \
+                                                                      ([self.currentState getCFlag] ? 1 : 0)))];
             PRINTDBG("0x%02x -- SBC A,B -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
                      prev, [self.currentState getA]);
             break;
@@ -1580,13 +1600,18 @@ const int biosSize = 256;
             {
                 [self.currentState setA:([self.currentState getA]-[self.currentState getC])];
             }
-#warning Figure out how to set flags here
             /*
              Z - Set if result is zero.
              N - Set.
              H - Set if no borrow from bit 4.
              C - Set if no borrow.
              */
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:true
+                                      H:!((char)(prev & 0xf) < (char)((([self.currentState getC] & 0xf + \
+                                                                      ([self.currentState getCFlag] ? 1 : 0)) & 0xf)))
+                                      C:!((char)(prev) < (char)([self.currentState getC] + \
+                                                               ([self.currentState getCFlag] ? 1 : 0)))];
             PRINTDBG("0x%02x -- SBC A,C -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
                      prev, [self.currentState getA]);
             break;
@@ -1601,13 +1626,18 @@ const int biosSize = 256;
             {
                 [self.currentState setA:([self.currentState getA]-[self.currentState getD])];
             }
-#warning Figure out how to set flags here
             /*
              Z - Set if result is zero.
              N - Set.
              H - Set if no borrow from bit 4.
              C - Set if no borrow.
              */
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:true
+                                      H:!((char)(prev & 0xf) < (char)((([self.currentState getD] & 0xf + \
+                                                                      ([self.currentState getCFlag] ? 1 : 0)) & 0xf)))
+                                      C:!((char)(prev) < (char)([self.currentState getD] + \
+                                                               ([self.currentState getCFlag] ? 1 : 0)))];
             PRINTDBG("0x%02x -- SBC A,D -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
                      prev, [self.currentState getA]);
             break;
@@ -1622,13 +1652,18 @@ const int biosSize = 256;
             {
                 [self.currentState setA:([self.currentState getA]-[self.currentState getE])];
             }
-#warning Figure out how to set flags here
             /*
              Z - Set if result is zero.
              N - Set.
              H - Set if no borrow from bit 4.
              C - Set if no borrow.
              */
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:true
+                                      H:!((char)(prev & 0xf) < (char)((([self.currentState getE] & 0xf + \
+                                                                      ([self.currentState getCFlag] ? 1 : 0)) & 0xf)))
+                                      C:!((char)(prev) < (char)([self.currentState getE] + \
+                                                               ([self.currentState getCFlag] ? 1 : 0)))];
             PRINTDBG("0x%02x -- SBC A,E -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
                      prev, [self.currentState getA]);
             break;
@@ -1643,13 +1678,18 @@ const int biosSize = 256;
             {
                 [self.currentState setA:([self.currentState getA]-[self.currentState getH])];
             }
-#warning Figure out how to set flags here
             /*
              Z - Set if result is zero.
              N - Set.
              H - Set if no borrow from bit 4.
              C - Set if no borrow.
              */
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:true
+                                      H:!((char)(prev & 0xf) < (char)((([self.currentState getH] & 0xf + \
+                                                                      ([self.currentState getCFlag] ? 1 : 0)) & 0xf)))
+                                      C:!((char)(prev) < (char)([self.currentState getH] + \
+                                                               ([self.currentState getCFlag] ? 1 : 0)))];
             PRINTDBG("0x%02x -- SBC A,H -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
                      prev, [self.currentState getA]);
             break;
@@ -1664,13 +1704,18 @@ const int biosSize = 256;
             {
                 [self.currentState setA:([self.currentState getA]-[self.currentState getL])];
             }
-#warning Figure out how to set flags here
             /*
              Z - Set if result is zero.
              N - Set.
              H - Set if no borrow from bit 4.
              C - Set if no borrow.
              */
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:true
+                                      H:!((char)(prev & 0xf) < (char)((([self.currentState getL] & 0xf + \
+                                                                      ([self.currentState getCFlag] ? 1 : 0)) & 0xf)))
+                                      C:!((char)(prev) < (char)([self.currentState getL] + \
+                                                               ([self.currentState getCFlag] ? 1 : 0)))];
             PRINTDBG("0x%02x -- SBC A,L -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
                      prev, [self.currentState getA]);
             break;
@@ -1686,13 +1731,18 @@ const int biosSize = 256;
             {
                 [self.currentState setA:([self.currentState getA]-d8)];
             }
-#warning Figure out how to set flags here
             /*
              Z - Set if result is zero.
              N - Set.
              H - Set if no borrow from bit 4.
              C - Set if no borrow.
              */
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:true
+                                      H:!((char)(prev & 0xf) < (char)(((d8 & 0xf + \
+                                                                ([self.currentState getCFlag] ? 1 : 0)) & 0xf)))
+                                      C:!((char)(prev) < (char)(d8 + \
+                                                        ([self.currentState getCFlag] ? 1 : 0)))];
             PRINTDBG("0x%02x -- SBC A,(HL) -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
                      prev, [self.currentState getA]);
             break;
@@ -1707,13 +1757,16 @@ const int biosSize = 256;
             {
                 [self.currentState setA:0];
             }
-#warning Figure out how to set flags here
             /*
              Z - Set if result is zero.
              N - Set.
              H - Set if no borrow from bit 4.
              C - Set if no borrow.
              */
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:true
+                                      H:true
+                                      C:true];
             PRINTDBG("0x%02x -- SBC A,A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
                         prev, [self.currentState getA]);
             break;
@@ -1815,7 +1868,12 @@ const int biosSize = 256;
             
             break;
         case 7:
-            
+            // OR A -- A = A | A
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:false
+                                      H:false
+                                      C:false];
+            PRINTDBG("0x%02x -- OR A -- Why?\n", currentInstruction);
             break;
         case 8:
             
@@ -2190,6 +2248,7 @@ const int biosSize = 256;
     switch (currentInstruction & 0x0F) {
         case 0:
             // LDH (a8),A -- Load A into (0xFF00 + a8)
+#warning This is for I/O
             [self.currentState incrementPC];
             d8 = self.ram[[self.currentState getPC]];
             d16 = (unsigned short)0xff00 + (unsigned short)d8;
@@ -2210,6 +2269,7 @@ const int biosSize = 256;
             break;
         case 2:
             // LD (C),A -- Load A into (0xFF00 + C)
+#warning This is for I/O
             d16 = (unsigned short)0xff00 + (unsigned short)[self.currentState getC];
             prev = self.ram[(unsigned short)d16];
             self.ram[(unsigned short)d16] = [self.currentState getA];
@@ -2313,6 +2373,8 @@ const int biosSize = 256;
 {
     int16_t d16 = 0;
     short prev_short = 0;
+    int8_t d8 = 0;
+    int8_t prev = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
             
@@ -2369,7 +2431,15 @@ const int biosSize = 256;
                      prev_short, [self.currentState getSP]);
             break;
         case 0xA:
-            
+            // LD A,(a16) -- Load (a16) into A
+            [self.currentState incrementPC];
+            d16 = (([self.currentState getPC] & 0x00ff) << 8) | \
+                    ((([self.currentState getPC] & 0xff00) >> 8) & 0x0ff);
+            d8 = self.ram[(unsigned short)d16];
+            prev = [self.currentState getA];
+            [self.currentState setA:d8];
+            PRINTDBG("0x%02x -- LD A,(a16) -- A was 0x%02x, and is now 0x%02x; a16 = 0%02x\n", currentInstruction,
+                     prev & 0xff, [self.currentState getA] & 0xff, d16 & 0xffff);
             break;
         case 0xB:
             // EI -- Enable interrupts after next instruction
@@ -2383,7 +2453,18 @@ const int biosSize = 256;
             
             break;
         case 0xE:
-            
+            // CP d8 -- Compare A with 8-bit data
+            [self.currentState incrementPC];
+            d8 = self.ram[[self.currentState getPC]];
+            d16 = [self.currentState getA] - d8;
+            [self.currentState setFlags:d16 == 0
+                                      N:true
+                                      H:!((char)([self.currentState getA] & 0xf) < \
+                                          (char)(((d8 & 0xf + ([self.currentState getCFlag] ? 1 : 0)) & 0xf)))
+                                      C:!((char)([self.currentState getA]) < \
+                                          (char)(((d8 + ([self.currentState getCFlag] ? 1 : 0)))))];
+            PRINTDBG("0x%02x -- CP d8 -- A = 0x%02x, d8 = 0x%02x; C-flag = %i\n", currentInstruction,
+                     [self.currentState getA] & 0xff, d8 & 0xff, [self.currentState getCFlag] ? 1 : 0);
             break;
         case 0xF:
             // RST 38H -- push PC onto stack, and jump to address 0x00

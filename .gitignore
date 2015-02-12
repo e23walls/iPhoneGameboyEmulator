@@ -17,6 +17,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 Resources/
+gbEmulator.xcodeproj/xcuserdata/emilywalls.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
 
 # CocoaPods
 #
