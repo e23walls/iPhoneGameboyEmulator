@@ -276,7 +276,7 @@ const int biosSize = 256;
         case 3:
             // INC BC -- increment BC
             [self.currentState setBC_big:([self.currentState getBC_big] + 1)];
-            PRINTDBG("0x%02x -- INC BC\n", currentInstruction);
+            PRINTDBG("0x%02x -- INC BC; BC is now %i\n", currentInstruction, [self.currentState getBC_big]);
             break;
         case 4:
             // INC B -- increment B and set flags
@@ -287,7 +287,7 @@ const int biosSize = 256;
                                     // (If positive number becomes negative number)
                                     H:(prev > [self.currentState getB])
                                     C:([self.currentState getCFlag])];
-            PRINTDBG("0x%02x -- INC B\n", currentInstruction);
+            PRINTDBG("0x%02x -- INC B; B is now %i\n", currentInstruction, [self.currentState getB]);
             break;
         case 5:
             // DEC B -- decrement B and set flags
@@ -441,7 +441,7 @@ const int biosSize = 256;
             d16 = (self.ram[[self.currentState getPC] + 1] << 8) | (self.ram[[self.currentState getPC]] & 0x0ff);
             [self.currentState incrementPC];
             [self.currentState setDE_big:d16];
-            PRINTDBG("0x%02x -- LD DE, d16 -- d16 = %i\n", currentInstruction, d16);
+            PRINTDBG("0x%02x -- LD DE, d16 -- d16 = 0x%02x\n", currentInstruction, d16);
             break;
         case 2:
             // LD (DE), A -- put A into (DE)
@@ -451,7 +451,7 @@ const int biosSize = 256;
         case 3:
             // INC DE -- Increment DE
             [self.currentState setDE_big:([self.currentState getDE_big] + 1)];
-            PRINTDBG("0x%02x -- INC DE\n", currentInstruction);
+            PRINTDBG("0x%02x -- INC DE; DE is now %i\n", currentInstruction, [self.currentState getDE_big]);
             break;
         case 4:
             // INC D -- Increment D
@@ -461,7 +461,7 @@ const int biosSize = 256;
                                       N:false
                                       H:(prev > [self.currentState getD])
                                       C:([self.currentState getCFlag])];
-            PRINTDBG("0x%02x -- INC D\n", currentInstruction);
+            PRINTDBG("0x%02x -- INC D; D is now %i\n", currentInstruction, [self.currentState getD]);
             break;
         case 5:
             // DEC D -- Decrement D
@@ -494,7 +494,7 @@ const int biosSize = 256;
                                       N:false
                                       H:false
                                       C:C];
-            PRINTDBG("0x%02x -- RLA -- A was %02x; A is now %02x\n", currentInstruction, A, [self.currentState getA]);
+            PRINTDBG("0x%02x -- RLA -- A was 0x%02x; A is now 0x%02x\n", currentInstruction, A, [self.currentState getA]);
             break;
         case 8:
             // JR r8 (8-bit signed data, added to PC)
@@ -542,7 +542,7 @@ const int biosSize = 256;
                                       N:false
                                       H:(prev > [self.currentState getE])
                                       C:([self.currentState getCFlag])];
-            PRINTDBG("0x%02x -- INC E\n", currentInstruction);
+            PRINTDBG("0x%02x -- INC E; E = %i\n", currentInstruction, [self.currentState getE]);
             break;
         case 0xD:
             // DEC E -- Decrement E
@@ -624,7 +624,7 @@ const int biosSize = 256;
         case 3:
             // INC HL -- Increment HL
             [self.currentState setHL_big:([self.currentState getHL_big] + 1)];
-            PRINTDBG("0x%02x -- INC HL\n", currentInstruction);
+            PRINTDBG("0x%02x -- INC HL; HL is now %i\n", currentInstruction, [self.currentState getHL_big]);
             break;
         case 4:
             // INC H -- Increment H
@@ -634,7 +634,7 @@ const int biosSize = 256;
                                       N:false
                                       H:(prev > [self.currentState getH])
                                       C:([self.currentState getCFlag])];
-            PRINTDBG("0x%02x -- INC H\n", currentInstruction);
+            PRINTDBG("0x%02x -- INC H; H is now %i\n", currentInstruction, [self.currentState getH]);
             break;
         case 5:
             // DEC H -- Decrement H
@@ -707,7 +707,7 @@ const int biosSize = 256;
                                       N:false
                                       H:(prev > [self.currentState getL])
                                       C:([self.currentState getCFlag])];
-            PRINTDBG("0x%02x -- INC L\n", currentInstruction);
+            PRINTDBG("0x%02x -- INC L; L is now %i\n", currentInstruction, [self.currentState getL]);
             break;
         case 0xD:
             // DEC L -- Decrement L
@@ -783,7 +783,7 @@ const int biosSize = 256;
         case 3:
             // INC SP -- Increment SP
             [self.currentState setSP:([self.currentState getSP] + 1)];
-            PRINTDBG("0x%02x -- INC SP\n", currentInstruction);
+            PRINTDBG("0x%02x -- INC SP; SP is now 0x%02x\n", currentInstruction, [self.currentState getSP] & 0xffff);
             break;
         case 4:
             // INC (HL) -- Increment (HL)
@@ -793,7 +793,7 @@ const int biosSize = 256;
                                       N:false
                                       H:(prev > self.ram[(unsigned short)[self.currentState getHL_big]])
                                       C:([self.currentState getCFlag])];
-            PRINTDBG("0x%02x -- INC (HL)\n", currentInstruction);
+            PRINTDBG("0x%02x -- INC (HL); (HL) is now %i\n", currentInstruction, self.ram[[self.currentState getHL_big]]);
             break;
         case 5:
             // DEC (HL) -- Decrement (HL)
@@ -871,7 +871,7 @@ const int biosSize = 256;
                                       N:false
                                       H:(prev > [self.currentState getA])
                                       C:([self.currentState getCFlag])];
-            PRINTDBG("0x%02x -- INC A\n", currentInstruction);
+            PRINTDBG("0x%02x -- INC A; A is now %i\n", currentInstruction, [self.currentState getA]);
             break;
         case 0xD:
             // DEC A -- Decrement A
@@ -2388,7 +2388,7 @@ const int biosSize = 256;
         case 1:
             // POP AF -- Pop two bytes from SP into AF, and increment SP twice
             [self.currentState setA:self.ram[(([self.currentState getSP] & 0xff00) >> 8)]];
-            [self.currentState setF:self.ram[(([self.currentState getSP] & 0x00ff) << 8)]];
+            // We don't want to change F
             [self.currentState setSP:([self.currentState getSP] + 2)];
             PRINTDBG("0x%02x -- POP AF -- AF = 0x%02x -- SP is now at 0x%02x; (SP) = 0x%02x\n", currentInstruction,
                      [self.currentState getAF_big], [self.currentState getSP],
@@ -2606,12 +2606,27 @@ const int biosSize = 256;
 }
 - (void) CBexecute0x1Instruction:(unsigned char)currentInstruction
 {
+    int8_t prev = 0;
+    int8_t temp = 0;
+    bool C = false;
     switch (currentInstruction & 0x0F) {
         case 0:
             
             break;
         case 1:
-            
+            // RL C -- Rotate C left through C-flag
+            prev = [self.currentState getC];
+            temp = [self.currentState getCFlag];
+            C = (bool)([self.currentState getC] & 0b10000000);
+            [self.currentState setC:([self.currentState getC] << 1)];
+            // Set LSb of C to its previous C-value
+            temp ? [self.currentState setC:([self.currentState getC] | 1)] :
+            [self.currentState setC:([self.currentState getC] & 0b11111110)];
+            [self.currentState setFlags:[self.currentState getC] == 0
+                                      N:false
+                                      H:false
+                                      C:C];
+            PRINTDBG("0x%02x -- RL C -- C was 0x%02x; C is now 0x%02x\n", currentInstruction, prev, [self.currentState getC]);
             break;
         case 2:
             
