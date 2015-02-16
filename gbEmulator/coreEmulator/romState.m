@@ -52,7 +52,9 @@
 
 - (void) setFlags:(bool)Z N:(bool)N H:(bool)H C:(bool)C
 {
-    F = (Z << 7) | (N << 6) | (H << 5) | (C << 4);
+    // Maybe paranoid; does 'bool x = 4;' get changed to 1?
+    F = ((Z & 1) << 7) | ((N & 1) << 6) | ((H & 1) << 5) | ((C & 1) << 4);
+    printf("(Flags set; Z = %i, N = %i, H = %i, C = %i)\n", Z, N, H, C);
 }
 
 #pragma mark - PC methods
