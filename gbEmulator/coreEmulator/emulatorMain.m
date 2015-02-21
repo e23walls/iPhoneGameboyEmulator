@@ -2069,6 +2069,8 @@ const int biosSize = 256;
 - (void) execute0xDInstruction:(unsigned char)currentInstruction
 {
     int16_t d16 = 0;
+    int8_t d8 = 0;
+    int8_t prev = 0;
     unsigned short prev_short = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
@@ -2110,7 +2112,8 @@ const int biosSize = 256;
                      currentInstruction, d16 & 0xffff, [self.currentState getPC]);
             break;
         case 3:
-            
+            // no instruction
+            PRINTDBG("0x%02x -- invalid instruction\n", currentInstruction);
             break;
         case 4:
             // CALL NC,a16 -- If !C, call subroutine at address a16
@@ -2143,7 +2146,23 @@ const int biosSize = 256;
                      (((self.ram[[self.currentState getSP]+1]) << 8) & 0xff00));
             break;
         case 6:
-            
+            // SUB d8 -- A <- A - d8
+            [self.currentState incrementPC];
+            d8 = self.ram[[self.currentState getPC]];
+            prev = [self.currentState getA];
+            [self.currentState setA:([self.currentState getA]-d8)];
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if no borrow from bit 4.
+             C - Set if no borrow.
+             */
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:true
+                                      H:!((char)(prev & 0xf) < (char)(((d8 & 0xf) & 0xf)))
+                                      C:!((unsigned char)prev < (unsigned char)d8)];
+            PRINTDBG("0x%02x -- SUB d8 -- d8 is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+                        d8 & 0xff, prev, [self.currentState getA]);
             break;
         case 7:
             // RST 10H -- push PC onto stack, and jump to address 0x00
@@ -2196,12 +2215,10 @@ const int biosSize = 256;
                      currentInstruction, d16 & 0xffff, [self.currentState getPC]);
             break;
         case 0xB:
-            
+            // no instruction
+            PRINTDBG("0x%02x -- invalid instruction\n", currentInstruction);
             break;
         case 0xC:
-            
-            break;
-        case 0xD:
             // CALL C,a16 -- If C, call subroutine at address a16
             [self.currentState incrementPC];
             prev_short = [self.currentState getSP];
@@ -2220,7 +2237,37 @@ const int biosSize = 256;
                      currentInstruction, d16 & 0xffff, prev_short, [self.currentState getSP], \
                      [self.currentState getPC]);
             break;
+        case 0xD:
+            // no instruction
+            PRINTDBG("0x%02x -- invalid instruction\n", currentInstruction);
+            break;
         case 0xE:
+            // SBC A,d8 -- Subtract d8 + carry flag from A, so A = A - (d8 + C-flag)
+            prev = [self.currentState getA];
+            [self.currentState incrementPC];
+            d8 = self.ram[[self.currentState getPC]];
+            if ([self.currentState getCFlag])
+            {
+                [self.currentState setA:([self.currentState getA]-d8-1)];
+            }
+            else
+            {
+                [self.currentState setA:([self.currentState getA]-d8)];
+            }
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if no borrow from bit 4.
+             C - Set if no borrow.
+             */
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:true
+                                      H:!((char)(prev & 0xf) < (char)(((d8 & 0xf + \
+                                                                        ([self.currentState getCFlag] ? 1 : 0)) & 0xf)))
+                                      C:!((unsigned char)(prev) < (unsigned char)(d8 + \
+                                                                                  ([self.currentState getCFlag] ? 1 : 0)))];
+            PRINTDBG("0x%02x -- SBC A,d8 -- A was 0x%02x; A is now 0x%02x; d8 = 0x%02x\n", currentInstruction,
+                     prev, [self.currentState getA], d8 & 0xff);
             
             break;
         case 0xF:
