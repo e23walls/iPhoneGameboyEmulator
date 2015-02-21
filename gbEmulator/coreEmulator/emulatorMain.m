@@ -2408,7 +2408,17 @@ const int biosSize = 256;
     int8_t prev = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
-            // LDH A,(a8) -- 
+            // LDH A,(a8) -- Put (0xFF00+a8) into A
+#warning This is for I/O
+            [self.currentState incrementPC];
+            d8 = self.ram[[self.currentState getPC]];
+            d16 = (unsigned short)0xff00 + (unsigned short)d8;
+            prev = [self.currentState getA];
+            [self.currentState setA:self.ram[(unsigned short)d16]];
+            PRINTDBG("0x%02x -- LDH A,(a8) -- 0xFF00+a8 = 0x%02x; A was 0x%02x and is now 0x%02x; (0xff00+a8) is 0x%02x\n",
+                     currentInstruction, d16 & 0xffff, prev & 0xff,
+                     [self.currentState getA] & 0xff,
+                     self.ram[(unsigned short)d16] & 0xff);
             break;
         case 1:
             // POP AF -- Pop two bytes from SP into AF, and increment SP twice
@@ -2421,7 +2431,14 @@ const int biosSize = 256;
                      (((self.ram[[self.currentState getSP]+1]) << 8) & 0xff00));
             break;
         case 2:
-            
+            // LD A,(C) -- Put value (0xff00+C) into A
+#warning This is for I/O
+            d16 = (unsigned short)0xff00 + (unsigned short)[self.currentState getC];
+            prev = [self.currentState getA];
+            [self.currentState setA:self.ram[(unsigned short)d16]];
+            PRINTDBG("0x%02x -- LD A,(C) -- 0xFF00+C = 0x%02x; A was 0x%02x and is now 0x%02x; (0xff00+C) is 0x%02x\n",
+                     currentInstruction, d16 & 0xffff, prev & 0xff, [self.currentState getA] & 0xff,
+                     self.ram[(unsigned short)d16] & 0xff);
             break;
         case 3:
             // DI -- disable interrupts
