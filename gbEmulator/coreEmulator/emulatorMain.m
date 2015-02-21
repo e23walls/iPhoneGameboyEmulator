@@ -99,13 +99,12 @@ const int biosSize = 256;
         NSLog(@"Byte counter reached value: %i\n", counter);
         if (hitEOF == YES)
         {
-            NSLog(@"Warning: EOF was reached before RAM was filled.");
+            printf("Warning: EOF was reached before RAM was filled.");
         }
         else
         {
-            NSLog(@"As expected, EOF was not reached before end of RAM.");
+            printf("As expected, EOF was not reached before end of RAM.");
         }
-        
         fclose(romFileHandler);
         NSLog(@"Setting up the ROM initial state...");
         self.currentState = [[romState alloc] init];
@@ -118,7 +117,7 @@ const int biosSize = 256;
     }
     else
     {
-        NSLog(@"Error! Couldn't allocate memory for emulator\n");
+        printf("Error! Couldn't allocate memory for emulator.\n");
     }
     return self;
 }
@@ -185,6 +184,8 @@ const int biosSize = 256;
 }
 
 #pragma mark - Regular instruction processing
+
+#warning Everything below this needs to be moved to other files because it's currently really gross
 
 - (void) executeInstruction
 {
@@ -1883,6 +1884,8 @@ const int biosSize = 256;
 {
     int16_t d16 = 0;
     unsigned short prev_short = 0;
+    int8_t prev = 0;
+    int8_t d8 = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
             // RET NZ -- If !Z, return from subroutine
@@ -1925,7 +1928,7 @@ const int biosSize = 256;
             // CALL NZ,a16 -- If !Z, push PC onto stack, and jump to a16
             [self.currentState incrementPC];
             prev_short = [self.currentState getSP];
-            d16 = ((self.ram[[self.currentState getPC]] & 0x00ff) << 8) | \
+            d16 = ((self.ram[[self.currentState getPC]] & 0x00ff) << 8) |
                     (((self.ram[[self.currentState getPC]+1] & 0xff00) >> 8) & 0x0ff);
             [self.currentState incrementPC];
             if ([self.currentState getZFlag] == false)
@@ -1936,8 +1939,8 @@ const int biosSize = 256;
                 [self.currentState setPC:d16];
                 incrementPC = false;
             }
-            PRINTDBG("0x%02x -- CALL NZ,a16 -- a16 = 0x%02x -- PC is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x; (SP) = 0x%02x\n", \
-                        currentInstruction, d16 & 0xffff, prev_short, [self.currentState getSP], \
+            PRINTDBG("0x%02x -- CALL NZ,a16 -- a16 = 0x%02x -- PC is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x; (SP) = 0x%02x\n",
+                     currentInstruction, d16 & 0xffff, prev_short, [self.currentState getSP],
                      [self.currentState getPC],
                      (((self.ram[[self.currentState getSP]]) & 0x00ff)) |
                      (((self.ram[[self.currentState getSP]+1]) << 8) & 0xff00));
@@ -1954,7 +1957,17 @@ const int biosSize = 256;
                      (((self.ram[[self.currentState getSP]+1]) << 8) & 0xff00));
             break;
         case 6:
-            
+            // ADD A,d8 -- A <- A + d8
+            [self.currentState incrementPC];
+            prev = [self.currentState getA];
+            d8 = self.ram[[self.currentState getPC]];
+            [self.currentState setA:([self.currentState getA] + d8)];
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:false
+                                      H:prev > [self.currentState getA]
+                                      C:((unsigned char)prev > (unsigned char)[self.currentState getA])];
+            PRINTDBG("0x%02x -- ADD d8 -- A was 0x%02x; A is now 0x%02x; d8 = 0x%02x\n",
+                     currentInstruction, prev & 0xff, [self.currentState getA], d8 & 0xff);
             break;
         case 7:
             // RST 00H -- push PC onto stack, and jump to address 0x00
@@ -2050,7 +2063,32 @@ const int biosSize = 256;
                      (((self.ram[[self.currentState getSP]+1]) << 8) & 0xff00));
             break;
         case 0xE:
-            
+            // ADC A,d8 -- Add d8 + C-flag to A
+            prev = [self.currentState getA];
+            [self.currentState incrementPC];
+            d8 = self.ram[[self.currentState getPC]];
+            if ([self.currentState getCFlag])
+            {
+                [self.currentState setA:([self.currentState getA]+d8+1)];
+            }
+            else
+            {
+                [self.currentState setA:([self.currentState getA]+d8)];
+            }
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if carry from bit 4.
+             C - Set if carry (from bit 7).
+             */
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:false
+                                      H:((char)(prev & 0xf) > (char)((([self.currentState getA] & 0xf + \
+                                                                        ([self.currentState getCFlag] ? 1 : 0)) & 0xf)))
+                                      C:((unsigned char)(prev) > (unsigned char)([self.currentState getA] + \
+                                                                                  ([self.currentState getCFlag] ? 1 : 0)))];
+            PRINTDBG("0x%02x -- ADC A,d8 -- A was 0x%02x; A is now 0x%02x; d8 = 0x%02x\n", currentInstruction,
+                     prev, [self.currentState getA], d8 & 0xff);
             break;
         case 0xF:
             // RST 08H -- push PC onto stack, and jump to address 0x00

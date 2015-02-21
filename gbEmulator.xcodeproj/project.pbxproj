@@ -112,6 +112,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9C0AB1971A98FE1800479721 /* InstructionProcessing */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = InstructionProcessing;
+			sourceTree = "<group>";
+		};
 		9C79FC241A6DAE8100C76513 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -133,6 +140,7 @@
 			children = (
 				9C79FC381A6DC66B00C76513 /* romState.h */,
 				9C79FC391A6DC66B00C76513 /* romState.m */,
+				9C0AB1971A98FE1800479721 /* InstructionProcessing */,
 				9C79FC3B1A6DF40400C76513 /* emulatorMain.h */,
 				9C79FC3C1A6DF40400C76513 /* emulatorMain.m */,
 			);
