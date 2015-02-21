@@ -2280,10 +2280,12 @@ const int biosSize = 256;
                      [self.currentState getA] & 0xff);
             break;
         case 3:
-            
+            // No instruction
+            PRINTDBG("0x%02x -- invalid instruction\n", currentInstruction);
             break;
         case 4:
-            
+            // No instruction
+            PRINTDBG("0x%02x -- invalid instruction\n", currentInstruction);
             break;
         case 5:
             // PUSH HL -- push HL onto SP, and decrement SP twice
@@ -2297,7 +2299,17 @@ const int biosSize = 256;
                      (((self.ram[[self.currentState getSP]+1]) << 8) & 0xff00));
             break;
         case 6:
-            
+            // AND d8 -- A <- A & d8
+            [self.currentState incrementPC];
+            prev = [self.currentState getA];
+            d8 = self.ram[[self.currentState getPC]];
+            [self.currentState setA:([self.currentState getA] & d8)];
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:false
+                                      H:true
+                                      C:false];
+            PRINTDBG("0x%02x -- AND d8 -- A was 0x%02x; A is now 0x%02x; d8 = 0x%02x\n",
+                     currentInstruction, prev & 0xff, [self.currentState getA], d8 & 0xff);
             break;
         case 7:
             // RST 20H -- push PC onto stack, and jump to address 0x00
@@ -2350,16 +2362,29 @@ const int biosSize = 256;
                      (unsigned short)prev_short, self.ram[(unsigned short)d16]);
             break;
         case 0xB:
-            
+            // No instruction
+            PRINTDBG("0x%02x -- invalid instruction\n", currentInstruction);
             break;
         case 0xC:
-            
+            // No instruction
+            PRINTDBG("0x%02x -- invalid instruction\n", currentInstruction);
             break;
         case 0xD:
-            
+            // No instruction
+            PRINTDBG("0x%02x -- invalid instruction\n", currentInstruction);
             break;
         case 0xE:
-            
+            // XOR d8 -- A <- A | d8
+            [self.currentState incrementPC];
+            prev = [self.currentState getA];
+            d8 = self.ram[[self.currentState getPC]];
+            [self.currentState setA:([self.currentState getA] | d8)];
+            [self.currentState setFlags:[self.currentState getA] == 0
+                                      N:false
+                                      H:false
+                                      C:false];
+            PRINTDBG("0x%02x -- XOR d8 -- A was 0x%02x; A is now 0x%02x; d8 = 0x%02x\n",
+                     currentInstruction, prev & 0xff, [self.currentState getA], d8 & 0xff);
             break;
         case 0xF:
             // RST 28H -- push PC onto stack, and jump to address 0x00
@@ -2383,7 +2408,7 @@ const int biosSize = 256;
     int8_t prev = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
-            
+            // LDH A,(a8) -- 
             break;
         case 1:
             // POP AF -- Pop two bytes from SP into AF, and increment SP twice
