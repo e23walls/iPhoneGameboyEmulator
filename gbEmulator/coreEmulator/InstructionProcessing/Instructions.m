@@ -44,6 +44,7 @@ void (^execute0xcbDInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0xcbEInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0xcbFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 
+#pragma mark - enableInterrupts
 void (^enableInterrupts)(bool, char *) = ^(bool maybe, char * ram)
 {
     if (maybe == true)
@@ -58,6 +59,7 @@ void (^enableInterrupts)(bool, char *) = ^(bool maybe, char * ram)
     }
 };
 
+#pragma mark - setKeysInMemory
 void (^setKeysInMemory)(char *, int) = ^(char * ram, int buttons)
 {
     if (ram[0xff00] & 0b00100000) // a, b, start, select
@@ -70,9 +72,67 @@ void (^setKeysInMemory)(char *, int) = ^(char * ram, int buttons)
     }
 };
 
-#pragma mark - CB Instructions
+#pragma mark - executeInstruction
+void (^executeInstruction)(romState *, char *, bool *, int8_t *) =
+^(romState * state,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
+    unsigned char currentInstruction = ram[[state getPC]];
+    switch ((currentInstruction & 0xF0) >> 4) {
+        case 0:
+            execute0x0Instruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 1:
+            execute0x1Instruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 2:
+            execute0x2Instruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 3:
+            execute0x3Instruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 4:
+            execute0x4Instruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 5:
+            execute0x5Instruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 6:
+            execute0x6Instruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 7:
+            execute0x7Instruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 8:
+            execute0x8Instruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 9:
+            execute0x9Instruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 0xA:
+            execute0xAInstruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 0xB:
+            execute0xBInstruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 0xC:
+            execute0xCInstruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 0xD:
+            execute0xDInstruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 0xE:
+            execute0xEInstruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+        case 0xF:
+            execute0xFInstruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+            break;
+    }
+};
 
-
+#pragma mark - execute0xcbInstruction
 void (^execute0xcbInstruction)(romState *,
                                char *,
                                bool *,
