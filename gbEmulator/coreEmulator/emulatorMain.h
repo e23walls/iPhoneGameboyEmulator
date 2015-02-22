@@ -10,6 +10,14 @@
 #import "rom.h"
 #import "romState.h"
 
+#define MYDEBUG
+
+#ifdef MYDEBUG
+#define PRINTDBG(...) printf(__VA_ARGS__)
+#else
+#define PRINTDBG(...) ;
+#endif
+
 @interface emulatorMain : NSObject
 
 /*

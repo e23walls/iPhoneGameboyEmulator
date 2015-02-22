@@ -9,14 +9,6 @@
 #import "emulatorMain.h"
 #include <sys/stat.h>
 
-#define MYDEBUG
-
-#ifdef MYDEBUG
-#define PRINTDBG(...) printf(__VA_ARGS__)
-#else
-#define PRINTDBG(...) ;
-#endif
-
 const int k = 1024;
 const int ramSize = 64 * k; // For readability purposes; an unsigned short spans the same set of integers.
 const int biosSize = 256;
@@ -36,6 +28,40 @@ const int biosSize = 256;
 @property romState * currentState;
 
 @end
+
+void (^execute0x0Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0x1Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0x2Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0x3Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0x4Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0x5Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0x6Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0x7Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0x8Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0x9Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xAInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xBInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xCInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xDInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xEInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcbInstruction)(romState *, char *, bool *, int8_t *);
+void (^execute0xcb0Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcb1Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcb2Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcb3Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcb4Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcb5Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcb6Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcb7Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcb8Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcb9Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcbAInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcbBInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcbCInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcbDInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcbEInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^execute0xcbFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 
 @implementation emulatorMain
 
@@ -192,52 +218,68 @@ const int biosSize = 256;
     unsigned char currentInstruction = self.ram[[self.currentState getPC]];
     switch ((currentInstruction & 0xF0) >> 4) {
         case 0:
-            [self execute0x0Instruction:currentInstruction];
+//            [self execute0x0Instruction:currentInstruction];
+            execute0x0Instruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 1:
-            [self execute0x1Instruction:currentInstruction];
+//            [self execute0x1Instruction:currentInstruction];
+            execute0x1Instruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 2:
-            [self execute0x2Instruction:currentInstruction];
+//            [self execute0x2Instruction:currentInstruction];
+            execute0x2Instruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 3:
-            [self execute0x3Instruction:currentInstruction];
+//            [self execute0x3Instruction:currentInstruction];
+            execute0x3Instruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 4:
-            [self execute0x4Instruction:currentInstruction];
+//            [self execute0x4Instruction:currentInstruction];
+            execute0x4Instruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 5:
-            [self execute0x5Instruction:currentInstruction];
+//            [self execute0x5Instruction:currentInstruction];
+            execute0x5Instruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 6:
-            [self execute0x6Instruction:currentInstruction];
+//            [self execute0x6Instruction:currentInstruction];
+            execute0x6Instruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 7:
-            [self execute0x7Instruction:currentInstruction];
+//            [self execute0x7Instruction:currentInstruction];
+            execute0x7Instruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 8:
-            [self execute0x8Instruction:currentInstruction];
+//            [self execute0x8Instruction:currentInstruction];
+            execute0x8Instruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 9:
-            [self execute0x9Instruction:currentInstruction];
+//            [self execute0x9Instruction:currentInstruction];
+            execute0x9Instruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 0xA:
-            [self execute0xAInstruction:currentInstruction];
+//            [self execute0xAInstruction:currentInstruction];
+            execute0xAInstruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 0xB:
-            [self execute0xBInstruction:currentInstruction];
+//            [self execute0xBInstruction:currentInstruction];
+            execute0xBInstruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 0xC:
-            [self execute0xCInstruction:currentInstruction];
+//            [self execute0xCInstruction:currentInstruction];
+            execute0xCInstruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 0xD:
-            [self execute0xDInstruction:currentInstruction];
+//            [self execute0xDInstruction:currentInstruction];
+            execute0xDInstruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 0xE:
-            [self execute0xEInstruction:currentInstruction];
+//            [self execute0xEInstruction:currentInstruction];
+            execute0xEInstruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 0xF:
-            [self execute0xFInstruction:currentInstruction];
+//            [self execute0xFInstruction:currentInstruction];
+            execute0xFInstruction(self.currentState, currentInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
     }
 }
@@ -2649,52 +2691,68 @@ const int biosSize = 256;
     unsigned char CBInstruction = self.ram[[self.currentState getPC]];
     switch ((CBInstruction & 0xF0) >> 4) {
         case 0:
-            [self CBexecute0x0Instruction:CBInstruction];
+//            [self CBexecute0x0Instruction:CBInstruction];
+            execute0xcb0Instruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 1:
-            [self CBexecute0x1Instruction:CBInstruction];
+//            [self CBexecute0x1Instruction:CBInstruction];
+            execute0xcb1Instruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 2:
-            [self CBexecute0x2Instruction:CBInstruction];
+//            [self CBexecute0x2Instruction:CBInstruction];
+            execute0xcb2Instruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 3:
-            [self CBexecute0x3Instruction:CBInstruction];
+//            [self CBexecute0x3Instruction:CBInstruction];
+            execute0xcb3Instruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 4:
-            [self CBexecute0x4Instruction:CBInstruction];
+//            [self CBexecute0x4Instruction:CBInstruction];
+            execute0xcb4Instruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 5:
-            [self CBexecute0x5Instruction:CBInstruction];
+//            [self CBexecute0x5Instruction:CBInstruction];
+            execute0xcb6Instruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 6:
-            [self CBexecute0x6Instruction:CBInstruction];
+//            [self CBexecute0x6Instruction:CBInstruction];
+            execute0xcb6Instruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 7:
-            [self CBexecute0x7Instruction:CBInstruction];
+//            [self CBexecute0x7Instruction:CBInstruction];
+            execute0xcb7Instruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 8:
-            [self CBexecute0x8Instruction:CBInstruction];
+//            [self CBexecute0x8Instruction:CBInstruction];
+            execute0xcb8Instruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 9:
-            [self CBexecute0x9Instruction:CBInstruction];
+//            [self CBexecute0x9Instruction:CBInstruction];
+            execute0xcb9Instruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 0xA:
-            [self CBexecute0xAInstruction:CBInstruction];
+//            [self CBexecute0xAInstruction:CBInstruction];
+            execute0xcbAInstruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 0xB:
-            [self CBexecute0xBInstruction:CBInstruction];
+//            [self CBexecute0xBInstruction:CBInstruction];
+            execute0xcbBInstruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 0xC:
-            [self CBexecute0xCInstruction:CBInstruction];
+//            [self CBexecute0xCInstruction:CBInstruction];
+            execute0xcbCInstruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 0xD:
-            [self CBexecute0xDInstruction:CBInstruction];
+//            [self CBexecute0xDInstruction:CBInstruction];
+            execute0xcbDInstruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 0xE:
-            [self CBexecute0xEInstruction:CBInstruction];
+//            [self CBexecute0xEInstruction:CBInstruction];
+            execute0xcbEInstruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
         case 0xF:
-            [self CBexecute0xFInstruction:CBInstruction];
+//            [self CBexecute0xFInstruction:CBInstruction];
+            execute0xcbFInstruction(self.currentState, CBInstruction, self.ram, &incrementPC, &interruptsEnabled);
             break;
     }
 }
@@ -3393,7 +3451,6 @@ const int biosSize = 256;
             
             break;
         case 0xB:
-            // Instruction with 0xCB prefix
             
             break;
         case 0xC:
@@ -3571,4 +3628,3 @@ const int biosSize = 256;
 }
 
 @end
-

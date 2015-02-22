@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C0AB1A01A9964A800479721 /* Instructions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB19F1A9964A800479721 /* Instructions.m */; };
 		9C79FC0E1A6D878700C76513 /* romDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C79FC0D1A6D878700C76513 /* romDataController.m */; };
 		9C79FC111A6D89F200C76513 /* rom.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C79FC101A6D89F200C76513 /* rom.m */; };
 		9C79FC2E1A6DAFC400C76513 /* START.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C79FC251A6DAFC400C76513 /* START.png */; };
@@ -48,6 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9C0AB19F1A9964A800479721 /* Instructions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instructions.m; path = coreEmulator/InstructionProcessing/Instructions.m; sourceTree = "<group>"; };
 		9C79FC0C1A6D878700C76513 /* romDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = romDataController.h; sourceTree = "<group>"; };
 		9C79FC0D1A6D878700C76513 /* romDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = romDataController.m; sourceTree = "<group>"; };
 		9C79FC0F1A6D89F200C76513 /* rom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rom.h; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 		9C0AB1971A98FE1800479721 /* InstructionProcessing */ = {
 			isa = PBXGroup;
 			children = (
+				9C0AB19F1A9964A800479721 /* Instructions.m */,
 			);
 			name = InstructionProcessing;
 			sourceTree = "<group>";
@@ -140,9 +143,9 @@
 			children = (
 				9C79FC381A6DC66B00C76513 /* romState.h */,
 				9C79FC391A6DC66B00C76513 /* romState.m */,
-				9C0AB1971A98FE1800479721 /* InstructionProcessing */,
 				9C79FC3B1A6DF40400C76513 /* emulatorMain.h */,
 				9C79FC3C1A6DF40400C76513 /* emulatorMain.m */,
+				9C0AB1971A98FE1800479721 /* InstructionProcessing */,
 			);
 			name = coreEmulator;
 			sourceTree = "<group>";
@@ -359,6 +362,7 @@
 				9CB9CC421A6CA22800DA02DD /* gbTableViewController.m in Sources */,
 				9CB9CC181A6C9CC300DA02DD /* main.m in Sources */,
 				9C79FC3D1A6DF40400C76513 /* emulatorMain.m in Sources */,
+				9C0AB1A01A9964A800479721 /* Instructions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
