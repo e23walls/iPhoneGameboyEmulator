@@ -183,13 +183,12 @@ void (^execute0xAInstruction)(romState *,
         case 0xF:
             // XOR A -- A <- A ^ A
             prev = [state getA];
-            [state setA:(prev ^ prev)];
+            [state setA:0];
             [state setFlags:([state getA] == 0)
                           N:false
                           H:false
                           C:false];
-            PRINTDBG("0x%02x -- XOR A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
-                     prev, [state getA]);
+            PRINTDBG("0x%02x -- XOR A -- A is now 0x00\n", currentInstruction);
             break;
     }
 };
