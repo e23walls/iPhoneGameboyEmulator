@@ -114,10 +114,8 @@ void (^execute0xFInstruction)(romState *,
                      prev_short, [state getSP]);
             break;
         case 0xA:
-#warning This looks fishy
             // LD A,(a16) -- Load (a16) into A
-            d16 = (([state getPC] & 0x00ff) << 8) | \
-                ((([state getPC] & 0xff00) >> 8) & 0x0ff);
+            d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0xff);
             d8 = ram[(unsigned short)d16];
             [state doubleIncPC];
             prev = [state getA];

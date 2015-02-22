@@ -44,8 +44,7 @@ void (^execute0xDInstruction)(romState *,
             break;
         case 2:
             // JP NC,a16 -- If !C, jump to address a16
-            d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
-            (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+            d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0xff);
             [state doubleIncPC];
             if ([state getCFlag] == false)
             {
@@ -62,8 +61,7 @@ void (^execute0xDInstruction)(romState *,
         case 4:
             // CALL NC,a16 -- If !C, call subroutine at address a16
             prev_short = [state getSP];
-            d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
-                (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+            d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0xff);
             [state doubleIncPC];
             if ([state getCFlag] == false)
             {
@@ -145,13 +143,12 @@ void (^execute0xDInstruction)(romState *,
             break;
         case 0xA:
             // JP C,a16 -- If C, jump to address a16
-            d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
-                (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+            d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0xff);
             [state doubleIncPC];
             if ([state getCFlag] == true)
             {
                 [state setPC:d16];
-                *incrementPC =false;
+                *incrementPC = false;
             }
             PRINTDBG("0x%02x -- JP C,a16 -- a16 = 0x%02x -- PC is now at 0x%02x\n", currentInstruction & 0xff,
                      d16 & 0xffff, [state getPC]);
@@ -163,8 +160,7 @@ void (^execute0xDInstruction)(romState *,
         case 0xC:
             // CALL C,a16 -- If C, call subroutine at address a16
             prev_short = [state getSP];
-            d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
-                (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+            d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0xff);
             [state doubleIncPC];
             if ([state getCFlag] == true)
             {

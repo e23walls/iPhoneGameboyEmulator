@@ -147,8 +147,7 @@ void (^execute0xCInstruction)(romState *,
             break;
         case 0xA:
             // JP Z,a16 -- If Z, jump to address a16
-            d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
-            (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+            d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0xff);
             [state doubleIncPC];
             if ([state getZFlag] == true)
             {
@@ -167,8 +166,7 @@ void (^execute0xCInstruction)(romState *,
         case 0xC:
             // CALL Z,a16 -- If Z, call subroutine at address a16
             prev_short = [state getSP];
-            d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
-                (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+            d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0xff);
             [state doubleIncPC];
             if ([state getZFlag] == true)
             {
@@ -185,8 +183,7 @@ void (^execute0xCInstruction)(romState *,
         case 0xD:
             // CALL a16 -- call subroutine at address a16
             prev_short = [state getSP];
-            d16 = ((ram[[state getPC]] & 0x00ff)) | \
-                ((ram[[state getPC]+1] << 8) & 0xff00);
+            d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0xff);
             [state doubleIncPC];
             [state setSP:(prev_short - 2)];
             ram[[state getSP]] = (int8_t)(([state getPC]+1) & 0xff);

@@ -115,16 +115,14 @@ void (^execute0xEInstruction)(romState *,
             // JP (HL) -- Jump to address in register HL
             d16 = (([state getHL_big] & 0x00ff) << 8) | \
                 ((([state getHL_big] & 0xff00) >> 8) & 0x0ff);
-            [state doubleIncPC];
             [state setPC:d16];
-            *incrementPC =false;
+            *incrementPC = false;
             PRINTDBG("0x%02x -- JP (HL) -- HL = 0x%02x -- PC is now at 0x%02x\n", currentInstruction & 0xff,
                      d16 & 0xffff, [state getPC]);
             break;
         case 0xA:
             // LD (a16),A -- Put A into (a16)
-            d16 = (([state getPC] & 0x00ff) << 8) | \
-                ((([state getPC] & 0xff00) >> 8) & 0x0ff);
+            d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0xff);
             [state doubleIncPC];
             prev_short = ram[(unsigned short)d16];
             ram[(unsigned short)d16] = [state getA];
