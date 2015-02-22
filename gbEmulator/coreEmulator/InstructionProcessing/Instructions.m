@@ -11,14 +11,18 @@
 #import "emulatorMain.h"
 
 // Do not change these addresses!!!
-const unsigned short IRSAddress_VerticalBlank = 0x40;
-const unsigned short IRSAddress_LCDStatusTriggers = 0x48;
-const unsigned short IRSAddress_Timer = 0x50;
-const unsigned short IRSAddress_SerialLink = 0x58;
-const unsigned short IRSAddress_JoypadPress = 0x60;
+const unsigned short ISRAddress_VerticalBlank = 0x40;
+const unsigned short ISRAddress_LCDStatusTriggers = 0x48;
+const unsigned short ISRAddress_Timer = 0x50;
+const unsigned short ISRAddress_SerialLink = 0x58;
+const unsigned short ISRAddress_JoypadPress = 0x60;
 const unsigned short interruptFlagAddress = 0xff0f;
 const unsigned short interruptEnableRegister = 0xffff;
 const unsigned short joypadDataRegister = 0xff00;
+
+// Do not change these instruction definitions!
+const unsigned char RET = 0xc9;
+const unsigned char RETI = 0xd9;
 
 void (^execute0x0Instruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0x1Instruction)(romState *, int8_t, char *, bool *, int8_t *);
@@ -54,6 +58,7 @@ void (^execute0xcbDInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0xcbEInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0xcbFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^servicedInterrupt)(char *, int8_t);
+void (^pushPCForISR)(romState *, char *, unsigned short);
 
 #pragma mark - enableInterrupts
 void (^enableInterrupts)(bool, char *) = ^(bool maybe, char * ram)
@@ -217,39 +222,98 @@ void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *) = ^
  int8_t * interruptsEnabled)
 {
     int8_t enabledInterrupts = ram[interruptFlagAddress] & ram[interruptEnableRegister];
+    unsigned char instruction = 0;
     // Since the interrupts have specific priorities, these statements
     // are arranged to correspond to the order of the interrupt priorities.
 
     // Service interrupt for vertical blank -- approx. occurs 60 times a second
     if (enabledInterrupts & (1 << VERTICAL_BLANK))
     {
-        
+        pushPCForISR(state, ram, ISRAddress_VerticalBlank);
+        // Continue to execute instructions until we exit the ISR.
+        // We know when this occurs because we'll hit a return instruction,
+        // either RET (0xC9) or RETI (0xD9)
+        while (instruction != RET && instruction != RETI)
+        {
+            [state incrementPC];
+            PRINTDBG("PC = 0x%02x\n", [state getPC]);
+            instruction = ram[[state getPC]];
+            executeInstruction(state, ram, incrementPC, interruptsEnabled);
+        }
         servicedInterrupt(ram, VERTICAL_BLANK);
+        instruction = 0;
     }
     // Service interrupt for LCD status triggers
     if (enabledInterrupts & (1 << LCD_STATUS_TRIGGERS))
     {
-        
+        pushPCForISR(state, ram, ISRAddress_LCDStatusTriggers);
+        while (instruction != RET && instruction != RETI)
+        {
+            [state incrementPC];
+            PRINTDBG("PC = 0x%02x\n", [state getPC]);
+            instruction = ram[[state getPC]];
+            executeInstruction(state, ram, incrementPC, interruptsEnabled);
+        }
         servicedInterrupt(ram, LCD_STATUS_TRIGGERS);
+        instruction = 0;
     }
     // Service interrupt for timer overflow -- if 0xff05 goes from 0xff to 0x00
     if (enabledInterrupts & (1 << TIMER_OVERFLOW))
     {
-        
+        pushPCForISR(state, ram, ISRAddress_Timer);
+        while (instruction != RET && instruction != RETI)
+        {
+            [state incrementPC];
+            PRINTDBG("PC = 0x%02x\n", [state getPC]);
+            instruction = ram[[state getPC]];
+            executeInstruction(state, ram, incrementPC, interruptsEnabled);
+        }
         servicedInterrupt(ram, TIMER_OVERFLOW);
+        instruction = 0;
     }
     // Service interrupt for serial link -- serial transfer finished on game link port
     if (enabledInterrupts & (1 << SERIAL_LINK))
     {
-        
+        pushPCForISR(state, ram, ISRAddress_SerialLink);
+        while (instruction != RET && instruction != RETI)
+        {
+            [state incrementPC];
+            PRINTDBG("PC = 0x%02x\n", [state getPC]);
+            instruction = ram[[state getPC]];
+            executeInstruction(state, ram, incrementPC, interruptsEnabled);
+        }
         servicedInterrupt(ram, SERIAL_LINK);
+        instruction = 0;
     }
     // Service interrupt for joypad press -- occurs every time a key is pressed or released
     if (enabledInterrupts & (1 << JOYPAD_PRESS))
     {
-        
+        pushPCForISR(state, ram, ISRAddress_JoypadPress);
+        while (instruction != RET && instruction != RETI)
+        {
+            [state incrementPC];
+            PRINTDBG("PC = 0x%02x\n", [state getPC]);
+            instruction = ram[[state getPC]];
+            executeInstruction(state, ram, incrementPC, interruptsEnabled);
+        }
         servicedInterrupt(ram, JOYPAD_PRESS);
     }
+};
+
+void (^pushPCForISR)(romState *, char *, unsigned short) = ^
+(romState * state,
+ char * ram,
+ unsigned short ISRAddress)
+{
+    unsigned short prev_PC = [state getPC];
+    unsigned short prev_short = [state getSP];
+    [state setSP:(prev_short - 2)];
+    ram[[state getSP]] = (int8_t)(([state getPC]+1) & 0xff);
+    ram[[state getSP]+1] = (int8_t)((([state getPC]+1) & 0xff00) >> 8);
+    [state setPC:ISRAddress];
+    PRINTDBG("Save PC for ISR -- PC was at 0x%02x, and is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x; (SP) = 0x%02x\n",
+             prev_PC, [state getPC], prev_short, [state getSP],
+             (((ram[[state getSP]]) & 0x00ff)) | (((ram[[state getSP]+1]) << 8) & 0xff00));
 };
 
 void (^servicedInterrupt)(char *, int8_t) = ^
