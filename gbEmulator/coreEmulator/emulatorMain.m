@@ -65,6 +65,9 @@ extern void (^execute0xcbEInstruction)(romState *, int8_t, char *, bool *, int8_
 extern void (^execute0xcbFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 extern void (^setKeysInMemory)(char *, int);
 extern void (^enableInterrupts)(bool, char *);
+extern void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *);
+extern const unsigned short interruptFlagAddress;
+const unsigned short interruptEnableRegister;
 
 @implementation emulatorMain
 
@@ -189,7 +192,16 @@ extern void (^enableInterrupts)(bool, char *);
         PRINTDBG("PC = 0x%02x\n", [self.currentState getPC]);
         incrementPC = true;
         executeInstruction(self.currentState, self.ram, &incrementPC, &interruptsEnabled);
+        if ([self interruptOccurred])
+        {
+            PRINTDBG("An interrupt has occurred!\n");
+            interruptServiceRoutineCaller(self.currentState, self.ram, &incrementPC, &interruptsEnabled);
+        }
     }
+}
+- (bool) interruptOccurred
+{
+    return (bool)(self.ram[interruptEnableRegister] & self.ram[interruptFlagAddress]);
 }
 
 @end

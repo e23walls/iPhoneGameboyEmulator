@@ -10,6 +10,16 @@
 
 #import "emulatorMain.h"
 
+// Do not change these addresses!!!
+const unsigned short IRSAddress_VerticalBlank = 0x40;
+const unsigned short IRSAddress_LCDStatusTriggers = 0x48;
+const unsigned short IRSAddress_Timer = 0x50;
+const unsigned short IRSAddress_SerialLink = 0x58;
+const unsigned short IRSAddress_JoypadPress = 0x60;
+const unsigned short interruptFlagAddress = 0xff0f;
+const unsigned short interruptEnableRegister = 0xffff;
+const unsigned short joypadDataRegister = 0xff00;
+
 void (^execute0x0Instruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0x1Instruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0x2Instruction)(romState *, int8_t, char *, bool *, int8_t *);
@@ -43,6 +53,7 @@ void (^execute0xcbCInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0xcbDInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0xcbEInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0xcbFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+void (^servicedInterrupt)(char *, int8_t);
 
 #pragma mark - enableInterrupts
 void (^enableInterrupts)(bool, char *) = ^(bool maybe, char * ram)
@@ -50,7 +61,7 @@ void (^enableInterrupts)(bool, char *) = ^(bool maybe, char * ram)
     if (maybe == true)
     {
         PRINTDBG("Interrupts have been ENabled...\n");
-        ram[0x0ffff] = 1;
+        ram[0x0ffff] = 0b00011111;
     }
     else
     {
@@ -62,13 +73,13 @@ void (^enableInterrupts)(bool, char *) = ^(bool maybe, char * ram)
 #pragma mark - setKeysInMemory
 void (^setKeysInMemory)(char *, int) = ^(char * ram, int buttons)
 {
-    if (ram[0xff00] & 0b00100000) // a, b, start, select
+    if (ram[joypadDataRegister] & 0b00100000) // a, b, start, select
     {
-        ram[0xff00] |= (buttons & 0b11110000) >> 4;
+        ram[joypadDataRegister] |= (buttons & 0b11110000) >> 4;
     }
-    else if (ram[0xff00] & 0b00010000) // arrows
+    else if (ram[joypadDataRegister] & 0b00010000) // arrows
     {
-        ram[0xff00] |= buttons & 0b00001111;
+        ram[joypadDataRegister] |= buttons & 0b00001111;
     }
 };
 
@@ -196,5 +207,59 @@ void (^execute0xcbInstruction)(romState *,
             execute0xcbFInstruction(state, CBInstruction, ram, incrementPC, interruptsEnabled);
             break;
     }
+};
+
+void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *) = ^
+(romState * state,
+ char * ram,
+ bool * incrementPC,
+ int8_t * interruptsEnabled)
+{
+    int8_t enabledInterrupts = ram[interruptFlagAddress] & ram[interruptEnableRegister];
+    // Since the interrupts have priority, these statements
+    // are arranged in order from highest to lowest priority.
+
+    // Service interrupt for vertical blank
+    if (enabledInterrupts & 0b00001)
+    {
+        
+        servicedInterrupt(ram, 0);
+    }
+    // Service interrupt for LCD status triggers
+    if (enabledInterrupts & 0b00010)
+    {
+        
+        servicedInterrupt(ram, 1);
+    }
+    // Service interrupt for timer overflow
+    if (enabledInterrupts & 0b00100)
+    {
+        
+        servicedInterrupt(ram, 2);
+    }
+    // Service interrupt for serial link
+    if (enabledInterrupts & 0b01000)
+    {
+        
+        servicedInterrupt(ram, 3);
+    }
+    // Service interrupt for joypad press
+    if (enabledInterrupts & 0b10000)
+    {
+        
+        servicedInterrupt(ram, 4);
+    }
+};
+
+void (^servicedInterrupt)(char *, int8_t) = ^
+(char * ram,
+ int8_t pos)
+{
+    // Acknowledge the interrupt has been handled by writing a 0 to
+    // the corresponding interrupt flag bit (at 0xff0f), without
+    // changing the other bits.
+    assert(pos >= 0 && pos <= 4);
+    ram[interruptFlagAddress] &= (1 << pos) ^ 0xff;
+    PRINTDBG("Serviced interrupt at flag bit %i\n", pos & 0xff);
 };
 
