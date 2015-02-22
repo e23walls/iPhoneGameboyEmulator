@@ -26,6 +26,12 @@ const int biosSize = 256;
 @property char * ram;
 @property rom * currentRom;
 @property romState * currentState;
+/*
+ Keys:
+ [Start][Select][B][A][Down][Up][Left][Right]
+ */
+@property int * keys;
+@property int8_t buttons;
 
 @end
 
@@ -67,7 +73,7 @@ extern void (^setKeysInMemory)(char *, int);
 extern void (^enableInterrupts)(bool, char *);
 extern void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *);
 extern const unsigned short interruptFlagAddress;
-const unsigned short interruptEnableRegister;
+extern const unsigned short interruptEnableRegister;
 
 @implementation emulatorMain
 
@@ -191,17 +197,38 @@ const unsigned short interruptEnableRegister;
         // If the current instruction is 1 byte, it should be correct.
         PRINTDBG("PC = 0x%02x\n", [self.currentState getPC]);
         incrementPC = true;
-        executeInstruction(self.currentState, self.ram, &incrementPC, &interruptsEnabled);
         if ([self interruptOccurred])
         {
             PRINTDBG("An interrupt has occurred!\n");
             interruptServiceRoutineCaller(self.currentState, self.ram, &incrementPC, &interruptsEnabled);
         }
+        executeInstruction(self.currentState, self.ram, &incrementPC, &interruptsEnabled);
     }
+}
+- (void) setInterruptFlag:(int8_t) bit
+{
+    assert(bit <= 5 && bit >= 0);
+    self.ram[interruptFlagAddress] |= (1 << bit);
+    PRINTDBG("Set IF flag bit #%i\n", bit);
 }
 - (bool) interruptOccurred
 {
     return (bool)(self.ram[interruptEnableRegister] & self.ram[interruptFlagAddress]);
+}
+// Toggle bit corresponding to the specified key press, and write 1
+// to corresponding interrupt flag (bit 4)
+- (void) pressedKey:(int8_t)offset
+{
+    assert(offset >= 0 && offset <= 7);
+    self.buttons ^= 1 << offset;
+    [self setInterruptFlag:JOYPAD_PRESS];
+}
+- (void) printKeys
+{
+    for (int8_t i = 0; i < 8; i++)
+    {
+        printf("buttons[%i] = %i\n", i, self.buttons & (1 << i));
+    }
 }
 
 @end

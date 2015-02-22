@@ -209,6 +209,7 @@ void (^execute0xcbInstruction)(romState *,
     }
 };
 
+// TODO: should the IF be set to 0 upon startup? (Hypothesis: Yes)
 void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *) = ^
 (romState * state,
  char * ram,
@@ -216,38 +217,38 @@ void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *) = ^
  int8_t * interruptsEnabled)
 {
     int8_t enabledInterrupts = ram[interruptFlagAddress] & ram[interruptEnableRegister];
-    // Since the interrupts have priority, these statements
-    // are arranged in order from highest to lowest priority.
+    // Since the interrupts have specific priorities, these statements
+    // are arranged to correspond to the order of the interrupt priorities.
 
-    // Service interrupt for vertical blank
-    if (enabledInterrupts & 0b00001)
+    // Service interrupt for vertical blank -- approx. occurs 60 times a second
+    if (enabledInterrupts & (1 << VERTICAL_BLANK))
     {
         
-        servicedInterrupt(ram, 0);
+        servicedInterrupt(ram, VERTICAL_BLANK);
     }
     // Service interrupt for LCD status triggers
-    if (enabledInterrupts & 0b00010)
+    if (enabledInterrupts & (1 << LCD_STATUS_TRIGGERS))
     {
         
-        servicedInterrupt(ram, 1);
+        servicedInterrupt(ram, LCD_STATUS_TRIGGERS);
     }
-    // Service interrupt for timer overflow
-    if (enabledInterrupts & 0b00100)
+    // Service interrupt for timer overflow -- if 0xff05 goes from 0xff to 0x00
+    if (enabledInterrupts & (1 << TIMER_OVERFLOW))
     {
         
-        servicedInterrupt(ram, 2);
+        servicedInterrupt(ram, TIMER_OVERFLOW);
     }
-    // Service interrupt for serial link
-    if (enabledInterrupts & 0b01000)
+    // Service interrupt for serial link -- serial transfer finished on game link port
+    if (enabledInterrupts & (1 << SERIAL_LINK))
     {
         
-        servicedInterrupt(ram, 3);
+        servicedInterrupt(ram, SERIAL_LINK);
     }
-    // Service interrupt for joypad press
-    if (enabledInterrupts & 0b10000)
+    // Service interrupt for joypad press -- occurs every time a key is pressed or released
+    if (enabledInterrupts & (1 << JOYPAD_PRESS))
     {
         
-        servicedInterrupt(ram, 4);
+        servicedInterrupt(ram, JOYPAD_PRESS);
     }
 };
 

@@ -13,7 +13,7 @@
 #define PRINTOUTKEYS 0
 
 #if PRINTOUTKEYS
-#define PRINTKEYS() [self printKeys];
+#define PRINTKEYS() [emulator printKeys];
 #else
 #define PRINTKEYS() ;
 #endif
@@ -73,7 +73,7 @@ static rom * currentRom;
  Bit 1 - P11 in port - LEFT  | B
  Bit 0 - P10 in port - RIGHT | A
  
- For emulator.keys, we'll say that the lower 4 bits are for the arrows,
+ For emulator.buttons, we'll say that the lower 4 bits are for the arrows,
  D, U, L, R
  And the top 4 bits are for the other buttons,
  Start, Select, B, A
@@ -82,130 +82,114 @@ static rom * currentRom;
 
 - (IBAction)upButtonDown:(id)sender
 {
-    NSLog(@"User pressed up arrow!\n");
+    NSLog(@"User pressed 'Up' button!\n");
     // or (0000 0100)2 with [0xff00]
-    emulator.keys[2] = 1;
-    emulator.buttons ^= 0b00000100;
+    [emulator pressedKey:2];
     PRINTKEYS();
 }
 - (IBAction)downButtonDown:(id)sender
 {
-    NSLog(@"User pressed down arrow!\n");
+    NSLog(@"User pressed 'Down' button!\n");
     // or (0000 1000)2 with [0xff00]
-    emulator.keys[3] = 1;
-    emulator.buttons ^= 0b00001000;
+    [emulator pressedKey:3];
     PRINTKEYS();
 }
 - (IBAction)leftButtonDown:(id)sender
 {
-    NSLog(@"User pressed left arrow!\n");
+    NSLog(@"User pressed 'Left' button!\n");
     // or (0000 0010)2 with [0xff00]
-    emulator.keys[1] = 1;
-    emulator.buttons ^= 0b00000010;
+    [emulator pressedKey:1];
     PRINTKEYS();
 }
 - (IBAction)rightButtonDown:(id)sender
 {
-    NSLog(@"User pressed right arrow!\n");
+    NSLog(@"User pressed 'Right' button!\n");
     // or (0000 0001)2 with [0xff00]
-    emulator.keys[0] = 1;
-    emulator.buttons ^= 0b00000001;
+    [emulator pressedKey:0];
     PRINTKEYS();
 }
 - (IBAction)AButtonDown:(id)sender
 {
     NSLog(@"User pressed 'A' button!\n");
     // or (0000 0001)2 with [0xff00]
-    emulator.keys[4] = 1;
-    emulator.buttons ^= 0b00010000;
+    [emulator pressedKey:4];
     PRINTKEYS();
 }
 - (IBAction)BButtonDown:(id)sender
 {
     NSLog(@"User pressed 'B' button!\n");
     // or (0000 0010)2 with [0xff00]
-    emulator.keys[5] = 1;
-    emulator.buttons ^= 0b00100000;
+    [emulator pressedKey:5];
     PRINTKEYS();
 }
 - (IBAction)startButtonDown:(id)sender
 {
     NSLog(@"User pressed 'Start' button!\n");
     // or (0000 1000)2 with [0xff00]
-    emulator.keys[7] = 1;
-    emulator.buttons ^= 0b10000000;
+    [emulator pressedKey:7];
     PRINTKEYS();
 }
 - (IBAction)selectButtonDown:(id)sender
 {
     NSLog(@"User pressed 'Select' button!\n");
     // or (0000 0100)2 with [0xff00]
-    emulator.keys[6] = 1;
-    emulator.buttons ^= 0b01000000;
+    [emulator pressedKey:6];
     PRINTKEYS();
 }
 - (IBAction)upButtonUp:(id)sender
 {
     NSLog(@"User released 'Up' button!\n");
     // or (0000 0100)2 with [0xff00]
-    emulator.keys[2] = 0;
-    emulator.buttons ^= 0b00000100;
+    [emulator pressedKey:2];
     PRINTKEYS();
 }
 - (IBAction)downButtonUp:(id)sender
 {
-    NSLog(@"User released down arrow!\n");
+    NSLog(@"User released 'Down' button!\n");
     // or (0000 1000)2 with [0xff00]
-    emulator.keys[3] = 0;
-    emulator.buttons ^= 0b00001000;
+    [emulator pressedKey:3];
     PRINTKEYS();
 }
 - (IBAction)leftButtonUp:(id)sender
 {
-    NSLog(@"User released left arrow!\n");
+    NSLog(@"User released 'Left' button!\n");
     // or (0000 0010)2 with [0xff00]
-    emulator.keys[1] = 0;
-    emulator.buttons ^= 0b00000010;
+    [emulator pressedKey:1];
     PRINTKEYS();
 }
 - (IBAction)rightButtonUp:(id)sender
 {
-    NSLog(@"User released right arrow!\n");
+    NSLog(@"User released 'Right' button!\n");
     // or (0000 0001)2 with [0xff00]
-    emulator.keys[0] = 0;
-    emulator.buttons ^= 0b00000001;
+    [emulator pressedKey:0];
     PRINTKEYS();
 }
 - (IBAction)AButtonUp:(id)sender
 {
     NSLog(@"User released 'A' button!\n");
     // or (0000 0001)2 with [0xff00]
-    emulator.keys[4] = 0;
-    emulator.buttons ^= 0b00010000;
+    [emulator pressedKey:4];
     PRINTKEYS();
 }
 - (IBAction)BButtonUp:(id)sender
 {
     NSLog(@"User released 'B' button!\n");
     // or (0000 0010)2 with [0xff00]
-    emulator.keys[5] = 0;
-    emulator.buttons ^= 0b00100000;
+    [emulator pressedKey:5];
     PRINTKEYS();
 }
 - (IBAction)startButtonUp:(id)sender
 {
     NSLog(@"User released 'Start' button!\n");
     // or (0000 1000)2 with [0xff00]
-    emulator.keys[7] = 0;
-    emulator.buttons ^= 0b10000000;
+    [emulator pressedKey:7];
     PRINTKEYS();
 }
 - (IBAction)selectButtonUp:(id)sender
 {
     NSLog(@"User released 'Select' button!\n");
     // or (0000 0100)2 with [0xff00]
-    emulator.keys[6] = 0;
-    emulator.buttons ^= 0b00100000;
+    [emulator pressedKey:6];
     PRINTKEYS();
 }
 - (IBAction)stopButton:(id)sender
@@ -220,7 +204,7 @@ static rom * currentRom;
 {
     if (isRunningRom == false)
     {
-        [self romIsRunning];
+        [self romRunning:YES];
         [emulator runRom];
         // Until the emulator isn't just a giant for-loop, it won't be clear that this actually
         // does change the button's text. But commenting out this following line shows it does.
@@ -228,49 +212,34 @@ static rom * currentRom;
     }
     else
     {
-        [self romNotRunning];
+        [self romRunning:NO];
 #warning Pause the ROM's execution!
         // Something like [emulator pauseRom];
     }
 }
 
-- (void) romIsRunning
+- (void) romRunning:(BOOL)isRunning
 {
-    isRunningRom = true;
-    [runButton setTitle:@"Pause" forState:UIControlStateNormal];
-    [self.view setNeedsDisplay];
-    [leftButton setEnabled:YES];
-    [rightButton setEnabled:YES];
-    [upButton setEnabled:YES];
-    [downButton setEnabled:YES];
-    [aButton setEnabled:YES];
-    [bButton setEnabled:YES];
-    [selectButton setEnabled:YES];
-    [startButton setEnabled:YES];
-    [middle setEnabled:YES];
-}
-- (void) romNotRunning
-{
-    isRunningRom = false;
-    [runButton setTitle:@"Run" forState:UIControlStateNormal];
-    [self.view setNeedsDisplay];
-    [leftButton setEnabled:NO];
-    [rightButton setEnabled:NO];
-    [upButton setEnabled:NO];
-    [downButton setEnabled:NO];
-    [aButton setEnabled:NO];
-    [bButton setEnabled:NO];
-    [selectButton setEnabled:NO];
-    [startButton setEnabled:NO];
-    [middle setEnabled:NO];
-}
-- (void) printKeys
-{
-    for (int i = 0; i < NUMBEROFBUTTONS; i++)
+    isRunningRom = isRunning;
+    if (isRunning)
     {
-        printf("keys[%i] = %i\n", i, emulator.keys[i]);
+        [runButton setTitle:@"Pause" forState:UIControlStateNormal];
+        [self.view setNeedsDisplay];
     }
-    printf("\n");
+    else
+    {
+        [runButton setTitle:@"Run" forState:UIControlStateNormal];
+        [self.view setNeedsDisplay];
+    }
+    [leftButton setEnabled:isRunning];
+    [rightButton setEnabled:isRunning];
+    [upButton setEnabled:isRunning];
+    [downButton setEnabled:isRunning];
+    [aButton setEnabled:isRunning];
+    [bButton setEnabled:isRunning];
+    [selectButton setEnabled:isRunning];
+    [startButton setEnabled:isRunning];
+    [middle setEnabled:isRunning];
 }
 
 @end

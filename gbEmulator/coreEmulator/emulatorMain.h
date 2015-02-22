@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 Emily Walls. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "rom.h"
 #import "romState.h"
 
@@ -18,15 +17,20 @@
 #define PRINTDBG(...) ;
 #endif
 
+enum interruptFlagBitNames
+{
+    VERTICAL_BLANK,
+    LCD_STATUS_TRIGGERS,
+    TIMER_OVERFLOW,
+    SERIAL_LINK,
+    JOYPAD_PRESS
+};
+
 @interface emulatorMain : NSObject
 
-/*
- Keys:
- [Start][Select][B][A][Down][Up][Left][Right]
- */
-@property int * keys;
-@property int8_t buttons;
 - (emulatorMain *) initWithRom: (rom *) theRom;
 - (void) runRom;
+- (void) pressedKey:(int8_t)offset;
+- (void) printKeys;
 
 @end
