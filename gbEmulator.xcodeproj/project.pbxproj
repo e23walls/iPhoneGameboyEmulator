@@ -8,6 +8,38 @@
 
 /* Begin PBXBuildFile section */
 		9C0AB1A01A9964A800479721 /* Instructions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB19F1A9964A800479721 /* Instructions.m */; };
+		9C0AB1A21A997C2200479721 /* Instruction0x0.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1A11A997C2200479721 /* Instruction0x0.m */; };
+		9C0AB1A41A997CA400479721 /* Instruction0x1.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1A31A997CA400479721 /* Instruction0x1.m */; };
+		9C0AB1A61A997CCE00479721 /* Instruction0x2.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1A51A997CCE00479721 /* Instruction0x2.m */; };
+		9C0AB1A81A997CFE00479721 /* Instruction0x3.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1A71A997CFE00479721 /* Instruction0x3.m */; };
+		9C0AB1B51A997ECF00479721 /* Instruction0x4.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1A91A997ECF00479721 /* Instruction0x4.m */; };
+		9C0AB1B61A997ECF00479721 /* Instruction0x5.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1AA1A997ECF00479721 /* Instruction0x5.m */; };
+		9C0AB1B71A997ECF00479721 /* Instruction0x6.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1AB1A997ECF00479721 /* Instruction0x6.m */; };
+		9C0AB1B81A997ECF00479721 /* Instruction0x7.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1AC1A997ECF00479721 /* Instruction0x7.m */; };
+		9C0AB1B91A997ECF00479721 /* Instruction0x8.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1AD1A997ECF00479721 /* Instruction0x8.m */; };
+		9C0AB1BA1A997ECF00479721 /* Instruction0x9.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1AE1A997ECF00479721 /* Instruction0x9.m */; };
+		9C0AB1BB1A997ECF00479721 /* Instruction0xA.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1AF1A997ECF00479721 /* Instruction0xA.m */; };
+		9C0AB1BC1A997ECF00479721 /* Instruction0xB.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1B01A997ECF00479721 /* Instruction0xB.m */; };
+		9C0AB1BD1A997ECF00479721 /* Instruction0xC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1B11A997ECF00479721 /* Instruction0xC.m */; };
+		9C0AB1BE1A997ECF00479721 /* Instruction0xD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1B21A997ECF00479721 /* Instruction0xD.m */; };
+		9C0AB1BF1A997ECF00479721 /* Instruction0xE.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1B31A997ECF00479721 /* Instruction0xE.m */; };
+		9C0AB1C01A997ECF00479721 /* Instruction0xF.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1B41A997ECF00479721 /* Instruction0xF.m */; };
+		9C0AB1D31A99815300479721 /* Instruction0xcb0.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1C31A99815300479721 /* Instruction0xcb0.m */; };
+		9C0AB1D41A99815300479721 /* Instruction0xcb1.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1C41A99815300479721 /* Instruction0xcb1.m */; };
+		9C0AB1D51A99815300479721 /* Instruction0xcb2.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1C51A99815300479721 /* Instruction0xcb2.m */; };
+		9C0AB1D61A99815300479721 /* Instruction0xcb3.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1C61A99815300479721 /* Instruction0xcb3.m */; };
+		9C0AB1D71A99815300479721 /* Instruction0xcb4.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1C71A99815300479721 /* Instruction0xcb4.m */; };
+		9C0AB1D81A99815300479721 /* Instruction0xcb5.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1C81A99815300479721 /* Instruction0xcb5.m */; };
+		9C0AB1D91A99815300479721 /* Instruction0xcb6.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1C91A99815300479721 /* Instruction0xcb6.m */; };
+		9C0AB1DA1A99815300479721 /* Instruction0xcb7.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1CA1A99815300479721 /* Instruction0xcb7.m */; };
+		9C0AB1DB1A99815300479721 /* Instruction0xcb8.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1CB1A99815300479721 /* Instruction0xcb8.m */; };
+		9C0AB1DC1A99815300479721 /* Instruction0xcb9.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1CC1A99815300479721 /* Instruction0xcb9.m */; };
+		9C0AB1DD1A99815300479721 /* Instruction0xcbA.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1CD1A99815300479721 /* Instruction0xcbA.m */; };
+		9C0AB1DE1A99815300479721 /* Instruction0xcbB.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1CE1A99815300479721 /* Instruction0xcbB.m */; };
+		9C0AB1DF1A99815300479721 /* Instruction0xcbC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1CF1A99815300479721 /* Instruction0xcbC.m */; };
+		9C0AB1E01A99815300479721 /* Instruction0xcbD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1D01A99815300479721 /* Instruction0xcbD.m */; };
+		9C0AB1E11A99815300479721 /* Instruction0xcbE.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1D11A99815300479721 /* Instruction0xcbE.m */; };
+		9C0AB1E21A99815300479721 /* Instruction0xcbF.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1D21A99815300479721 /* Instruction0xcbF.m */; };
 		9C79FC0E1A6D878700C76513 /* romDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C79FC0D1A6D878700C76513 /* romDataController.m */; };
 		9C79FC111A6D89F200C76513 /* rom.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C79FC101A6D89F200C76513 /* rom.m */; };
 		9C79FC2E1A6DAFC400C76513 /* START.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C79FC251A6DAFC400C76513 /* START.png */; };
@@ -50,6 +82,38 @@
 
 /* Begin PBXFileReference section */
 		9C0AB19F1A9964A800479721 /* Instructions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instructions.m; path = coreEmulator/InstructionProcessing/Instructions.m; sourceTree = "<group>"; };
+		9C0AB1A11A997C2200479721 /* Instruction0x0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0x0.m; path = coreEmulator/InstructionProcessing/Instruction0x0.m; sourceTree = "<group>"; };
+		9C0AB1A31A997CA400479721 /* Instruction0x1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0x1.m; path = coreEmulator/InstructionProcessing/Instruction0x1.m; sourceTree = "<group>"; };
+		9C0AB1A51A997CCE00479721 /* Instruction0x2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0x2.m; path = coreEmulator/InstructionProcessing/Instruction0x2.m; sourceTree = "<group>"; };
+		9C0AB1A71A997CFE00479721 /* Instruction0x3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0x3.m; path = coreEmulator/InstructionProcessing/Instruction0x3.m; sourceTree = "<group>"; };
+		9C0AB1A91A997ECF00479721 /* Instruction0x4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0x4.m; path = coreEmulator/InstructionProcessing/Instruction0x4.m; sourceTree = "<group>"; };
+		9C0AB1AA1A997ECF00479721 /* Instruction0x5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0x5.m; path = coreEmulator/InstructionProcessing/Instruction0x5.m; sourceTree = "<group>"; };
+		9C0AB1AB1A997ECF00479721 /* Instruction0x6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0x6.m; path = coreEmulator/InstructionProcessing/Instruction0x6.m; sourceTree = "<group>"; };
+		9C0AB1AC1A997ECF00479721 /* Instruction0x7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0x7.m; path = coreEmulator/InstructionProcessing/Instruction0x7.m; sourceTree = "<group>"; };
+		9C0AB1AD1A997ECF00479721 /* Instruction0x8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0x8.m; path = coreEmulator/InstructionProcessing/Instruction0x8.m; sourceTree = "<group>"; };
+		9C0AB1AE1A997ECF00479721 /* Instruction0x9.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0x9.m; path = coreEmulator/InstructionProcessing/Instruction0x9.m; sourceTree = "<group>"; };
+		9C0AB1AF1A997ECF00479721 /* Instruction0xA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xA.m; path = coreEmulator/InstructionProcessing/Instruction0xA.m; sourceTree = "<group>"; };
+		9C0AB1B01A997ECF00479721 /* Instruction0xB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xB.m; path = coreEmulator/InstructionProcessing/Instruction0xB.m; sourceTree = "<group>"; };
+		9C0AB1B11A997ECF00479721 /* Instruction0xC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xC.m; path = coreEmulator/InstructionProcessing/Instruction0xC.m; sourceTree = "<group>"; };
+		9C0AB1B21A997ECF00479721 /* Instruction0xD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xD.m; path = coreEmulator/InstructionProcessing/Instruction0xD.m; sourceTree = "<group>"; };
+		9C0AB1B31A997ECF00479721 /* Instruction0xE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xE.m; path = coreEmulator/InstructionProcessing/Instruction0xE.m; sourceTree = "<group>"; };
+		9C0AB1B41A997ECF00479721 /* Instruction0xF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xF.m; path = coreEmulator/InstructionProcessing/Instruction0xF.m; sourceTree = "<group>"; };
+		9C0AB1C31A99815300479721 /* Instruction0xcb0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcb0.m; path = coreEmulator/InstructionProcessing/Instruction0xcb0.m; sourceTree = "<group>"; };
+		9C0AB1C41A99815300479721 /* Instruction0xcb1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcb1.m; path = coreEmulator/InstructionProcessing/Instruction0xcb1.m; sourceTree = "<group>"; };
+		9C0AB1C51A99815300479721 /* Instruction0xcb2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcb2.m; path = coreEmulator/InstructionProcessing/Instruction0xcb2.m; sourceTree = "<group>"; };
+		9C0AB1C61A99815300479721 /* Instruction0xcb3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcb3.m; path = coreEmulator/InstructionProcessing/Instruction0xcb3.m; sourceTree = "<group>"; };
+		9C0AB1C71A99815300479721 /* Instruction0xcb4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcb4.m; path = coreEmulator/InstructionProcessing/Instruction0xcb4.m; sourceTree = "<group>"; };
+		9C0AB1C81A99815300479721 /* Instruction0xcb5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcb5.m; path = coreEmulator/InstructionProcessing/Instruction0xcb5.m; sourceTree = "<group>"; };
+		9C0AB1C91A99815300479721 /* Instruction0xcb6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcb6.m; path = coreEmulator/InstructionProcessing/Instruction0xcb6.m; sourceTree = "<group>"; };
+		9C0AB1CA1A99815300479721 /* Instruction0xcb7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcb7.m; path = coreEmulator/InstructionProcessing/Instruction0xcb7.m; sourceTree = "<group>"; };
+		9C0AB1CB1A99815300479721 /* Instruction0xcb8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcb8.m; path = coreEmulator/InstructionProcessing/Instruction0xcb8.m; sourceTree = "<group>"; };
+		9C0AB1CC1A99815300479721 /* Instruction0xcb9.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcb9.m; path = coreEmulator/InstructionProcessing/Instruction0xcb9.m; sourceTree = "<group>"; };
+		9C0AB1CD1A99815300479721 /* Instruction0xcbA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcbA.m; path = coreEmulator/InstructionProcessing/Instruction0xcbA.m; sourceTree = "<group>"; };
+		9C0AB1CE1A99815300479721 /* Instruction0xcbB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcbB.m; path = coreEmulator/InstructionProcessing/Instruction0xcbB.m; sourceTree = "<group>"; };
+		9C0AB1CF1A99815300479721 /* Instruction0xcbC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcbC.m; path = coreEmulator/InstructionProcessing/Instruction0xcbC.m; sourceTree = "<group>"; };
+		9C0AB1D01A99815300479721 /* Instruction0xcbD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcbD.m; path = coreEmulator/InstructionProcessing/Instruction0xcbD.m; sourceTree = "<group>"; };
+		9C0AB1D11A99815300479721 /* Instruction0xcbE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcbE.m; path = coreEmulator/InstructionProcessing/Instruction0xcbE.m; sourceTree = "<group>"; };
+		9C0AB1D21A99815300479721 /* Instruction0xcbF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcbF.m; path = coreEmulator/InstructionProcessing/Instruction0xcbF.m; sourceTree = "<group>"; };
 		9C79FC0C1A6D878700C76513 /* romDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = romDataController.h; sourceTree = "<group>"; };
 		9C79FC0D1A6D878700C76513 /* romDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = romDataController.m; sourceTree = "<group>"; };
 		9C79FC0F1A6D89F200C76513 /* rom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rom.h; sourceTree = "<group>"; };
@@ -118,8 +182,56 @@
 			isa = PBXGroup;
 			children = (
 				9C0AB19F1A9964A800479721 /* Instructions.m */,
+				9C0AB1C11A997FAD00479721 /* NormalInstructions */,
+				9C0AB1C21A997FC800479721 /* CBInstructions */,
 			);
 			name = InstructionProcessing;
+			sourceTree = "<group>";
+		};
+		9C0AB1C11A997FAD00479721 /* NormalInstructions */ = {
+			isa = PBXGroup;
+			children = (
+				9C0AB1A11A997C2200479721 /* Instruction0x0.m */,
+				9C0AB1A31A997CA400479721 /* Instruction0x1.m */,
+				9C0AB1A51A997CCE00479721 /* Instruction0x2.m */,
+				9C0AB1A71A997CFE00479721 /* Instruction0x3.m */,
+				9C0AB1A91A997ECF00479721 /* Instruction0x4.m */,
+				9C0AB1AA1A997ECF00479721 /* Instruction0x5.m */,
+				9C0AB1AB1A997ECF00479721 /* Instruction0x6.m */,
+				9C0AB1AC1A997ECF00479721 /* Instruction0x7.m */,
+				9C0AB1AD1A997ECF00479721 /* Instruction0x8.m */,
+				9C0AB1AE1A997ECF00479721 /* Instruction0x9.m */,
+				9C0AB1AF1A997ECF00479721 /* Instruction0xA.m */,
+				9C0AB1B01A997ECF00479721 /* Instruction0xB.m */,
+				9C0AB1B11A997ECF00479721 /* Instruction0xC.m */,
+				9C0AB1B21A997ECF00479721 /* Instruction0xD.m */,
+				9C0AB1B31A997ECF00479721 /* Instruction0xE.m */,
+				9C0AB1B41A997ECF00479721 /* Instruction0xF.m */,
+			);
+			name = NormalInstructions;
+			sourceTree = "<group>";
+		};
+		9C0AB1C21A997FC800479721 /* CBInstructions */ = {
+			isa = PBXGroup;
+			children = (
+				9C0AB1C31A99815300479721 /* Instruction0xcb0.m */,
+				9C0AB1C41A99815300479721 /* Instruction0xcb1.m */,
+				9C0AB1C51A99815300479721 /* Instruction0xcb2.m */,
+				9C0AB1C61A99815300479721 /* Instruction0xcb3.m */,
+				9C0AB1C71A99815300479721 /* Instruction0xcb4.m */,
+				9C0AB1C81A99815300479721 /* Instruction0xcb5.m */,
+				9C0AB1C91A99815300479721 /* Instruction0xcb6.m */,
+				9C0AB1CA1A99815300479721 /* Instruction0xcb7.m */,
+				9C0AB1CB1A99815300479721 /* Instruction0xcb8.m */,
+				9C0AB1CC1A99815300479721 /* Instruction0xcb9.m */,
+				9C0AB1CD1A99815300479721 /* Instruction0xcbA.m */,
+				9C0AB1CE1A99815300479721 /* Instruction0xcbB.m */,
+				9C0AB1CF1A99815300479721 /* Instruction0xcbC.m */,
+				9C0AB1D01A99815300479721 /* Instruction0xcbD.m */,
+				9C0AB1D11A99815300479721 /* Instruction0xcbE.m */,
+				9C0AB1D21A99815300479721 /* Instruction0xcbF.m */,
+			);
+			name = CBInstructions;
 			sourceTree = "<group>";
 		};
 		9C79FC241A6DAE8100C76513 /* Resources */ = {
@@ -354,15 +466,47 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C0AB1B61A997ECF00479721 /* Instruction0x5.m in Sources */,
 				9C79FC111A6D89F200C76513 /* rom.m in Sources */,
+				9C0AB1BF1A997ECF00479721 /* Instruction0xE.m in Sources */,
 				9C79FC3A1A6DC66B00C76513 /* romState.m in Sources */,
+				9C0AB1DE1A99815300479721 /* Instruction0xcbB.m in Sources */,
 				9C79FC0E1A6D878700C76513 /* romDataController.m in Sources */,
+				9C0AB1A81A997CFE00479721 /* Instruction0x3.m in Sources */,
+				9C0AB1DB1A99815300479721 /* Instruction0xcb8.m in Sources */,
+				9C0AB1A61A997CCE00479721 /* Instruction0x2.m in Sources */,
+				9C0AB1E11A99815300479721 /* Instruction0xcbE.m in Sources */,
+				9C0AB1BB1A997ECF00479721 /* Instruction0xA.m in Sources */,
+				9C0AB1D41A99815300479721 /* Instruction0xcb1.m in Sources */,
 				9CB9CC221A6C9CC300DA02DD /* ViewController.m in Sources */,
+				9C0AB1D51A99815300479721 /* Instruction0xcb2.m in Sources */,
+				9C0AB1BD1A997ECF00479721 /* Instruction0xC.m in Sources */,
 				9CB9CC1C1A6C9CC300DA02DD /* AppDelegate.m in Sources */,
+				9C0AB1BE1A997ECF00479721 /* Instruction0xD.m in Sources */,
+				9C0AB1E01A99815300479721 /* Instruction0xcbD.m in Sources */,
+				9C0AB1D71A99815300479721 /* Instruction0xcb4.m in Sources */,
+				9C0AB1B51A997ECF00479721 /* Instruction0x4.m in Sources */,
+				9C0AB1B81A997ECF00479721 /* Instruction0x7.m in Sources */,
+				9C0AB1A21A997C2200479721 /* Instruction0x0.m in Sources */,
+				9C0AB1D91A99815300479721 /* Instruction0xcb6.m in Sources */,
 				9CB9CC421A6CA22800DA02DD /* gbTableViewController.m in Sources */,
+				9C0AB1D81A99815300479721 /* Instruction0xcb5.m in Sources */,
+				9C0AB1D31A99815300479721 /* Instruction0xcb0.m in Sources */,
+				9C0AB1B71A997ECF00479721 /* Instruction0x6.m in Sources */,
+				9C0AB1DC1A99815300479721 /* Instruction0xcb9.m in Sources */,
+				9C0AB1DD1A99815300479721 /* Instruction0xcbA.m in Sources */,
+				9C0AB1BC1A997ECF00479721 /* Instruction0xB.m in Sources */,
 				9CB9CC181A6C9CC300DA02DD /* main.m in Sources */,
+				9C0AB1E21A99815300479721 /* Instruction0xcbF.m in Sources */,
+				9C0AB1DF1A99815300479721 /* Instruction0xcbC.m in Sources */,
 				9C79FC3D1A6DF40400C76513 /* emulatorMain.m in Sources */,
+				9C0AB1B91A997ECF00479721 /* Instruction0x8.m in Sources */,
+				9C0AB1C01A997ECF00479721 /* Instruction0xF.m in Sources */,
 				9C0AB1A01A9964A800479721 /* Instructions.m in Sources */,
+				9C0AB1A41A997CA400479721 /* Instruction0x1.m in Sources */,
+				9C0AB1D61A99815300479721 /* Instruction0xcb3.m in Sources */,
+				9C0AB1BA1A997ECF00479721 /* Instruction0x9.m in Sources */,
+				9C0AB1DA1A99815300479721 /* Instruction0xcb7.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
