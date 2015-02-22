@@ -29,39 +29,41 @@ const int biosSize = 256;
 
 @end
 
-void (^execute0x0Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0x1Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0x2Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0x3Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0x4Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0x5Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0x6Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0x7Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0x8Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0x9Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xAInstruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xBInstruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xCInstruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xDInstruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xEInstruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcbInstruction)(romState *, char *, bool *, int8_t *);
-void (^execute0xcb0Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcb1Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcb2Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcb3Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcb4Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcb5Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcb6Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcb7Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcb8Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcb9Instruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcbAInstruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcbBInstruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcbCInstruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcbDInstruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcbEInstruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcbFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0x0Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0x1Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0x2Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0x3Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0x4Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0x5Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0x6Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0x7Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0x8Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0x9Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xAInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xBInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xCInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xDInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xEInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcbInstruction)(romState *, char *, bool *, int8_t *);
+extern void (^execute0xcb0Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcb1Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcb2Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcb3Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcb4Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcb5Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcb6Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcb7Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcb8Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcb9Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcbAInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcbBInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcbCInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcbDInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcbEInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^execute0xcbFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^setKeysInMemory)(char *, int);
+extern void (^enableInterrupts)(bool, char *);
 
 @implementation emulatorMain
 
@@ -134,7 +136,7 @@ void (^execute0xcbFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
         fclose(romFileHandler);
         NSLog(@"Setting up the ROM initial state...");
         self.currentState = [[romState alloc] init];
-        [self enableInterrupts:false];
+        enableInterrupts(false, self.ram);
         NSLog(@"Loading BIOS into RAM...");
         for (int i = 0; i < biosSize; i++)
         {
@@ -148,31 +150,6 @@ void (^execute0xcbFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
     return self;
 }
 
-- (void) enableInterrupts:(bool)maybe
-{
-    if (maybe == true)
-    {
-        PRINTDBG("Interrupts have been ENabled...\n");
-        self.ram[0x0ffff] = 1;
-    }
-    else
-    {
-        PRINTDBG("Interrupts have been DISabled...\n");
-        self.ram[0x0ffff] = 0;
-    }
-}
-- (void) setKeysInMemory
-{
-    if (self.ram[0xff00] & 0b00100000) // a, b, start, select
-    {
-        self.ram[0xff00] |= (self.buttons & 0b11110000) >> 4;
-    }
-    else if (self.ram[0xff00] & 0b00010000) // arrows
-    {
-        self.ram[0xff00] |= self.buttons & 0b00001111;
-    }
-}
-
 - (void) runRom
 {
     interruptsEnabled = 0;
@@ -184,7 +161,7 @@ void (^execute0xcbFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
         // Otherwise, the instruction can directly call the method enableInterrupts
         if (interruptsEnabled == 2)
         {
-            [self enableInterrupts:YES];
+            enableInterrupts(true, self.ram);
             interruptsEnabled = 0;
         }
         else if (interruptsEnabled == 1)
@@ -193,14 +170,14 @@ void (^execute0xcbFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
         }
         else if (interruptsEnabled == -2)
         {
-            [self enableInterrupts:NO];
+            enableInterrupts(false, self.ram);
             interruptsEnabled = 0;
         }
         else if (interruptsEnabled == -1)
         {
             interruptsEnabled--;
         }
-        [self setKeysInMemory];
+        setKeysInMemory(self.ram, self.buttons);
         [self executeInstruction];
         if (incrementPC)
         {
