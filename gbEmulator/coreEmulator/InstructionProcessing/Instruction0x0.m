@@ -28,8 +28,8 @@ void (^execute0x0Instruction)(romState *,
             break;
         case 1:
             // LD BC, d16 -- Load 16-bit data into registers BC
-            [state incrementPC];
             d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0x00ff);
+            [state incrementPC];
             [state incrementPC];
             [state setBC_big:d16];
             PRINTDBG("0x%02x -- LD BC, d16 -- d16 = %i\n", currentInstruction, d16);
@@ -69,8 +69,8 @@ void (^execute0x0Instruction)(romState *,
             break;
         case 6:
             // LD B, d8 -- load following 8-bit data into B
-            [state incrementPC];
             d8 = ram[[state getPC]];
+            [state incrementPC];
             [state setB:d8];
             PRINTDBG("0x%02x -- LD B, d8 -- d8 = %i\n", currentInstruction, (int)d8);
             break;
@@ -91,15 +91,14 @@ void (^execute0x0Instruction)(romState *,
             break;
         case 8:
             // LD (a16), SP -- put (SP) at address a16
-            [state incrementPC];
             d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0xff);
+            [state incrementPC];
             [state incrementPC];
             prev_short =  (ram[(unsigned short)(d16+1)] << 8) | (ram[(unsigned short)d16] & 0x0ff);
             ram[(unsigned short)d16] = ram[(unsigned short)([state getSP]+1)];
             ram[(unsigned short)(d16+1)] = ram[[state getSP]];
-            PRINTDBG("0x%02x -- LD (a16), SP -- put (SP = 0x%02x) at [d16 = 0x%02x] -- [SP] is 0x%02x -- [d16] was 0x%02x; now 0x%02x\n", \
-                     currentInstruction, [state getSP], d16, \
-                     (ram[[state getSP]] & 0x0ff) | (ram[[state getSP]+1] << 8), \
+            PRINTDBG("0x%02x -- LD (a16), SP -- put (SP = 0x%02x) at [d16 = 0x%02x] -- [SP] is 0x%02x -- [d16] was 0x%02x; now 0x%02x\n", currentInstruction, [state getSP], d16,
+                     (ram[[state getSP]] & 0x0ff) | (ram[[state getSP]+1] << 8),
                      prev_short, (ram[(unsigned short)(d16+1)] & 0x0ff) | (ram[(unsigned short)d16] << 8));
             break;
         case 9:
@@ -159,8 +158,8 @@ void (^execute0x0Instruction)(romState *,
             break;
         case 0xE:
             // LD C, d8 -- load immediate 8-bit data into C
-            [state incrementPC];
             d8 = ram[[state getPC]];
+            [state incrementPC];
             [state setC:d8];
             PRINTDBG("0x%02x -- LD C, d8 -- d8 = %i\n", currentInstruction, (short)d8);
             break;

@@ -29,7 +29,7 @@ void (^execute0x9Instruction)(romState *,
                           N:true
                           H:!((char)(prev & 0xf) < (char)((([state getB] & 0xf) & 0xf)))
                           C:!((unsigned char)prev < (unsigned char)[state getB])];
-            PRINTDBG("0x%02x -- SUB B -- B is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SUB B -- B is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      [state getB], prev, [state getA]);
             break;
         case 1:
@@ -46,7 +46,7 @@ void (^execute0x9Instruction)(romState *,
                           N:true
                           H:!((char)(prev & 0xf) < (char)((([state getC] & 0xf) & 0xf)))
                           C:!((unsigned char)prev < (unsigned char)[state getC])];
-            PRINTDBG("0x%02x -- SUB C -- C is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SUB C -- C is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      [state getC], prev, [state getA]);
             break;
         case 2:
@@ -63,7 +63,7 @@ void (^execute0x9Instruction)(romState *,
                           N:true
                           H:!((char)(prev & 0xf) < (char)((([state getD] & 0xf) & 0xf)))
                           C:!((unsigned char)prev < (unsigned char)[state getD])];
-            PRINTDBG("0x%02x -- SUB D -- D is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SUB D -- D is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      [state getD], prev, [state getA]);
             break;
         case 3:
@@ -80,7 +80,7 @@ void (^execute0x9Instruction)(romState *,
                           N:true
                           H:!((char)(prev & 0xf) < (char)((([state getE] & 0xf) & 0xf)))
                           C:!((unsigned char)prev < (unsigned char)[state getE])];
-            PRINTDBG("0x%02x -- SUB E -- E is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SUB E -- E is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      [state getE], prev, [state getA]);
             break;
         case 4:
@@ -97,7 +97,7 @@ void (^execute0x9Instruction)(romState *,
                           N:true
                           H:!((char)(prev & 0xf) < (char)((([state getH] & 0xf) & 0xf)))
                           C:!((unsigned char)prev < (unsigned char)[state getH])];
-            PRINTDBG("0x%02x -- SUB H -- H is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SUB H -- H is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      [state getH], prev, [state getA]);
             break;
         case 5:
@@ -114,7 +114,7 @@ void (^execute0x9Instruction)(romState *,
                           N:true
                           H:!((char)(prev & 0xf) < (char)((([state getL] & 0xf) & 0xf)))
                           C:!((unsigned char)prev < (unsigned char)[state getL])];
-            PRINTDBG("0x%02x -- SUB L -- L is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SUB L -- L is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      [state getL], prev, [state getA]);
             break;
         case 6:
@@ -132,7 +132,7 @@ void (^execute0x9Instruction)(romState *,
                           N:true
                           H:!((char)(prev & 0xf) < (char)(((d8 & 0xf) & 0xf)))
                           C:!((unsigned char)prev < (unsigned char)d8)];
-            PRINTDBG("0x%02x -- SUB (HL) -- HL is 0x%02x; (HL) is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SUB (HL) -- HL is 0x%02x; (HL) is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      [state getHL_big], d8, prev, [state getA]);
             break;
         case 7:
@@ -143,7 +143,7 @@ void (^execute0x9Instruction)(romState *,
                           N:true
                           H:true
                           C:true];
-            PRINTDBG("0x%02x -- SUB A -- A is now 0x0\n", currentInstruction);
+            PRINTDBG("0x%02x -- SUB A -- A is now 0x0\n", currentInstruction & 0xff);
             break;
         case 8:
             // SBC A,B -- Subtract B + carry flag from A, so A = 0 - C-flag
@@ -168,7 +168,7 @@ void (^execute0x9Instruction)(romState *,
                                                             ([state getCFlag] ? 1 : 0)) & 0xf)))
                           C:!((unsigned char)(prev) < (unsigned char)([state getB] + \
                                                                       ([state getCFlag] ? 1 : 0)))];
-            PRINTDBG("0x%02x -- SBC A,B -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SBC A,B -- A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      prev, [state getA]);
             break;
         case 9:
@@ -194,7 +194,7 @@ void (^execute0x9Instruction)(romState *,
                                                             ([state getCFlag] ? 1 : 0)) & 0xf)))
                           C:!((unsigned char)(prev) < (unsigned char)([state getC] + \
                                                                       ([state getCFlag] ? 1 : 0)))];
-            PRINTDBG("0x%02x -- SBC A,C -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SBC A,C -- A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      prev, [state getA]);
             break;
         case 0xA:
@@ -220,7 +220,7 @@ void (^execute0x9Instruction)(romState *,
                                                             ([state getCFlag] ? 1 : 0)) & 0xf)))
                           C:!((unsigned char)(prev) < (unsigned char)([state getD] + \
                                                                       ([state getCFlag] ? 1 : 0)))];
-            PRINTDBG("0x%02x -- SBC A,D -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SBC A,D -- A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      prev, [state getA]);
             break;
         case 0xB:
@@ -246,7 +246,7 @@ void (^execute0x9Instruction)(romState *,
                                                             ([state getCFlag] ? 1 : 0)) & 0xf)))
                           C:!((unsigned char)(prev) < (unsigned char)([state getE] + \
                                                                       ([state getCFlag] ? 1 : 0)))];
-            PRINTDBG("0x%02x -- SBC A,E -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SBC A,E -- A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      prev, [state getA]);
             break;
         case 0xC:
@@ -272,7 +272,7 @@ void (^execute0x9Instruction)(romState *,
                                                             ([state getCFlag] ? 1 : 0)) & 0xf)))
                           C:!((unsigned char)(prev) < (unsigned char)([state getH] + \
                                                                       ([state getCFlag] ? 1 : 0)))];
-            PRINTDBG("0x%02x -- SBC A,H -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SBC A,H -- A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      prev, [state getA]);
             break;
         case 0xD:
@@ -298,7 +298,7 @@ void (^execute0x9Instruction)(romState *,
                                                             ([state getCFlag] ? 1 : 0)) & 0xf)))
                           C:!((unsigned char)(prev) < (unsigned char)([state getL] + \
                                                                       ([state getCFlag] ? 1 : 0)))];
-            PRINTDBG("0x%02x -- SBC A,L -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SBC A,L -- A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      prev, [state getA]);
             break;
         case 0xE:
@@ -325,7 +325,7 @@ void (^execute0x9Instruction)(romState *,
                                                             ([state getCFlag] ? 1 : 0)) & 0xf)))
                           C:!((unsigned char)(prev) < (unsigned char)(d8 + \
                                                                       ([state getCFlag] ? 1 : 0)))];
-            PRINTDBG("0x%02x -- SBC A,(HL) -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SBC A,(HL) -- A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      prev, [state getA]);
             break;
         case 0xF:
@@ -349,7 +349,7 @@ void (^execute0x9Instruction)(romState *,
                           N:true
                           H:true
                           C:true];
-            PRINTDBG("0x%02x -- SBC A,A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SBC A,A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      prev, [state getA]);
             break;
     }

@@ -33,8 +33,8 @@ void (^execute0x1Instruction)(romState *,
             break;
         case 1:
             // LD DE, d16 -- Load d16 into DE
-            [state incrementPC];
             d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0x0ff);
+            [state incrementPC];
             [state incrementPC];
             [state setDE_big:d16];
             PRINTDBG("0x%02x -- LD DE, d16 -- d16 = 0x%02x\n", currentInstruction, d16);
@@ -71,8 +71,8 @@ void (^execute0x1Instruction)(romState *,
             break;
         case 6:
             // LD D, d8 -- load 8-bit immediate value into D
-            [state incrementPC];
             d8 = ram[[state getPC]];
+            [state incrementPC];
             [state setD:d8];
             PRINTDBG("0x%02x -- LD D, d8 -- d8 = %i\n", currentInstruction, (int)d8);
             break;
@@ -94,12 +94,11 @@ void (^execute0x1Instruction)(romState *,
             break;
         case 8:
             // JR r8 (8-bit signed data, added to PC)
-            [state incrementPC];
             d8 = ram[[state getPC]];
+            [state incrementPC];
             [state addToPC:d8];
-            PRINTDBG("0x%02x -- JR r8 (r8 = %d) -- PC is now 0x%02x\n",
-                     currentInstruction, (int)d8, [state getPC]);
-            *incrementPC =false;
+            PRINTDBG("0x%02x -- JR r8 (r8 = %d) -- PC is now 0x%02x\n", currentInstruction, (int)d8, [state getPC]);
+            *incrementPC = false;
             break;
         case 9:
             // ADD HL,DE -- add DE to HL
@@ -155,8 +154,8 @@ void (^execute0x1Instruction)(romState *,
             break;
         case 0xE:
             // LD E,d8 -- Load immediate 8-bit data into E
-            [state incrementPC];
             d8 = ram[[state getPC]];
+            [state incrementPC];
             [state setE:d8];
             PRINTDBG("0x%02x -- LD E, d8 -- d8 = %i\n", currentInstruction, (short)d8);
             break;

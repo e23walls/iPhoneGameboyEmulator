@@ -23,7 +23,7 @@ void (^execute0xBInstruction)(romState *,
                           N:false
                           H:false
                           C:false];
-            PRINTDBG("0x%02x -- OR B -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- OR B -- A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      prev, [state getA]);
             break;
         case 1:
@@ -34,8 +34,8 @@ void (^execute0xBInstruction)(romState *,
                           N:false
                           H:false
                           C:false];
-            PRINTDBG("0x%02x -- OR C -- A was 0x%02x; A is now 0x%02x; C = 0x%02x\n",
-                     currentInstruction, prev & 0xff, [state getA], [state getC] & 0xff);
+            PRINTDBG("0x%02x -- OR C -- A was 0x%02x; A is now 0x%02x; C = 0x%02x\n", currentInstruction & 0xff,
+                     prev & 0xff, [state getA], [state getC] & 0xff);
             break;
         case 2:
             // OR D -- A <- A | D
@@ -45,8 +45,8 @@ void (^execute0xBInstruction)(romState *,
                           N:false
                           H:false
                           C:false];
-            PRINTDBG("0x%02x -- OR D -- A was 0x%02x; A is now 0x%02x; D = 0x%02x\n",
-                     currentInstruction, prev & 0xff, [state getA], [state getD] & 0xff);
+            PRINTDBG("0x%02x -- OR D -- A was 0x%02x; A is now 0x%02x; D = 0x%02x\n", currentInstruction & 0xff,
+                     prev & 0xff, [state getA], [state getD] & 0xff);
             break;
         case 3:
             // OR E -- A <- A | E
@@ -56,8 +56,7 @@ void (^execute0xBInstruction)(romState *,
                           N:false
                           H:false
                           C:false];
-            PRINTDBG("0x%02x -- OR E -- A was 0x%02x; A is now 0x%02x; E = 0x%02x\n",
-                     currentInstruction, prev & 0xff, [state getA], [state getE] & 0xff);
+            PRINTDBG("0x%02x -- OR E -- A was 0x%02x; A is now 0x%02x; E = 0x%02x\n", currentInstruction & 0xff, prev & 0xff, [state getA], [state getE] & 0xff);
             break;
         case 4:
             // OR H -- A <- A | H
@@ -67,8 +66,7 @@ void (^execute0xBInstruction)(romState *,
                           N:false
                           H:false
                           C:false];
-            PRINTDBG("0x%02x -- OR H -- A was 0x%02x; A is now 0x%02x; H = 0x%02x\n",
-                     currentInstruction, prev & 0xff, [state getA], [state getH] & 0xff);
+            PRINTDBG("0x%02x -- OR H -- A was 0x%02x; A is now 0x%02x; H = 0x%02x\n", currentInstruction & 0xff, prev & 0xff, [state getA], [state getH] & 0xff);
             break;
         case 5:
             // OR L -- A <- A | L
@@ -78,8 +76,7 @@ void (^execute0xBInstruction)(romState *,
                           N:false
                           H:false
                           C:false];
-            PRINTDBG("0x%02x -- OR L -- A was 0x%02x; A is now 0x%02x; L = 0x%02x\n",
-                     currentInstruction, prev & 0xff, [state getA], [state getL] & 0xff);
+            PRINTDBG("0x%02x -- OR L -- A was 0x%02x; A is now 0x%02x; L = 0x%02x\n", currentInstruction & 0xff, prev & 0xff, [state getA], [state getL] & 0xff);
             break;
         case 6:
             // OR (HL) -- A <- A | (HL)
@@ -90,8 +87,8 @@ void (^execute0xBInstruction)(romState *,
                           N:false
                           H:false
                           C:false];
-            PRINTDBG("0x%02x -- OR (HL) -- A was 0x%02x; A is now 0x%02x; HL = 0x%02x; (HL) = 0x%02x\n",
-                     currentInstruction, prev & 0xff, [state getA], [state getHL_big] & 0xffff, d8 & 0xff);
+            PRINTDBG("0x%02x -- OR (HL) -- A was 0x%02x; A is now 0x%02x; HL = 0x%02x; (HL) = 0x%02x\n", currentInstruction & 0xff,
+                     prev & 0xff, [state getA], [state getHL_big] & 0xffff, d8 & 0xff);
             break;
         case 7:
             // OR A -- A <- A | A
@@ -99,7 +96,7 @@ void (^execute0xBInstruction)(romState *,
                           N:false
                           H:false
                           C:false];
-            PRINTDBG("0x%02x -- OR A -- A is 0x%02x\n", currentInstruction, [state getA]);
+            PRINTDBG("0x%02x -- OR A -- A is 0x%02x\n", currentInstruction & 0xff, [state getA]);
             break;
         case 8:
             // CP B -- Compare A with B and set flags accordingly
@@ -113,7 +110,7 @@ void (^execute0xBInstruction)(romState *,
                           N:true
                           H:!((char)([state getA] & 0xf) < (char)((([state getB] & 0xf) & 0xf)))
                           C:!((unsigned char)[state getA] < (unsigned char)[state getB])];
-            PRINTDBG("0x%02x -- CP B -- B is 0x%02x; A is 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- CP B -- B is 0x%02x; A is 0x%02x\n", currentInstruction & 0xff,
                      [state getB], [state getA]);
             break;
         case 9:
@@ -128,7 +125,7 @@ void (^execute0xBInstruction)(romState *,
                           N:true
                           H:!((char)([state getA] & 0xf) < (char)((([state getC] & 0xf) & 0xf)))
                           C:!((unsigned char)[state getA] < (unsigned char)[state getC])];
-            PRINTDBG("0x%02x -- CP C -- C is 0x%02x; A is 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- CP C -- C is 0x%02x; A is 0x%02x\n", currentInstruction & 0xff,
                      [state getC], [state getA]);
             break;
         case 0xA:
@@ -143,7 +140,7 @@ void (^execute0xBInstruction)(romState *,
                           N:true
                           H:!((char)([state getA] & 0xf) < (char)((([state getD] & 0xf) & 0xf)))
                           C:!((unsigned char)[state getA] < (unsigned char)[state getD])];
-            PRINTDBG("0x%02x -- CP D -- D is 0x%02x; A is 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- CP D -- D is 0x%02x; A is 0x%02x\n", currentInstruction & 0xff,
                      [state getD], [state getA]);
             break;
         case 0xB:
@@ -158,7 +155,7 @@ void (^execute0xBInstruction)(romState *,
                           N:true
                           H:!((char)([state getA] & 0xf) < (char)((([state getE] & 0xf) & 0xf)))
                           C:!((unsigned char)[state getA] < (unsigned char)[state getE])];
-            PRINTDBG("0x%02x -- CP E -- E is 0x%02x; A is 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- CP E -- E is 0x%02x; A is 0x%02x\n", currentInstruction & 0xff,
                      [state getE], [state getA]);
             break;
         case 0xC:
@@ -173,7 +170,7 @@ void (^execute0xBInstruction)(romState *,
                           N:true
                           H:!((char)([state getA] & 0xf) < (char)((([state getH] & 0xf) & 0xf)))
                           C:!((unsigned char)[state getA] < (unsigned char)[state getH])];
-            PRINTDBG("0x%02x -- CP H -- H is 0x%02x; A is 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- CP H -- H is 0x%02x; A is 0x%02x\n", currentInstruction & 0xff,
                      [state getH], [state getA]);
             break;
         case 0xD:
@@ -188,7 +185,7 @@ void (^execute0xBInstruction)(romState *,
                           N:true
                           H:!((char)([state getA] & 0xf) < (char)((([state getL] & 0xf) & 0xf)))
                           C:!((unsigned char)[state getA] < (unsigned char)[state getL])];
-            PRINTDBG("0x%02x -- CP L -- L is 0x%02x; A is 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- CP L -- L is 0x%02x; A is 0x%02x\n", currentInstruction & 0xff,
                      [state getL], [state getA]);
             break;
         case 0xE:
@@ -204,7 +201,7 @@ void (^execute0xBInstruction)(romState *,
                           N:true
                           H:!((char)([state getA] & 0xf) < (char)(((d8 & 0xf) & 0xf)))
                           C:!((unsigned char)[state getA] < (unsigned char)d8)];
-            PRINTDBG("0x%02x -- CP (HL) -- HL is 0x%02x; (HL) is 0x%02x; A is 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- CP (HL) -- HL is 0x%02x; (HL) is 0x%02x; A is 0x%02x\n", currentInstruction & 0xff,
                      [state getHL_big], d8, [state getA]);
             break;
         case 0xF:
@@ -219,7 +216,7 @@ void (^execute0xBInstruction)(romState *,
                           N:true
                           H:true
                           C:true];
-            PRINTDBG("0x%02x -- CP A -- A is 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- CP A -- A is 0x%02x\n", currentInstruction & 0xff,
                      [state getA]);
             break;
     }

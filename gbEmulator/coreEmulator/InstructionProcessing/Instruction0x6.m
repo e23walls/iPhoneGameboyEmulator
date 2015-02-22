@@ -59,8 +59,8 @@ void (^execute0x6Instruction)(romState *,
             prev = [state getH];
             prev_short = [state getHL_big];
             [state setH:ram[(unsigned short)[state getHL_big]]];
-            PRINTDBG("0x%02x -- LD H,(HL) -- H was 0x%02x; HL was 0x%04x; (HL) was 0x%02x; H is now 0x%02x\n", \
-                     currentInstruction, prev & 0xff, prev_short & 0xffff, \
+            PRINTDBG("0x%02x -- LD H,(HL) -- H was 0x%02x; HL was 0x%04x; (HL) was 0x%02x; H is now 0x%02x\n", currentInstruction,
+                     prev & 0xff, prev_short & 0xffff, \
                      ram[(unsigned short)prev_short] & 0xff, [state getH] & 0xff);
             break;
         case 7:

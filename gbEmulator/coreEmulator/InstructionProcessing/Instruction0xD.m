@@ -28,7 +28,7 @@ void (^execute0xDInstruction)(romState *,
                 [state setSP:([state getSP]+2)];
                 [state setPC:(unsigned short)d16];
             }
-            PRINTDBG("0x%02x -- RET NC -- PC is now 0x%02x; SP was 0x%02x; SP is now 0x%02x\n", currentInstruction, \
+            PRINTDBG("0x%02x -- RET NC -- PC is now 0x%02x; SP was 0x%02x; SP is now 0x%02x\n", currentInstruction & 0xff,
                      prev_short & 0xffff, [state getSP] & 0xffff, [state getPC]);
             break;
         case 1:
@@ -37,35 +37,35 @@ void (^execute0xDInstruction)(romState *,
             (((ram[[state getSP]+1] & 0xff00) >> 8) & 0x0ff);
             [state setDE_big:d16];
             [state setSP:([state getSP] + 2)];
-            PRINTDBG("0x%02x -- POP DE -- DE = 0x%02x -- SP is now at 0x%02x; (SP) = 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- POP DE -- DE = 0x%02x -- SP is now at 0x%02x; (SP) = 0x%02x\n", currentInstruction & 0xff,
                      [state getDE_big], [state getSP],
                      (((ram[[state getSP]]) & 0x00ff)) |
                      (((ram[[state getSP]+1]) << 8) & 0xff00));
             break;
         case 2:
             // JP NC,a16 -- If !C, jump to address a16
-            [state incrementPC];
             d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
             (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+            [state incrementPC];
             [state incrementPC];
             if ([state getCFlag] == false)
             {
                 [state setPC:d16];
                 *incrementPC =false;
             }
-            PRINTDBG("0x%02x -- JP NC,a16 -- a16 = 0x%02x -- PC is now at 0x%02x\n", \
-                     currentInstruction, d16 & 0xffff, [state getPC]);
+            PRINTDBG("0x%02x -- JP NC,a16 -- a16 = 0x%02x -- PC is now at 0x%02x\n", currentInstruction & 0xff,
+                     d16 & 0xffff, [state getPC]);
             break;
         case 3:
             // no instruction
-            PRINTDBG("0x%02x -- invalid instruction\n", currentInstruction);
+            PRINTDBG("0x%02x -- invalid instruction\n", currentInstruction & 0xff);
             break;
         case 4:
             // CALL NC,a16 -- If !C, call subroutine at address a16
-            [state incrementPC];
             prev_short = [state getSP];
             d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
-            (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+                (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+            [state incrementPC];
             [state incrementPC];
             if ([state getCFlag] == false)
             {
@@ -75,8 +75,8 @@ void (^execute0xDInstruction)(romState *,
                 [state setPC:d16];
                 *incrementPC =false;
             }
-            PRINTDBG("0x%02x -- CALL NC,a16 -- a16 = 0x%02x -- PC is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x\n", \
-                     currentInstruction, d16 & 0xffff, prev_short, [state getSP], \
+            PRINTDBG("0x%02x -- CALL NC,a16 -- a16 = 0x%02x -- PC is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x\n", currentInstruction & 0xff,
+                     d16 & 0xffff, prev_short, [state getSP], \
                      [state getPC]);
             break;
         case 5:
@@ -85,15 +85,15 @@ void (^execute0xDInstruction)(romState *,
             [state setSP:([state getSP] - 2)];
             ram[[state getSP]] = (d16 & 0xff00) >> 8;
             ram[[state getSP]+1] = d16 & 0x00ff;
-            PRINTDBG("0x%02x -- PUSH DE -- DE = 0x%02x -- SP is now at 0x%02x; (SP) = 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- PUSH DE -- DE = 0x%02x -- SP is now at 0x%02x; (SP) = 0x%02x\n", currentInstruction & 0xff,
                      [state getDE_big], [state getSP],
                      (((ram[[state getSP]]) & 0x00ff)) |
                      (((ram[[state getSP]+1]) << 8) & 0xff00));
             break;
         case 6:
             // SUB d8 -- A <- A - d8
-            [state incrementPC];
             d8 = ram[[state getPC]];
+            [state incrementPC];
             prev = [state getA];
             [state setA:([state getA]-d8)];
             /*
@@ -106,7 +106,7 @@ void (^execute0xDInstruction)(romState *,
                           N:true
                           H:!((char)(prev & 0xf) < (char)(((d8 & 0xf) & 0xf)))
                           C:!((unsigned char)prev < (unsigned char)d8)];
-            PRINTDBG("0x%02x -- SUB d8 -- d8 is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SUB d8 -- d8 is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction & 0xff,
                      d8 & 0xff, prev, [state getA]);
             break;
         case 7:
@@ -117,7 +117,7 @@ void (^execute0xDInstruction)(romState *,
             ram[[state getSP]+1] = d16 & 0x00ff;
             [state setPC:0x10];
             *incrementPC =false;
-            PRINTDBG("0x%02x -- RST 10H -- SP is now at 0x%02x; (SP) = 0x%02x\n", currentInstruction, [state getSP],
+            PRINTDBG("0x%02x -- RST 10H -- SP is now at 0x%02x; (SP) = 0x%02x\n", currentInstruction & 0xff, [state getSP],
                      (((ram[[state getSP]]) & 0x00ff)) |
                      (((ram[[state getSP]+1]) << 8) & 0xff00));
             break;
@@ -131,7 +131,7 @@ void (^execute0xDInstruction)(romState *,
                 [state setSP:([state getSP]+2)];
                 [state setPC:(unsigned short)d16];
             }
-            PRINTDBG("0x%02x -- RET C -- PC is now 0x%02x; SP was 0x%02x; SP is now 0x%02x\n", currentInstruction, \
+            PRINTDBG("0x%02x -- RET C -- PC is now 0x%02x; SP was 0x%02x; SP is now 0x%02x\n", currentInstruction & 0xff,
                      prev_short & 0xffff, [state getSP] & 0xffff, [state getPC]);
             break;
         case 9:
@@ -142,33 +142,33 @@ void (^execute0xDInstruction)(romState *,
             [state setPC:(unsigned short)d16];
             *incrementPC = false;
             enableInterrupts(true, ram);
-            PRINTDBG("0x%02x -- RETI -- PC is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- RETI -- PC is now 0x%02x\n", currentInstruction & 0xff,
                      [state getPC]);
             break;
         case 0xA:
             // JP C,a16 -- If C, jump to address a16
-            [state incrementPC];
             d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
-            (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+                (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+            [state incrementPC];
             [state incrementPC];
             if ([state getCFlag] == true)
             {
                 [state setPC:d16];
                 *incrementPC =false;
             }
-            PRINTDBG("0x%02x -- JP C,a16 -- a16 = 0x%02x -- PC is now at 0x%02x\n", \
-                     currentInstruction, d16 & 0xffff, [state getPC]);
+            PRINTDBG("0x%02x -- JP C,a16 -- a16 = 0x%02x -- PC is now at 0x%02x\n", currentInstruction & 0xff,
+                     d16 & 0xffff, [state getPC]);
             break;
         case 0xB:
             // no instruction
-            PRINTDBG("0x%02x -- invalid instruction\n", currentInstruction);
+            PRINTDBG("0x%02x -- invalid instruction\n", currentInstruction & 0xff);
             break;
         case 0xC:
             // CALL C,a16 -- If C, call subroutine at address a16
-            [state incrementPC];
             prev_short = [state getSP];
             d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
-            (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+                (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+            [state incrementPC];
             [state incrementPC];
             if ([state getCFlag] == true)
             {
@@ -178,19 +178,19 @@ void (^execute0xDInstruction)(romState *,
                 [state setPC:d16];
                 *incrementPC =false;
             }
-            PRINTDBG("0x%02x -- CALL C,a16 -- a16 = 0x%02x -- PC is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x\n", \
-                     currentInstruction, d16 & 0xffff, prev_short, [state getSP], \
+            PRINTDBG("0x%02x -- CALL C,a16 -- a16 = 0x%02x -- PC is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x\n", currentInstruction & 0xff,
+                     d16 & 0xffff, prev_short, [state getSP], \
                      [state getPC]);
             break;
         case 0xD:
             // no instruction
-            PRINTDBG("0x%02x -- invalid instruction\n", currentInstruction);
+            PRINTDBG("0x%02x -- invalid instruction\n", currentInstruction & 0xff);
             break;
         case 0xE:
             // SBC A,d8 -- Subtract d8 + carry flag from A, so A = A - (d8 + C-flag)
             prev = [state getA];
-            [state incrementPC];
             d8 = ram[[state getPC]];
+            [state incrementPC];
             if ([state getCFlag])
             {
                 [state setA:([state getA]-d8-1)];
@@ -211,7 +211,7 @@ void (^execute0xDInstruction)(romState *,
                                                             ([state getCFlag] ? 1 : 0)) & 0xf)))
                           C:!((unsigned char)(prev) < (unsigned char)(d8 + \
                                                                       ([state getCFlag] ? 1 : 0)))];
-            PRINTDBG("0x%02x -- SBC A,d8 -- A was 0x%02x; A is now 0x%02x; d8 = 0x%02x\n", currentInstruction,
+            PRINTDBG("0x%02x -- SBC A,d8 -- A was 0x%02x; A is now 0x%02x; d8 = 0x%02x\n", currentInstruction & 0xff,
                      prev, [state getA], d8 & 0xff);
             
             break;
@@ -223,7 +223,7 @@ void (^execute0xDInstruction)(romState *,
             ram[[state getSP]+1] = d16 & 0x00ff;
             [state setPC:0x18];
             *incrementPC =false;
-            PRINTDBG("0x%02x -- RST 18H -- SP is now at 0x%02x; (SP) = 0x%02x\n", currentInstruction, [state getSP],
+            PRINTDBG("0x%02x -- RST 18H -- SP is now at 0x%02x; (SP) = 0x%02x\n", currentInstruction & 0xff, [state getSP],
                      (((ram[[state getSP]]) & 0x00ff)) |
                      (((ram[[state getSP]+1]) << 8) & 0xff00));
             break;

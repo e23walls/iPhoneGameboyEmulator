@@ -26,7 +26,7 @@ void (^execute0xCInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0xDInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0xEInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0xFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
-void (^execute0xcbInstruction)(romState *, char *, bool *, int8_t *);
+void (^execute0xcbInstruction)(romState *, char *, bool *, int8_t *, int8_t);
 void (^execute0xcb0Instruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0xcb1Instruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0xcb2Instruction)(romState *, int8_t, char *, bool *, int8_t *);
@@ -79,7 +79,8 @@ void (^executeInstruction)(romState *, char *, bool *, int8_t *) =
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
-    unsigned char currentInstruction = ram[[state getPC]];
+    unsigned char currentInstruction = ram[[state getPC]-1];
+    PRINTDBG("Instruction address: 0x%02x\n", ([state getPC]-1) & 0xff);
     switch ((currentInstruction & 0xF0) >> 4) {
         case 0:
             execute0x0Instruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
@@ -136,14 +137,15 @@ void (^executeInstruction)(romState *, char *, bool *, int8_t *) =
 void (^execute0xcbInstruction)(romState *,
                                char *,
                                bool *,
-                               int8_t *) =
+                               int8_t *,
+                               int8_t) =
 ^(romState * state,
   char * ram,
   bool * incrementPC,
-  int8_t * interruptsEnabled)
+  int8_t * interruptsEnabled,
+  int8_t CBInstruction)
 {
     [state incrementPC];
-    int8_t CBInstruction = ram[[state getPC]];
     switch ((CBInstruction & 0xF0) >> 4) {
         case 0:
             execute0xcb0Instruction(state, CBInstruction, ram, incrementPC, interruptsEnabled);

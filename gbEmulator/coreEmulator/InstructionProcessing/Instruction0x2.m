@@ -22,20 +22,20 @@ void (^execute0x2Instruction)(romState *,
     switch (currentInstruction & 0x0F) {
         case 0:
             // JR NZ,r8 -- If !Z, add r8 to PC
-            [state incrementPC];
             d8 = ram[[state getPC]];
             if ([state getZFlag] == false)
             {
                 [state addToPC:d8];
             }
-            PRINTDBG("0x%02x -- JR NZ, r8 -- if !Z, PC += %i; PC is now 0x%02x\n",
-                     currentInstruction, (int8_t)d8, [state getPC]);
+            [state incrementPC];
+            PRINTDBG("0x%02x -- JR NZ, r8 -- if !Z, PC += %i; PC is now 0x%02x\n", currentInstruction, (int8_t)d8,
+                     [state getPC]);
             *incrementPC =false;
             break;
         case 1:
             // LD HL,d16 -- Load d16 into HL
-            [state incrementPC];
             d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0x0ff);
+            [state incrementPC];
             [state incrementPC];
             [state setHL_big:d16];
             PRINTDBG("0x%02x -- LD HL, d16 -- d16 = 0x%02x; HL = 0x%02x\n", currentInstruction, d16, \
@@ -76,9 +76,9 @@ void (^execute0x2Instruction)(romState *,
             break;
         case 6:
             // LD H,d8 -- Load 8-bit immediate data into H
-            [state incrementPC];
             d8 = ram[[state getPC]];
             [state setH:d8];
+            [state incrementPC];
             PRINTDBG("0x%02x -- LD H, d8 -- d8 = %i\n", currentInstruction, (int)d8);
             break;
         case 7:
@@ -88,14 +88,14 @@ void (^execute0x2Instruction)(romState *,
             break;
         case 8:
             // JR Z,r8 -- If Z, add r8 to PC
-            [state incrementPC];
             d8 = ram[[state getPC]];
+            [state incrementPC];
             if ([state getZFlag])
             {
                 [state addToPC:d8];
             }
-            PRINTDBG("0x%02x -- JR Z, r8 -- if Z, PC += %i; PC is now 0x%02x\n",
-                     currentInstruction, (int8_t)d8, [state getPC]);
+            PRINTDBG("0x%02x -- JR Z, r8 -- if Z, PC += %i; PC is now 0x%02x\n", currentInstruction,
+                     (int8_t)d8, [state getPC]);
             *incrementPC =false;
             break;
         case 9:
@@ -152,8 +152,8 @@ void (^execute0x2Instruction)(romState *,
             break;
         case 0xE:
             // LD L,d8 -- Load 8-bit immediate data into L
-            [state incrementPC];
             d8 = ram[[state getPC]];
+            [state incrementPC];
             [state setL:d8];
             PRINTDBG("0x%02x -- LD L, d8 -- d8 = %i\n", currentInstruction, (short)d8);
             break;

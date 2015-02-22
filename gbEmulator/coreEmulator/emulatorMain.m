@@ -46,7 +46,7 @@ extern void (^execute0xCInstruction)(romState *, int8_t, char *, bool *, int8_t 
 extern void (^execute0xDInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 extern void (^execute0xEInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 extern void (^execute0xFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
-extern void (^execute0xcbInstruction)(romState *, char *, bool *, int8_t *);
+extern void (^execute0xcbInstruction)(romState *, char *, bool *, int8_t *, int8_t);
 extern void (^execute0xcb0Instruction)(romState *, int8_t, char *, bool *, int8_t *);
 extern void (^execute0xcb1Instruction)(romState *, int8_t, char *, bool *, int8_t *);
 extern void (^execute0xcb2Instruction)(romState *, int8_t, char *, bool *, int8_t *);
@@ -128,11 +128,11 @@ extern void (^enableInterrupts)(bool, char *);
         NSLog(@"Byte counter reached value: %i\n", counter);
         if (hitEOF == YES)
         {
-            printf("Warning: EOF was reached before RAM was filled.");
+            printf("Warning: EOF was reached before RAM was filled.\n");
         }
         else
         {
-            printf("As expected, EOF was not reached before end of RAM.");
+            printf("As expected, EOF was not reached before end of RAM.\n");
         }
         fclose(romFileHandler);
         NSLog(@"Setting up the ROM initial state...");
@@ -153,11 +153,10 @@ extern void (^enableInterrupts)(bool, char *);
 
 - (void) runRom
 {
+    PRINTDBG("\nRunning rom '%s'\n\n", [[self.currentRom romName] cStringUsingEncoding:NSUTF8StringEncoding]);
     interruptsEnabled = 0;
     while ([self.currentState getPC] < ramSize)
     {
-        PRINTDBG("PC = 0x%02x\n", [self.currentState getPC]);
-        incrementPC = true;
         // For when enabling interrupts doesn't take effect until after the next instruction.
         // Otherwise, the instruction can directly call the method enableInterrupts
         if (interruptsEnabled == 2)
@@ -179,11 +178,17 @@ extern void (^enableInterrupts)(bool, char *);
             interruptsEnabled--;
         }
         setKeysInMemory(self.ram, self.buttons);
-        executeInstruction(self.currentState, self.ram, &incrementPC, &interruptsEnabled);
         if (incrementPC)
         {
             [self.currentState incrementPC];
         }
+        // This could be slightly off because we don't know the
+        // length of the current instruction at this point. It will
+        // always be pointing 1 byte ahead of the current instruction.
+        // If the current instruction is 1 byte, it should be correct.
+        PRINTDBG("PC = 0x%02x\n", [self.currentState getPC]);
+        incrementPC = true;
+        executeInstruction(self.currentState, self.ram, &incrementPC, &interruptsEnabled);
     }
 }
 
