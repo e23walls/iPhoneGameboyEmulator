@@ -35,8 +35,7 @@ void (^execute0x2Instruction)(romState *,
         case 1:
             // LD HL,d16 -- Load d16 into HL
             d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0x0ff);
-            [state incrementPC];
-            [state incrementPC];
+            [state doubleIncPC];
             [state setHL_big:d16];
             PRINTDBG("0x%02x -- LD HL, d16 -- d16 = 0x%02x; HL = 0x%02x\n", currentInstruction, d16, \
                      [state getHL_big]);

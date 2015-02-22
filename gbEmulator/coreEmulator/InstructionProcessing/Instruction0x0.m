@@ -29,8 +29,7 @@ void (^execute0x0Instruction)(romState *,
         case 1:
             // LD BC, d16 -- Load 16-bit data into registers BC
             d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0x00ff);
-            [state incrementPC];
-            [state incrementPC];
+            [state doubleIncPC];
             [state setBC_big:d16];
             PRINTDBG("0x%02x -- LD BC, d16 -- d16 = %i\n", currentInstruction, d16);
             break;
@@ -92,8 +91,7 @@ void (^execute0x0Instruction)(romState *,
         case 8:
             // LD (a16), SP -- put (SP) at address a16
             d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0xff);
-            [state incrementPC];
-            [state incrementPC];
+            [state doubleIncPC];
             prev_short =  (ram[(unsigned short)(d16+1)] << 8) | (ram[(unsigned short)d16] & 0x0ff);
             ram[(unsigned short)d16] = ram[(unsigned short)([state getSP]+1)];
             ram[(unsigned short)(d16+1)] = ram[[state getSP]];

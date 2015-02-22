@@ -149,8 +149,7 @@ void (^execute0xCInstruction)(romState *,
             // JP Z,a16 -- If Z, jump to address a16
             d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
             (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
-            [state incrementPC];
-            [state incrementPC];
+            [state doubleIncPC];
             if ([state getZFlag] == true)
             {
                 [state setPC:d16];
@@ -170,8 +169,7 @@ void (^execute0xCInstruction)(romState *,
             prev_short = [state getSP];
             d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
                 (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
-            [state incrementPC];
-            [state incrementPC];
+            [state doubleIncPC];
             if ([state getZFlag] == true)
             {
                 [state setSP:([state getSP] - 2)];
@@ -189,8 +187,7 @@ void (^execute0xCInstruction)(romState *,
             prev_short = [state getSP];
             d16 = ((ram[[state getPC]] & 0x00ff)) | \
                 ((ram[[state getPC]+1] << 8) & 0xff00);
-            [state incrementPC];
-            [state incrementPC];
+            [state doubleIncPC];
             [state setSP:(prev_short - 2)];
             ram[[state getSP]] = (int8_t)(([state getPC]+1) & 0xff);
             ram[[state getSP]+1] = (int8_t)((([state getPC]+1) & 0xff00) >> 8);

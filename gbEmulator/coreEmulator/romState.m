@@ -71,6 +71,10 @@
 {
     PC++;
 }
+- (void) doubleIncPC
+{
+    PC += 2;
+}
 - (void) addToPC:(int8_t)offset
 {
     PC += offset;

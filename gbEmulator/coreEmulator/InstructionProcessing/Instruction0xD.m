@@ -46,8 +46,7 @@ void (^execute0xDInstruction)(romState *,
             // JP NC,a16 -- If !C, jump to address a16
             d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
             (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
-            [state incrementPC];
-            [state incrementPC];
+            [state doubleIncPC];
             if ([state getCFlag] == false)
             {
                 [state setPC:d16];
@@ -65,8 +64,7 @@ void (^execute0xDInstruction)(romState *,
             prev_short = [state getSP];
             d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
                 (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
-            [state incrementPC];
-            [state incrementPC];
+            [state doubleIncPC];
             if ([state getCFlag] == false)
             {
                 [state setSP:([state getSP] - 2)];
@@ -149,8 +147,7 @@ void (^execute0xDInstruction)(romState *,
             // JP C,a16 -- If C, jump to address a16
             d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
                 (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
-            [state incrementPC];
-            [state incrementPC];
+            [state doubleIncPC];
             if ([state getCFlag] == true)
             {
                 [state setPC:d16];
@@ -168,8 +165,7 @@ void (^execute0xDInstruction)(romState *,
             prev_short = [state getSP];
             d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
                 (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
-            [state incrementPC];
-            [state incrementPC];
+            [state doubleIncPC];
             if ([state getCFlag] == true)
             {
                 [state setSP:([state getSP] - 2)];

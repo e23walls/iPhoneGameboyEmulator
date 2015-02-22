@@ -119,8 +119,7 @@ void (^execute0xFInstruction)(romState *,
             d16 = (([state getPC] & 0x00ff) << 8) | \
                 ((([state getPC] & 0xff00) >> 8) & 0x0ff);
             d8 = ram[(unsigned short)d16];
-            [state incrementPC];
-            [state incrementPC];
+            [state doubleIncPC];
             prev = [state getA];
             [state setA:d8];
             PRINTDBG("0x%02x -- LD A,(a16) -- A was 0x%02x, and is now 0x%02x; a16 = 0%02x\n", currentInstruction & 0xff,

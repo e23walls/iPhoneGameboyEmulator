@@ -34,8 +34,7 @@ void (^execute0x1Instruction)(romState *,
         case 1:
             // LD DE, d16 -- Load d16 into DE
             d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0x0ff);
-            [state incrementPC];
-            [state incrementPC];
+            [state doubleIncPC];
             [state setDE_big:d16];
             PRINTDBG("0x%02x -- LD DE, d16 -- d16 = 0x%02x\n", currentInstruction, d16);
             break;

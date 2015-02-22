@@ -35,8 +35,7 @@ void (^execute0x3Instruction)(romState *,
         case 1:
             // LD SP,d16 -- load immediate 16-bit data into SP
             d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0x0ff);
-            [state incrementPC];
-            [state incrementPC];
+            [state doubleIncPC];
             [state setSP:d16];
             PRINTDBG("0x%02x -- LD SP, d16 -- d16 = %i\n", currentInstruction, d16);
             break;

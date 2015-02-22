@@ -23,6 +23,7 @@
 - (void) setPC:(unsigned short)newPC;
 - (unsigned short) getPC;
 - (void) incrementPC;
+- (void) doubleIncPC;
 - (void) addToPC:(int8_t)offset;
 - (void) setSP:(unsigned short)newSP;
 - (unsigned short) getSP;
