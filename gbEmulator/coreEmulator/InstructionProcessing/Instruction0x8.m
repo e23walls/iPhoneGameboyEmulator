@@ -124,28 +124,197 @@ void (^execute0x8Instruction)(romState *,
                      prev, prev, [state getA]);
             break;
         case 8:
-            
+            // ADC A,B -- Add B + C-flag to A
+            prev = [state getA];
+            if ([state getCFlag])
+            {
+                [state setA:[state getA]+[state getB]+1];
+            }
+            else
+            {
+                [state setA:[state getA]+[state getB]];
+            }
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if carry from bit 4.
+             C - Set if carry (from bit 7).
+             */
+            [state setFlags:[state getA] == 0
+                          N:false
+                          H:((char)(prev & 0xf) > (char)([state getA] & 0xf))
+                          C:((unsigned char)(prev) > (unsigned char)([state getA]))];
+            PRINTDBG("0x%02x -- ADC A,B -- A was 0x%02x; A is now 0x%02x; B = 0x%02x\n", currentInstruction,
+                     prev, [state getA], [state getB]);
             break;
         case 9:
-            
+            // ADC A,C -- Add C + C-flag to A
+            prev = [state getA];
+            if ([state getCFlag])
+            {
+                [state setA:[state getA]+[state getC]+1];
+            }
+            else
+            {
+                [state setA:[state getA]+[state getC]];
+            }
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if carry from bit 4.
+             C - Set if carry (from bit 7).
+             */
+            [state setFlags:[state getA] == 0
+                          N:false
+                          H:((char)(prev & 0xf) > (char)([state getA] & 0xf))
+                          C:((unsigned char)(prev) > (unsigned char)([state getA]))];
+            PRINTDBG("0x%02x -- ADC A,C -- A was 0x%02x; A is now 0x%02x; C = 0x%02x\n", currentInstruction,
+                     prev, [state getA], [state getC]);
             break;
         case 0xA:
-            
+            // ADC A,D -- Add D + C-flag to A
+            prev = [state getA];
+            if ([state getCFlag])
+            {
+                [state setA:[state getA]+[state getD]+1];
+            }
+            else
+            {
+                [state setA:[state getA]+[state getD]];
+            }
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if carry from bit 4.
+             C - Set if carry (from bit 7).
+             */
+            [state setFlags:[state getA] == 0
+                          N:false
+                          H:((char)(prev & 0xf) > (char)([state getA] & 0xf))
+                          C:((unsigned char)(prev) > (unsigned char)([state getA]))];
+            PRINTDBG("0x%02x -- ADC A,D -- A was 0x%02x; A is now 0x%02x; D = 0x%02x\n", currentInstruction,
+                     prev, [state getA], [state getD]);
             break;
         case 0xB:
-            
+            // ADC A,E -- Add E + C-flag to A
+            prev = [state getA];
+            if ([state getCFlag])
+            {
+                [state setA:[state getA]+[state getE]+1];
+            }
+            else
+            {
+                [state setA:[state getA]+[state getE]];
+            }
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if carry from bit 4.
+             C - Set if carry (from bit 7).
+             */
+            [state setFlags:[state getA] == 0
+                          N:false
+                          H:((char)(prev & 0xf) > (char)([state getA] & 0xf))
+                          C:((unsigned char)(prev) > (unsigned char)([state getA]))];
+            PRINTDBG("0x%02x -- ADC A,E -- A was 0x%02x; A is now 0x%02x; E = 0x%02x\n", currentInstruction,
+                     prev, [state getA], [state getE]);
             break;
         case 0xC:
-            
+            // ADC A,H -- Add H + C-flag to A
+            prev = [state getA];
+            if ([state getCFlag])
+            {
+                [state setA:[state getA]+[state getH]+1];
+            }
+            else
+            {
+                [state setA:[state getA]+[state getH]];
+            }
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if carry from bit 4.
+             C - Set if carry (from bit 7).
+             */
+            [state setFlags:[state getA] == 0
+                          N:false
+                          H:((char)(prev & 0xf) > (char)([state getA] & 0xf))
+                          C:((unsigned char)(prev) > (unsigned char)([state getA]))];
+            PRINTDBG("0x%02x -- ADC A,H -- A was 0x%02x; A is now 0x%02x; H = 0x%02x\n", currentInstruction,
+                     prev, [state getA], [state getH]);
             break;
         case 0xD:
-            
+            // ADC A,L -- Add L + C-flag to A
+            prev = [state getA];
+            if ([state getCFlag])
+            {
+                [state setA:[state getA]+[state getL]+1];
+            }
+            else
+            {
+                [state setA:[state getA]+[state getL]];
+            }
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if carry from bit 4.
+             C - Set if carry (from bit 7).
+             */
+            [state setFlags:[state getA] == 0
+                          N:false
+                          H:((char)(prev & 0xf) > (char)([state getA] & 0xf))
+                          C:((unsigned char)(prev) > (unsigned char)([state getA]))];
+            PRINTDBG("0x%02x -- ADC A,L -- A was 0x%02x; A is now 0x%02x; L = 0x%02x\n", currentInstruction,
+                     prev, [state getA], [state getL]);
             break;
         case 0xE:
-            
+            // ADC A,(HL) -- Add (HL) + C-flag to A
+            prev = [state getA];
+            d8 = ram[(unsigned short)[state getHL_big]];
+            if ([state getCFlag])
+            {
+                [state setA:[state getA]+d8+1];
+            }
+            else
+            {
+                [state setA:[state getA]+d8];
+            }
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if carry from bit 4.
+             C - Set if carry (from bit 7).
+             */
+            [state setFlags:[state getA] == 0
+                          N:false
+                          H:((char)(prev & 0xf) > (char)([state getA] & 0xf))
+                          C:((unsigned char)(prev) > (unsigned char)([state getA]))];
+            PRINTDBG("0x%02x -- ADC A,B -- A was 0x%02x; A is now 0x%02x; HL = 0x%02x; (HL) = 0x%02x\n", currentInstruction,
+                     prev, [state getA], [state getHL_big] & 0xffff, d8 & 0xff);
             break;
         case 0xF:
-            
+            // ADC A,A -- Add A + C-flag to A
+            prev = [state getA];
+            if ([state getCFlag])
+            {
+                [state setA:[state getA]*2+1];
+            }
+            else
+            {
+                [state setA:[state getA]*2];
+            }
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if carry from bit 4.
+             C - Set if carry (from bit 7).
+             */
+            [state setFlags:[state getA] == 0
+                          N:false
+                          H:((char)(prev & 0xf) > (char)([state getA] & 0xf))
+                          C:((unsigned char)(prev) > (unsigned char)([state getA]))];
+            PRINTDBG("0x%02x -- ADC A,A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+                     prev, [state getA]);
             break;
     }
 };

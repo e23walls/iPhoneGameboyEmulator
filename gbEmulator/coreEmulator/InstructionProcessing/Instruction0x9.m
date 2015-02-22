@@ -16,22 +16,106 @@ void (^execute0x9Instruction)(romState *,
     int8_t d8 = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
-            
+            // SUB B -- A <- A - B
+            prev = [state getA];
+            [state setA:([state getA]-[state getB])];
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if no borrow from bit 4.
+             C - Set if no borrow.
+             */
+            [state setFlags:[state getA] == 0
+                          N:true
+                          H:!((char)(prev & 0xf) < (char)((([state getB] & 0xf) & 0xf)))
+                          C:!((unsigned char)prev < (unsigned char)[state getB])];
+            PRINTDBG("0x%02x -- SUB B -- B is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+                     [state getB], prev, [state getA]);
             break;
         case 1:
-            
+            // SUB C -- A <- A - C
+            prev = [state getA];
+            [state setA:([state getA]-[state getC])];
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if no borrow from bit 4.
+             C - Set if no borrow.
+             */
+            [state setFlags:[state getA] == 0
+                          N:true
+                          H:!((char)(prev & 0xf) < (char)((([state getC] & 0xf) & 0xf)))
+                          C:!((unsigned char)prev < (unsigned char)[state getC])];
+            PRINTDBG("0x%02x -- SUB C -- C is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+                     [state getC], prev, [state getA]);
             break;
         case 2:
-            
+            // SUB D -- A <- A - D
+            prev = [state getA];
+            [state setA:([state getA]-[state getD])];
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if no borrow from bit 4.
+             C - Set if no borrow.
+             */
+            [state setFlags:[state getA] == 0
+                          N:true
+                          H:!((char)(prev & 0xf) < (char)((([state getD] & 0xf) & 0xf)))
+                          C:!((unsigned char)prev < (unsigned char)[state getD])];
+            PRINTDBG("0x%02x -- SUB D -- D is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+                     [state getD], prev, [state getA]);
             break;
         case 3:
-            
+            // SUB E -- A <- A - E
+            prev = [state getA];
+            [state setA:([state getA]-[state getE])];
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if no borrow from bit 4.
+             C - Set if no borrow.
+             */
+            [state setFlags:[state getA] == 0
+                          N:true
+                          H:!((char)(prev & 0xf) < (char)((([state getE] & 0xf) & 0xf)))
+                          C:!((unsigned char)prev < (unsigned char)[state getE])];
+            PRINTDBG("0x%02x -- SUB E -- E is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+                     [state getE], prev, [state getA]);
             break;
         case 4:
-            
+            // SUB H -- A <- A - H
+            prev = [state getA];
+            [state setA:([state getA]-[state getH])];
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if no borrow from bit 4.
+             C - Set if no borrow.
+             */
+            [state setFlags:[state getA] == 0
+                          N:true
+                          H:!((char)(prev & 0xf) < (char)((([state getH] & 0xf) & 0xf)))
+                          C:!((unsigned char)prev < (unsigned char)[state getH])];
+            PRINTDBG("0x%02x -- SUB H -- H is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+                     [state getH], prev, [state getA]);
             break;
         case 5:
-            
+            // SUB L -- A <- A - L
+            prev = [state getA];
+            [state setA:([state getA]-[state getL])];
+            /*
+             Z - Set if result is zero.
+             N - Set.
+             H - Set if no borrow from bit 4.
+             C - Set if no borrow.
+             */
+            [state setFlags:[state getA] == 0
+                          N:true
+                          H:!((char)(prev & 0xf) < (char)((([state getL] & 0xf) & 0xf)))
+                          C:!((unsigned char)prev < (unsigned char)[state getL])];
+            PRINTDBG("0x%02x -- SUB L -- L is 0x%02x; A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+                     [state getL], prev, [state getA]);
             break;
         case 6:
             // SUB (HL) -- Subtract (HL) from A
@@ -52,7 +136,14 @@ void (^execute0x9Instruction)(romState *,
                      [state getHL_big], d8, prev, [state getA]);
             break;
         case 7:
-            
+            // SUB A -- A <- A - A
+            prev = [state getA];
+            [state setA:0];
+            [state setFlags:[state getA] == 0
+                          N:true
+                          H:true
+                          C:true];
+            PRINTDBG("0x%02x -- SUB A -- A is now 0x0\n", currentInstruction);
             break;
         case 8:
             // SBC A,B -- Subtract B + carry flag from A, so A = 0 - C-flag

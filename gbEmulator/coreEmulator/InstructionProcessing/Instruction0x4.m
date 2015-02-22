@@ -15,8 +15,8 @@ void (^execute0x4Instruction)(romState *,
     int8_t prev = 0;
     switch (currentInstruction & 0x0F) {
         case 0:
-            // LD B,B -- Load B into B (effectively a no-op?)
-            PRINTDBG("0x%02x -- LD B,B -- WTH!\n", currentInstruction);
+            // LD B,B -- Load B into B (effectively a no-op)
+            PRINTDBG("0x%02x -- LD B,B\n", currentInstruction);
             break;
         case 1:
             // LD B,C -- Load C into B
