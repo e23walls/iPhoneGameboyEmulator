@@ -215,6 +215,8 @@ void (^execute0xcbInstruction)(romState *,
 };
 
 // TODO: should the IF be set to 0 upon startup? (Hypothesis: Yes)
+// Note: We will denote being in an ISR by having '>' before
+// every instruction while in the ISR.
 void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *) = ^
 (romState * state,
  char * ram,
@@ -236,7 +238,7 @@ void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *) = ^
         while (instruction != RET && instruction != RETI)
         {
             [state incrementPC];
-            PRINTDBG("PC = 0x%02x\n", [state getPC]);
+            PRINTDBG("\n> PC = 0x%02x\n", [state getPC]);
             instruction = ram[[state getPC]];
             executeInstruction(state, ram, incrementPC, interruptsEnabled);
         }
@@ -250,7 +252,7 @@ void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *) = ^
         while (instruction != RET && instruction != RETI)
         {
             [state incrementPC];
-            PRINTDBG("PC = 0x%02x\n", [state getPC]);
+            PRINTDBG("\n> PC = 0x%02x\n", [state getPC]);
             instruction = ram[[state getPC]];
             executeInstruction(state, ram, incrementPC, interruptsEnabled);
         }
@@ -264,7 +266,7 @@ void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *) = ^
         while (instruction != RET && instruction != RETI)
         {
             [state incrementPC];
-            PRINTDBG("PC = 0x%02x\n", [state getPC]);
+            PRINTDBG("\n> PC = 0x%02x\n", [state getPC]);
             instruction = ram[[state getPC]];
             executeInstruction(state, ram, incrementPC, interruptsEnabled);
         }
@@ -278,7 +280,7 @@ void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *) = ^
         while (instruction != RET && instruction != RETI)
         {
             [state incrementPC];
-            PRINTDBG("PC = 0x%02x\n", [state getPC]);
+            PRINTDBG("\n> PC = 0x%02x\n", [state getPC]);
             instruction = ram[[state getPC]];
             executeInstruction(state, ram, incrementPC, interruptsEnabled);
         }
@@ -292,7 +294,7 @@ void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *) = ^
         while (instruction != RET && instruction != RETI)
         {
             [state incrementPC];
-            PRINTDBG("PC = 0x%02x\n", [state getPC]);
+            PRINTDBG("\n> PC = 0x%02x\n", [state getPC]);
             instruction = ram[[state getPC]];
             executeInstruction(state, ram, incrementPC, interruptsEnabled);
         }

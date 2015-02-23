@@ -195,7 +195,7 @@ extern const unsigned short interruptEnableRegister;
         // length of the current instruction at this point. It will
         // always be pointing 1 byte ahead of the current instruction.
         // If the current instruction is 1 byte, it should be correct.
-        PRINTDBG("PC = 0x%02x\n", [self.currentState getPC]);
+        PRINTDBG("\nPC = 0x%02x\n", [self.currentState getPC]);
         incrementPC = true;
         if ([self interruptOccurred])
         {
