@@ -37,7 +37,8 @@ void (^execute0x3Instruction)(romState *,
             d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0x0ff);
             [state doubleIncPC];
             [state setSP:d16];
-            PRINTDBG("0x%02x -- LD SP, d16 -- d16 = %i\n", currentInstruction, d16);
+            PRINTDBG("0x%02x -- LD SP, d16 -- d16 = 0x%02x; SP = 0x%02x\n", currentInstruction, d16 & 0xffff,
+                     [state getSP] & 0xffff);
             break;
         case 2:
             // LD (HL-),A -- put A into (HL), and decrement HL
@@ -45,8 +46,8 @@ void (^execute0x3Instruction)(romState *,
             ram[(unsigned short)[state getHL_big]] = [state getA];
             [state setHL_big:([state getHL_big] - 1)];
             PRINTDBG("0x%02x -- LD (HL-),A -- HL-1 = 0x%02x; (HL) was 0x%02x; (HL) = 0x%02x; A = 0x%02x\n", currentInstruction,
-                     [state getHL_big], prev,
-                     ram[(unsigned short)[state getHL_big]+1], [state getA]);
+                     [state getHL_big] & 0xffff, prev & 0xff,
+                     ram[(unsigned short)[state getHL_big]+1] & 0xff, [state getA] & 0xff);
             break;
         case 3:
             // INC SP -- Increment SP
@@ -61,7 +62,7 @@ void (^execute0x3Instruction)(romState *,
                           N:false
                           H:(prev > ram[(unsigned short)[state getHL_big]])
                           C:([state getCFlag])];
-            PRINTDBG("0x%02x -- INC (HL); (HL) is now %i\n", currentInstruction, ram[[state getHL_big]]);
+            PRINTDBG("0x%02x -- INC (HL); (HL) is now 0x%02x\n", currentInstruction, ram[[state getHL_big]] & 0xff);
             break;
         case 5:
             // DEC (HL) -- Decrement (HL)
@@ -69,17 +70,18 @@ void (^execute0x3Instruction)(romState *,
             ram[(unsigned short)[state getHL_big]] -= 1;
             [state setFlags:(ram[(unsigned short)[state getHL_big]] == 0)
                           N:true
+                            // Set if no borrow from b4
                           H:!((char)(prev & 0xf) < (char)(((ram[(unsigned short)[state getHL_big]] & 0xf) & 0xf)))
                           C:([state getCFlag])];
-            PRINTDBG("0x%02x -- DEC (HL); (HL) was %i; (HL) is now %i\n", currentInstruction, prev,
-                     ram[(unsigned short)[state getHL_big]]);
+            PRINTDBG("0x%02x -- DEC (HL); (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction, prev,
+                     ram[(unsigned short)[state getHL_big]] & 0xff);
             break;
         case 6:
             // LD (HL),d8 -- Load 8-bit immediate data into (HL)
             d8 = ram[[state getPC]];
             [state incrementPC];
             ram[(unsigned short)[state getHL_big]] = d8;
-            PRINTDBG("0x%02x -- LD (HL), d8 -- d8 = 0x%02x\n", currentInstruction, (int)d8);
+            PRINTDBG("0x%02x -- LD (HL), d8 -- d8 = 0x%02x\n", currentInstruction, d8 & 0xff);
             break;
         case 7:
             // SCF -- Set carry flag
@@ -98,7 +100,7 @@ void (^execute0x3Instruction)(romState *,
                 [state addToPC:d8];
             }
             PRINTDBG("0x%02x -- JR C, r8 -- if C, PC += %i; PC is now 0x%02x\n", currentInstruction,
-                     (int8_t)d8, [state getPC]);
+                     (int)d8, [state getPC] & 0xffff);
             *incrementPC =false;
             break;
         case 9:
@@ -114,22 +116,22 @@ void (^execute0x3Instruction)(romState *,
                           N:false
                           H:H
                           C:C];
-            PRINTDBG("0x%02x -- ADD HL,SP -- add SP (%i) and HL (%i) = %i\n", currentInstruction, \
-                     [state getSP], prev_short, [state getHL_big]);
+            PRINTDBG("0x%02x -- ADD HL,SP -- add SP (0x%02x) and HL (0x%02x) = 0x%02x\n", currentInstruction,
+                     [state getSP] & 0xffff, prev_short & 0xffff, [state getHL_big] & 0xffff);
             break;
         case 0xA:
             // LD A,(HL-) -- Put value at address at HL, (HL), into A, and decrement HL
             [state setA:ram[(unsigned short)[state getHL_big]]];
             [state setHL_big:([state getHL_big]-1)];
-            PRINTDBG("0x%02x -- LD A,(HL-) -- HL is now 0x%02x; A = 0x%02x\n", currentInstruction, \
-                     [state getHL_big], [state getA]);
+            PRINTDBG("0x%02x -- LD A,(HL-) -- HL is now 0x%02x; A = 0x%02x\n", currentInstruction,
+                     [state getHL_big] & 0xffff, [state getA] & 0xff);
             break;
         case 0xB:
             // DEC SP -- Decrement SP
-            prev_int = [state getSP];
+            prev_short = [state getSP];
             [state setHL_big:([state getSP] - 1)];
-            PRINTDBG("0x%02x -- DEC SP -- SP was %i; SP is now %i\n", currentInstruction, \
-                     prev_int, [state getSP]);
+            PRINTDBG("0x%02x -- DEC SP -- SP was 0x%02x; SP is now 0x%02x\n", currentInstruction,
+                     prev_short & 0xffff, [state getSP] & 0xffff);
             break;
         case 0xC:
             // INC A -- Increment A
@@ -139,7 +141,7 @@ void (^execute0x3Instruction)(romState *,
                           N:false
                           H:(prev > [state getA])
                           C:([state getCFlag])];
-            PRINTDBG("0x%02x -- INC A; A is now %i\n", currentInstruction, [state getA]);
+            PRINTDBG("0x%02x -- INC A; A is now 0x%02x\n", currentInstruction, [state getA] & 0xff);
             break;
         case 0xD:
             // DEC A -- Decrement A
@@ -151,15 +153,15 @@ void (^execute0x3Instruction)(romState *,
                           N:true
                           H:H
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- DEC A -- A was %i; A is now %i\n", currentInstruction, \
-                     prev, (int)[state getA]);
+            PRINTDBG("0x%02x -- DEC A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction,
+                     prev & 0xff, [state getA] & 0xff);
             break;
         case 0xE:
             // LD A,d8 -- Load 8-bit immediate data into A
             d8 = ram[[state getPC]];
             [state incrementPC];
             [state setA:d8];
-            PRINTDBG("0x%02x -- LD A, d8 -- d8 = %i\n", currentInstruction, (short)d8);
+            PRINTDBG("0x%02x -- LD A, d8 -- d8 = 0x%02x\n", currentInstruction, d8 & 0xff);
             break;
         case 0xF:
             // CCF -- Complement carry flag

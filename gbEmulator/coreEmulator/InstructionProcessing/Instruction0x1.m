@@ -118,8 +118,8 @@ void (^execute0x1Instruction)(romState *,
         case 0xA:
             // LD A,(DE) - load (DE) into A
             [state setA:(ram[(unsigned short)[state getDE_big]])];
-            PRINTDBG("0x%02x -- LD A,(DE) -- load (DE == %i -> %i) into A\n", currentInstruction, \
-                     [state getDE_big], (int)ram[(unsigned short)[state getDE_big]]);
+            PRINTDBG("0x%02x -- LD A,(DE) -- load (DE == 0x%04x) = 0x%02x into A\n", currentInstruction, \
+                     [state getDE_big] & 0xffff, ram[(unsigned short)[state getDE_big]] & 0xff);
             break;
         case 0xB:
             // DEC DE -- Decrement DE

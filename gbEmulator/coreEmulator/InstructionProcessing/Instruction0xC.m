@@ -73,10 +73,9 @@ void (^execute0xCInstruction)(romState *,
             if ([state getZFlag] == false)
             {
                 [state setSP:([state getSP] - 2)];
-                ram[[state getSP]] = (int8_t)(([state getPC]+1) & 0xff00) >> 8;
-                ram[[state getSP]+1] = (int8_t)(([state getPC]+1) & 0x00ff);
+                ram[[state getSP]] = (int8_t)(([state getPC]) & 0xff00) >> 8;
+                ram[[state getSP]+1] = (int8_t)(([state getPC]) & 0x00ff);
                 [state setPC:d16];
-                *incrementPC =false;
             }
             PRINTDBG("0x%02x -- CALL NZ,a16 -- a16 = 0x%02x -- PC is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x; (SP) = 0x%02x\n", currentInstruction & 0xff,
                      d16 & 0xffff, prev_short, [state getSP],
@@ -171,10 +170,9 @@ void (^execute0xCInstruction)(romState *,
             if ([state getZFlag] == true)
             {
                 [state setSP:([state getSP] - 2)];
-                ram[[state getSP]] = (int8_t)(([state getPC]+1) & 0xff00) >> 8;
-                ram[[state getSP]+1] = (int8_t)(([state getPC]+1) & 0x00ff);
+                ram[[state getSP]] = (int8_t)(([state getPC]) & 0xff00) >> 8;
+                ram[[state getSP]+1] = (int8_t)(([state getPC]) & 0x00ff);
                 [state setPC:d16];
-                *incrementPC =false;
             }
             PRINTDBG("0x%02x -- CALL Z,a16 -- a16 = 0x%02x -- PC is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x\n", currentInstruction & 0xff,
                      d16 & 0xffff, prev_short, [state getSP],
@@ -186,10 +184,9 @@ void (^execute0xCInstruction)(romState *,
             d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0xff);
             [state doubleIncPC];
             [state setSP:(prev_short - 2)];
-            ram[[state getSP]] = (int8_t)(([state getPC]+1) & 0xff);
-            ram[[state getSP]+1] = (int8_t)((([state getPC]+1) & 0xff00) >> 8);
+            ram[[state getSP]] = (int8_t)(([state getPC]) & 0xff);
+            ram[[state getSP]+1] = (int8_t)((([state getPC]) & 0xff00) >> 8);
             [state setPC:d16];
-            *incrementPC = false;
             PRINTDBG("0x%02x -- CALL a16 -- a16 = 0x%02x -- PC is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x; (SP) = 0x%02x\n", currentInstruction & 0xff, d16 & 0xffff,
                      [state getPC],
                      prev_short, [state getSP],

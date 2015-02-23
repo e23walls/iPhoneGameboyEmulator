@@ -164,6 +164,8 @@ extern const unsigned short interruptEnableRegister;
 {
     PRINTDBG("\nRunning rom '%s'\n\n", [[self.currentRom romName] cStringUsingEncoding:NSUTF8StringEncoding]);
     interruptsEnabled = 0;
+    // This is probably necessary...
+    self.ram[interruptFlagAddress] = 0;
     while ([self.currentState getPC] < ramSize)
     {
         // For when enabling interrupts doesn't take effect until after the next instruction.

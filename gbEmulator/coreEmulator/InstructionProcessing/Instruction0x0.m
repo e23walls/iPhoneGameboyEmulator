@@ -159,7 +159,8 @@ void (^execute0x0Instruction)(romState *,
             d8 = ram[[state getPC]];
             [state incrementPC];
             [state setC:d8];
-            PRINTDBG("0x%02x -- LD C, d8 -- d8 = %i\n", currentInstruction, (short)d8);
+            PRINTDBG("0x%02x -- LD C, d8 -- d8 = 0x%02x; C is now 0x%02x\n", currentInstruction, d8 & 0xff,
+                     [state getC] & 0xff);
             break;
         case 0xF:
             // RRCA -- rotate A right
