@@ -86,7 +86,7 @@ void (^execute0x0Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RLCA -- A was %02x; A is now %02x\n", currentInstruction, A, [state getA]);
+            PRINTDBG("0x%02x -- RLCA -- A was 0x%02x; A is now 0x%02x\n", currentInstruction, A, [state getA]);
             break;
         case 8:
             // LD (a16), SP -- put (SP) at address a16
@@ -174,7 +174,7 @@ void (^execute0x0Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RRCA -- A was %02x; A is now %02x\n", currentInstruction, A, [state getA]);
+            PRINTDBG("0x%02x -- RRCA -- A was 0x%02x; A is now 0x%02x\n", currentInstruction, A, [state getA]);
             break;
     }
 };

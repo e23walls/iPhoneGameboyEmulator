@@ -171,7 +171,7 @@ void (^execute0x1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RRA -- A was %02x; A is now %02x\n", currentInstruction, A, [state getA]);
+            PRINTDBG("0x%02x -- RRA -- A was 0x%02x; A is now 0x%02x\n", currentInstruction, A, [state getA]);
             break;
     }
 };
