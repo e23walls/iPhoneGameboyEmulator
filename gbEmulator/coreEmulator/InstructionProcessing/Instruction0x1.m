@@ -79,7 +79,7 @@ void (^execute0x1Instruction)(romState *,
             A = [state getA] << 1;
             C = (bool)([state getA] & 0b10000000);
             // Set LSb of A to its previous C-value
-            [state getCFlag] ? [state setA:(A | 1)] : [state setA:([state getA] & 0b11111110)];
+            [state getCFlag] ? [state setA:(A | 1)] : [state setA:(A & 0b11111110)];
             [state setFlags:false
                           N:false
                           H:false

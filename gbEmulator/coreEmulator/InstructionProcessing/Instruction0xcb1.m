@@ -12,7 +12,6 @@ void (^execute0xcb1Instruction)(romState *,
   int8_t * interruptsEnabled)
 {
     int8_t prev = 0;
-    int8_t temp = 0;
     bool C = false;
     switch (currentInstruction & 0x0F) {
         case 0:
@@ -20,14 +19,11 @@ void (^execute0xcb1Instruction)(romState *,
             break;
         case 1:
             // RL C -- Rotate C left through C-flag
-            prev = [state getC];
-            temp = [state getCFlag];
+            prev = [state getC] << 1;
             C = (bool)([state getC] & 0b10000000);
-            [state setC:([state getC] << 1)];
-            // Set LSb of C to its previous C-value
-            temp ? [state setC:([state getC] | 1)] :
-            [state setC:([state getC] & 0b11111110)];
-            [state setFlags:[state getC] == 0
+            // Set LSb of A to its previous C-value
+            [state getCFlag] ? [state setC:(prev | 1)] : [state setC:(prev & 0b11111110)];
+            [state setFlags:false
                           N:false
                           H:false
                           C:C];
