@@ -63,6 +63,7 @@
 - (bool) getNFlag;
 - (bool) getHFlag;
 - (bool) getCFlag;
+- (void) printState:(char *)ram;
 
 // Keep track of registers, the display, timers, etc.
 

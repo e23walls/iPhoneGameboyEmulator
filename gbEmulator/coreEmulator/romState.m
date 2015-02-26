@@ -49,12 +49,17 @@
 {
     return (bool)(F & 0b00010000);
 }
-
+- (void) printFlags
+{
+    printf("Z = %i, N = %i, H = %i, C = %i\n",
+           [self getZFlag], [self getNFlag],
+           [self getHFlag], [self getCFlag]);
+}
 - (void) setFlags:(bool)Z N:(bool)N H:(bool)H C:(bool)C
 {
     // Maybe paranoid; does 'bool x = 4;' get changed to 1?
     F = ((Z & 1) << 7) | ((N & 1) << 6) | ((H & 1) << 5) | ((C & 1) << 4);
-    printf("(Flags set; Z = %i, N = %i, H = %i, C = %i)\n", Z, N, H, C);
+    [self printFlags];
 }
 
 #pragma mark - PC methods
@@ -226,5 +231,23 @@
 {
     HL = ((newHL & 0x00FF) << 8) | ((newHL & 0xFF00) >> 8);
 }
+- (void) printState:(char *)ram
+{
+    printf("*****************************\n");
+    printf("  A = 0x%02x; F = 0x%02x\n", A & 0xff, F & 0xff);
+    printf("  B = 0x%02x; C = 0x%02x\n", ((BC & 0xff00) >> 8) & 0xff, BC & 0xff);
+    printf("  D = 0x%02x; E = 0x%02x\n", ((DE & 0xff00) >> 8) & 0xff, DE & 0xff);
+    printf("  H = 0x%02x; L = 0x%02x\n", ((HL & 0xff00) >> 8) & 0xff, HL & 0xff);
+    [self printFlags];
+    printf("  PC = 0x%04x; SP = 0x%04x\n", PC & 0xffff, SP & 0xffff);
+    printf("  Words on stack = %i\n", (0xfffe - SP)/2);
+    if (ram)
+    {
+        printf("  [PC] = 0x%02x; [SP] = 0x%02x\n", ram[PC] & 0xff, ram[SP] & 0xff);
+        printf("  [HL] = 0x%02x\n", ram[(unsigned short)HL] & 0xff);
+    }
+    printf("******************************\n");
+}
+
 
 @end

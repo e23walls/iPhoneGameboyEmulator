@@ -20,7 +20,6 @@ void (^execute0x1Instruction)(romState *,
     bool Z = true;
     bool H = true;
     bool C = true;
-    bool temp = true;
     //    int8_t previousButtons = self.buttons;
     switch (currentInstruction & 0x0F) {
         case 0:
@@ -76,15 +75,11 @@ void (^execute0x1Instruction)(romState *,
             PRINTDBG("0x%02x -- LD D, d8 -- d8 = %i\n", currentInstruction, (int)d8);
             break;
         case 7:
-            // RLA -- Rotate A left through carry flag -- Does this mean take previous C value for A[0]? Else, what's
-            // the difference between it and the RLCA instruction?
-            A = [state getA];
-            temp = [state getCFlag];
+            // RLA -- Rotate A left through carry flag
+            A = [state getA] << 1;
             C = (bool)([state getA] & 0b10000000);
-            [state setA:([state getA] << 1)];
             // Set LSb of A to its previous C-value
-            temp ? [state setA:([state getA] | 1)] :
-            [state setA:([state getA] & 0b11111110)];
+            [state getCFlag] ? [state setA:(A | 1)] : [state setA:([state getA] & 0b11111110)];
             [state setFlags:false
                           N:false
                           H:false
@@ -160,13 +155,10 @@ void (^execute0x1Instruction)(romState *,
             break;
         case 0xF:
             // RRA -- Rotate accumulator right through carry flag
-            A = [state getA];
-            temp = [state getCFlag];
+            A = [state getA] >> 1;
             C = (bool)([state getA] & 0b00000001);
-            [state setA:([state getA] >> 1)];
             // Set MSb of A to its previous C-value
-            temp ? [state setA:([state getA] | 0b10000000)] :
-            [state setA:([state getA] & 0b01111111)];
+            [state getCFlag] ? [state setA:(A | 0b10000000)] : [state setA:(A & 0b01111111)];
             [state setFlags:false
                           N:false
                           H:false

@@ -12,7 +12,6 @@ void (^execute0x3Instruction)(romState *,
   int8_t * interruptsEnabled)
 {
     int8_t prev = 0;
-    int prev_int = 0;
     short prev_short = 0;
     unsigned short d16 = 0;
     int8_t d8 = 0;

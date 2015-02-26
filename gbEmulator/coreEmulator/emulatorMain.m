@@ -193,6 +193,8 @@ extern const unsigned short interruptEnableRegister;
         {
             [self.currentState incrementPC];
         }
+        printf("Before:\n");
+        [self.currentState printState:self.ram];
         // This could be slightly off because we don't know the
         // length of the current instruction at this point. It will
         // always be pointing 1 byte ahead of the current instruction.
@@ -205,6 +207,9 @@ extern const unsigned short interruptEnableRegister;
             interruptServiceRoutineCaller(self.currentState, self.ram, &incrementPC, &interruptsEnabled);
         }
         executeInstruction(self.currentState, self.ram, &incrementPC, &interruptsEnabled);
+        printf("After:\n");
+        [self.currentState printState:self.ram];
+        printf("\n\n");
     }
 }
 - (void) setInterruptFlag:(int8_t) bit
