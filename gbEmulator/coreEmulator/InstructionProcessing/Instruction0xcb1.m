@@ -119,28 +119,102 @@ void (^execute0xcb1Instruction)(romState *,
             PRINTDBG("0x%02x -- RL A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction, prev, [state getA]);
             break;
         case 8:
-            
+            // RR B -- Rotate B right through C-flag
+            prev = [state getB] >> 1;
+            C = (bool)([state getB] & 0b00000001);
+            // Set MSb of B to its previous C-value
+            [state getCFlag] ? [state setB:(prev | 0b10000000)] : [state setB:(prev & 0b01111111)];
+            [state setFlags:false
+                          N:false
+                          H:false
+                          C:C];
+            PRINTDBG("0x%02x -- RR B -- B was 0x%02x; B is now 0x%02x\n", currentInstruction, prev, [state getB]);
             break;
         case 9:
-            
+            // RR C -- Rotate C right through C-flag
+            prev = [state getC] >> 1;
+            C = (bool)([state getC] & 0b00000001);
+            // Set MSb of C to its previous C-value
+            [state getCFlag] ? [state setC:(prev | 0b10000000)] : [state setC:(prev & 0b01111111)];
+            [state setFlags:false
+                          N:false
+                          H:false
+                          C:C];
+            PRINTDBG("0x%02x -- RR C -- C was 0x%02x; C is now 0x%02x\n", currentInstruction, prev, [state getC]);
             break;
         case 0xA:
-            
+            // RR D -- Rotate D right through C-flag
+            prev = [state getD] >> 1;
+            C = (bool)([state getD] & 0b00000001);
+            // Set MSb of D to its previous C-value
+            [state getCFlag] ? [state setD:(prev | 0b10000000)] : [state setD:(prev & 0b01111111)];
+            [state setFlags:false
+                          N:false
+                          H:false
+                          C:C];
+            PRINTDBG("0x%02x -- RR D -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, prev, [state getD]);
             break;
         case 0xB:
-            
+            // RR E -- Rotate E right through C-flag
+            prev = [state getE] >> 1;
+            C = (bool)([state getE] & 0b00000001);
+            // Set MSb of E to its previous C-value
+            [state getCFlag] ? [state setE:(prev | 0b10000000)] : [state setE:(prev & 0b01111111)];
+            [state setFlags:false
+                          N:false
+                          H:false
+                          C:C];
+            PRINTDBG("0x%02x -- RR E -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, prev, [state getE]);
             break;
         case 0xC:
-            
+            // RR H -- Rotate H right through C-flag
+            prev = [state getH] >> 1;
+            C = (bool)([state getH] & 0b00000001);
+            // Set MSb of H to its previous C-value
+            [state getCFlag] ? [state setH:(prev | 0b10000000)] : [state setH:(prev & 0b01111111)];
+            [state setFlags:false
+                          N:false
+                          H:false
+                          C:C];
+            PRINTDBG("0x%02x -- RR H -- H was 0x%02x; H is now 0x%02x\n", currentInstruction, prev, [state getH]);
             break;
         case 0xD:
-            
+            // RR L -- Rotate L right through C-flag
+            prev = [state getL] >> 1;
+            C = (bool)([state getL] & 0b00000001);
+            // Set MSb of L to its previous C-value
+            [state getCFlag] ? [state setL:(prev | 0b10000000)] : [state setL:(prev & 0b01111111)];
+            [state setFlags:false
+                          N:false
+                          H:false
+                          C:C];
+            PRINTDBG("0x%02x -- RR L -- L was 0x%02x; L is now 0x%02x\n", currentInstruction, prev, [state getL]);
             break;
         case 0xE:
-            
+            // RR (HL) -- Rotate (HL) right through C-flag
+            prev = ram[(unsigned short)[state getHL_big]] >> 1;
+            C = (bool)(ram[(unsigned short)[state getHL_big]] & 0b00000001);
+            // Set MSb of (HL) to its previous C-value
+            [state getCFlag] ? (ram[(unsigned short)[state getHL_big]] = (prev | 0b10000000)) :
+                                (ram[(unsigned short)[state getHL_big]] = (prev & 0b01111111));
+            [state setFlags:false
+                          N:false
+                          H:false
+                          C:C];
+            PRINTDBG("0x%02x -- RR (HL) -- (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction,
+                     prev, ram[(unsigned short)[state getHL_big]]);
             break;
         case 0xF:
-            
+            // RR A -- Rotate A right through C-flag
+            prev = [state getA] >> 1;
+            C = (bool)([state getA] & 0b00000001);
+            // Set MSb of A to its previous C-value
+            [state getCFlag] ? [state setA:(prev | 0b10000000)] : [state setA:(prev & 0b01111111)];
+            [state setFlags:false
+                          N:false
+                          H:false
+                          C:C];
+            PRINTDBG("0x%02x -- RR A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction, prev, [state getA]);
             break;
     }
 };

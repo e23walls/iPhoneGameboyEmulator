@@ -154,7 +154,7 @@ void (^execute0x1Instruction)(romState *,
             PRINTDBG("0x%02x -- LD E, d8 -- d8 = %i\n", currentInstruction, (short)d8);
             break;
         case 0xF:
-            // RRA -- Rotate accumulator right through carry flag
+            // RRA -- Rotate A right through carry flag
             A = [state getA] >> 1;
             C = (bool)([state getA] & 0b00000001);
             // Set MSb of A to its previous C-value
