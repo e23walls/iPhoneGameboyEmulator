@@ -24,7 +24,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RL B -- B was 0x%02x; B is now 0x%02x\n", currentInstruction, prev, [state getB]);
+            PRINTDBG("0xCB%02x -- RL B -- B was 0x%02x; B is now 0x%02x\n", currentInstruction, prev, [state getB]);
             break;
         case 1:
             // RL C -- Rotate C left through C-flag
@@ -36,7 +36,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RL C -- C was 0x%02x; C is now 0x%02x\n", currentInstruction, prev, [state getC]);
+            PRINTDBG("0xCB%02x -- RL C -- C was 0x%02x; C is now 0x%02x\n", currentInstruction, prev, [state getC]);
             break;
         case 2:
             // RL D -- Rotate D left through C-flag
@@ -48,7 +48,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RL D -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, prev, [state getD]);
+            PRINTDBG("0xCB%02x -- RL D -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, prev, [state getD]);
             break;
         case 3:
             // RL E -- Rotate E left through C-flag
@@ -60,7 +60,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RL E -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, prev, [state getE]);
+            PRINTDBG("0xCB%02x -- RL E -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, prev, [state getE]);
             break;
         case 4:
             // RL H -- Rotate H left through C-flag
@@ -72,7 +72,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RL H -- H was 0x%02x; H is now 0x%02x\n", currentInstruction, prev, [state getH]);
+            PRINTDBG("0xCB%02x -- RL H -- H was 0x%02x; H is now 0x%02x\n", currentInstruction, prev, [state getH]);
             break;
         case 5:
             // RL L -- Rotate L left through C-flag
@@ -84,7 +84,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RL L -- L was 0x%02x; L is now 0x%02x\n", currentInstruction, prev, [state getL]);
+            PRINTDBG("0xCB%02x -- RL L -- L was 0x%02x; L is now 0x%02x\n", currentInstruction, prev, [state getL]);
             break;
         case 6:
             // RL (HL) -- Rotate (HL) left through C-flag
@@ -103,7 +103,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RL (HL) -- (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction, prev,
+            PRINTDBG("0xCB%02x -- RL (HL) -- (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction, prev,
                      ram[(unsigned short)[state getHL_big]]);
             break;
         case 7:
@@ -116,7 +116,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RL A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction, prev, [state getA]);
+            PRINTDBG("0xCB%02x -- RL A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction, prev, [state getA]);
             break;
         case 8:
             // RR B -- Rotate B right through C-flag
@@ -128,7 +128,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RR B -- B was 0x%02x; B is now 0x%02x\n", currentInstruction, prev, [state getB]);
+            PRINTDBG("0xCB%02x -- RR B -- B was 0x%02x; B is now 0x%02x\n", currentInstruction, prev, [state getB]);
             break;
         case 9:
             // RR C -- Rotate C right through C-flag
@@ -140,7 +140,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RR C -- C was 0x%02x; C is now 0x%02x\n", currentInstruction, prev, [state getC]);
+            PRINTDBG("0xCB%02x -- RR C -- C was 0x%02x; C is now 0x%02x\n", currentInstruction, prev, [state getC]);
             break;
         case 0xA:
             // RR D -- Rotate D right through C-flag
@@ -152,7 +152,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RR D -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, prev, [state getD]);
+            PRINTDBG("0xCB%02x -- RR D -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, prev, [state getD]);
             break;
         case 0xB:
             // RR E -- Rotate E right through C-flag
@@ -164,7 +164,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RR E -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, prev, [state getE]);
+            PRINTDBG("0xCB%02x -- RR E -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, prev, [state getE]);
             break;
         case 0xC:
             // RR H -- Rotate H right through C-flag
@@ -176,7 +176,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RR H -- H was 0x%02x; H is now 0x%02x\n", currentInstruction, prev, [state getH]);
+            PRINTDBG("0xCB%02x -- RR H -- H was 0x%02x; H is now 0x%02x\n", currentInstruction, prev, [state getH]);
             break;
         case 0xD:
             // RR L -- Rotate L right through C-flag
@@ -188,7 +188,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RR L -- L was 0x%02x; L is now 0x%02x\n", currentInstruction, prev, [state getL]);
+            PRINTDBG("0xCB%02x -- RR L -- L was 0x%02x; L is now 0x%02x\n", currentInstruction, prev, [state getL]);
             break;
         case 0xE:
             // RR (HL) -- Rotate (HL) right through C-flag
@@ -201,7 +201,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RR (HL) -- (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- RR (HL) -- (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction,
                      prev, ram[(unsigned short)[state getHL_big]]);
             break;
         case 0xF:
@@ -214,7 +214,7 @@ void (^execute0xcb1Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- RR A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction, prev, [state getA]);
+            PRINTDBG("0xCB%02x -- RR A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction, prev, [state getA]);
             break;
     }
 };

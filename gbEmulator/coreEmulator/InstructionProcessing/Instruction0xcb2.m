@@ -24,7 +24,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SLA B -- B was 0x%02x; B is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SLA B -- B was 0x%02x; B is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, [state getB] & 0xff, [state getCFlag]);
             break;
         case 1:
@@ -36,7 +36,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SLA C -- C was 0x%02x; C is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SLA C -- C was 0x%02x; C is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, [state getC] & 0xff, [state getCFlag]);
             break;
         case 2:
@@ -48,7 +48,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SLA D -- D was 0x%02x; D is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SLA D -- D was 0x%02x; D is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, [state getD] & 0xff, [state getCFlag]);
             break;
         case 3:
@@ -60,7 +60,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SLA E -- E was 0x%02x; E is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SLA E -- E was 0x%02x; E is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, [state getE] & 0xff, [state getCFlag]);
             break;
         case 4:
@@ -72,7 +72,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SLA H -- H was 0x%02x; H is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SLA H -- H was 0x%02x; H is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, [state getH] & 0xff, [state getCFlag]);
             break;
         case 5:
@@ -84,7 +84,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SLA L -- L was 0x%02x; L is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SLA L -- L was 0x%02x; L is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, [state getL] & 0xff, [state getCFlag]);
             break;
         case 6:
@@ -96,7 +96,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SLA (HL) -- (HL) was 0x%02x; (HL) is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SLA (HL) -- (HL) was 0x%02x; (HL) is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, ram[(unsigned short)[state getHL_big]] & 0xff, [state getCFlag]);
             break;
         case 7:
@@ -108,7 +108,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SLA A -- A was 0x%02x; A is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SLA A -- A was 0x%02x; A is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, [state getA] & 0xff, [state getCFlag]);
             break;
         case 8:
@@ -120,7 +120,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SRA B -- B was 0x%02x; B is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SRA B -- B was 0x%02x; B is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, [state getB] & 0xff, [state getCFlag]);
             break;
         case 9:
@@ -132,7 +132,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SRA C -- C was 0x%02x; C is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SRA C -- C was 0x%02x; C is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, [state getC] & 0xff, [state getCFlag]);
             break;
         case 0xA:
@@ -144,7 +144,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SRA D -- D was 0x%02x; D is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SRA D -- D was 0x%02x; D is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, [state getD] & 0xff, [state getCFlag]);
             break;
         case 0xB:
@@ -156,7 +156,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SRA E -- E was 0x%02x; E is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SRA E -- E was 0x%02x; E is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, [state getE] & 0xff, [state getCFlag]);
             break;
         case 0xC:
@@ -168,7 +168,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SRA H -- H was 0x%02x; H is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SRA H -- H was 0x%02x; H is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, [state getH] & 0xff, [state getCFlag]);
             break;
         case 0xD:
@@ -180,7 +180,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SRA L -- L was 0x%02x; L is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SRA L -- L was 0x%02x; L is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, [state getL] & 0xff, [state getCFlag]);
             break;
         case 0xE:
@@ -193,7 +193,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SRA (HL) -- (HL) was 0x%02x; (HL) is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SRA (HL) -- (HL) was 0x%02x; (HL) is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, ram[(unsigned short)[state getHL_big]] & 0xff, [state getCFlag]);
             break;
         case 0xF:
@@ -205,7 +205,7 @@ void (^execute0xcb2Instruction)(romState *,
                           N:false
                           H:false
                           C:C];
-            PRINTDBG("0x%02x -- SRA A -- A was 0x%02x; A is now 0x%02x; C-flag = %i\n", currentInstruction,
+            PRINTDBG("0xCB%02x -- SRA A -- A was 0x%02x; A is now 0x%02x; C-flag = %i\n", currentInstruction,
                      prev & 0xff, [state getA] & 0xff, [state getCFlag]);
             break;
     }

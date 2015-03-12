@@ -20,7 +20,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 6,B -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 6,B -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
         case 1:
             // BIT 6,C -- Test bit 6 of C
@@ -29,7 +29,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 6,C -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 6,C -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
         case 2:
             // BIT 6,D -- Test bit 6 of D
@@ -38,7 +38,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 6,D -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 6,D -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
         case 3:
             // BIT 6,E -- Test bit 6 of E
@@ -47,7 +47,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 6,E -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 6,E -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
         case 4:
             // BIT 6,H -- Test bit 6 of H
@@ -56,7 +56,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 6,H -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 6,H -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
         case 5:
             // BIT 6,L -- Test bit 6 of L
@@ -65,7 +65,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 6,L -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 6,L -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
         case 6:
             // BIT 6,(HL) -- Test bit 6 of (HL)
@@ -74,7 +74,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 6,(HL) -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 6,(HL) -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
         case 7:
             // BIT 6,A -- Test bit 6 of A
@@ -83,7 +83,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 6,A -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 6,A -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
         case 8:
             // BIT 7,B -- Test bit 7 of B
@@ -92,7 +92,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 7,B -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 7,B -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
         case 9:
             // BIT 7,C -- Test bit 7 of C
@@ -101,7 +101,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 7,C -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 7,C -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
         case 0xA:
             // BIT 7,D -- Test bit 7 of D
@@ -110,7 +110,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 7,D -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 7,D -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
         case 0xB:
             // BIT 7,E -- Test bit 7 of E
@@ -119,7 +119,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 7,E -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 7,E -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
         case 0xC:
             // BIT 7,H -- test 7th bit of H register
@@ -137,7 +137,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 7,L -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 7,L -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
         case 0xE:
             // BIT 7,(HL) -- Test bit 7 of (HL)
@@ -146,7 +146,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 7,(HL) -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 7,(HL) -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
         case 0xF:
             // BIT 7,A -- Test bit 7 of A
@@ -155,7 +155,7 @@ void (^execute0xcb7Instruction)(romState *,
                           N:false
                           H:true
                           C:[state getCFlag]];
-            PRINTDBG("0x%02x -- BIT 7,A -- Z is now %i\n", currentInstruction, [state getZFlag]);
+            PRINTDBG("0xCB%02x -- BIT 7,A -- Z is now %i\n", currentInstruction, [state getZFlag]);
             break;
     }
 };
