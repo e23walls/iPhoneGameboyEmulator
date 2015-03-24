@@ -6,6 +6,11 @@
  * to be seen as methods that only belong to the emulator
  * class. Plus, this makes that class not have a 6000-line
  * implementation file.
+ *
+ *
+ * IDEA:
+ * Subclass the emulatorMain class so that each instruction
+ * inherits from it. -- Add tests... :(
  */
 
 #import "emulatorMain.h"

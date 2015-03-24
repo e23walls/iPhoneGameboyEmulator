@@ -29,7 +29,7 @@ void (^execute0x3Instruction)(romState *,
             }
             PRINTDBG("0x%02x -- JR NC, r8 -- if !C, PC += %i; PC is now 0x%02x\n", currentInstruction,
                      (int8_t)d8, [state getPC]);
-            *incrementPC =false;
+            *incrementPC = false;
             break;
         case 1:
             // LD SP,d16 -- load immediate 16-bit data into SP
@@ -100,7 +100,7 @@ void (^execute0x3Instruction)(romState *,
             }
             PRINTDBG("0x%02x -- JR C, r8 -- if C, PC += %i; PC is now 0x%02x\n", currentInstruction,
                      (int)d8, [state getPC] & 0xffff);
-            *incrementPC =false;
+            *incrementPC = false;
             break;
         case 9:
             // ADD HL,SP -- Add SP to HL

@@ -25,4 +25,4 @@ gbEmulator.xcodeproj/xcuserdata/emilywalls.xcuserdatad/xcdebugger/Breakpoints_v2
 # you should judge for yourself, the pros and cons are mentioned at:
 # http://guides.cocoapods.org/using/using-cocoapods.html#should-i-ignore-the-pods-directory-in-source-control
 #
-# Pods/
+Pods/

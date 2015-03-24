@@ -9,15 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface romState : NSObject
-{
-    unsigned short PC;
-    unsigned short SP;
-    int8_t A;
-    int8_t F; // [Z][N][H][C][0][0][0][0]
-    int16_t BC;
-    int16_t DE;
-    int16_t HL;
-}
 
 - (romState *) init;
 - (void) setPC:(unsigned short)newPC;
