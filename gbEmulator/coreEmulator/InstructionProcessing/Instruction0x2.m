@@ -14,6 +14,7 @@ void (^execute0x2Instruction)(romState *,
     int8_t prev = 0;
     int prev_int = 0;
     short prev_short = 0;
+    short prevHL = 0;
     unsigned short d16 = 0;
     int8_t d8 = 0;
     bool Z = true;
@@ -43,7 +44,8 @@ void (^execute0x2Instruction)(romState *,
         case 2:
             // LD (HL+),A -- Put A into (HL), and increment HL
             ram[(unsigned short)[state getHL_big]] = [state getA];
-            [state setHL_big:([state getHL_big] + 1)];
+            prevHL = [state getHL_big];
+            [state setHL_big:(prevHL + 1)];
             PRINTDBG("0x%02x -- LD (HL+),A -- HL = 0x%02x; (HL) = 0x%02x; A = %i\n", currentInstruction,
                      [state getHL_big], ram[(unsigned short)[state getHL_big]],
                      [state getA]);

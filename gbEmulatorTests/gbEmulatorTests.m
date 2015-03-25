@@ -136,5 +136,77 @@ describe(@"Instructions LD (nn),A", ^{
         });
     });
 });
+describe(@"Instructions LD (HL+/-),A", ^{
+    __block emulatorMain * subject = nil;
+    __block char * testRam = nil;
+    __block romState * testState = nil;
+    __block int8_t testA = 0;
+    __block int16_t oldHL = 0;
+    __block int16_t testHL = 0;
+    __block short instruction = 0;
+    beforeEach(^{
+        testState = [romState mock];
+        [testState stub:@selector(getPC)
+              andReturn:theValue(0)];
+        testRam = malloc(sizeof(char) * TESTRAMSIZE);
+        subject = [[emulatorMain alloc] init];
+        [subject stub:@selector(currentState)
+            andReturn:testState];
+    });
+    context(@"when current instruction is 0x22 -- LD (HL+),A", ^{
+        beforeEach(^{
+            setupRamForTest(testRam, TESTRAMSIZE, -9);
+            testHL = 4;
+            oldHL = testHL;
+            testRam[testHL] = 5;
+            [testState stub:@selector(getA)
+                  andReturn:theValue(testA)];
+            [testState stub:@selector(setHL_big:)];
+            [testState stub:@selector(getHL_big)
+                  andReturn:theValue(testHL)];
+            [subject stub:@selector(ram)
+                andReturn:theValue(testRam)];
+            [subject stub:@selector(currentState)
+                andReturn:testState];
+            instruction = 0x22;
+        });
+        it(@"should copy A into (HL) -- old value of HL", ^{
+            execute0x2Instruction(testState, instruction, testRam, nil, nil);
+            [[theValue(testRam[(unsigned short)oldHL]) should] equal:theValue(testA)];
+        });
+        it(@"should increment HL after copy", ^{
+            [[testState should] receive:@selector(setHL_big:)
+                          withArguments:theValue(oldHL + 1)];
+            execute0x2Instruction(testState, instruction, testRam, nil, nil);
+        });
+    });
+    context(@"when current instruction is 0x32 -- LD (HL-),A", ^{
+        beforeEach(^{
+            setupRamForTest(testRam, TESTRAMSIZE, -9);
+            testHL = 4;
+            oldHL = testHL;
+            testRam[testHL] = 5;
+            [testState stub:@selector(getA)
+                  andReturn:theValue(testA)];
+            [testState stub:@selector(getHL_big)
+                  andReturn:theValue(testHL)];
+            [testState stub:@selector(setHL_big:)];
+            [subject stub:@selector(ram)
+                andReturn:theValue(testRam)];
+            [subject stub:@selector(currentState)
+                andReturn:testState];
+            instruction = 0x32;
+        });
+        it(@"should copy A into (HL) -- old value of HL", ^{
+            execute0x2Instruction(testState, instruction, testRam, nil, nil);
+            [[theValue(testRam[(unsigned short)oldHL]) should] equal:theValue(testA)];
+        });
+        it(@"should decrement HL after copy", ^{
+            [[testState should] receive:@selector(setHL_big:)
+                          withArguments:theValue(oldHL - 1)];
+            execute0x3Instruction(testState, instruction, testRam, nil, nil);
+        });
+    });
+});
 
 SPEC_END
