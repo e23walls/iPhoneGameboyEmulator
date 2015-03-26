@@ -160,6 +160,11 @@ extern const unsigned short interruptEnableRegister;
     return self;
 }
 
+- (void) dealloc
+{
+    free(self.ram);
+}
+
 - (void) runRom
 {
     PRINTDBG("\nRunning rom '%s'\n\n", [[self.currentRom romName] cStringUsingEncoding:NSUTF8StringEncoding]);

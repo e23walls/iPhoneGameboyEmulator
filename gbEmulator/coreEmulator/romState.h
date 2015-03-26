@@ -10,7 +10,6 @@
 
 @interface romState : NSObject
 
-- (romState *) init;
 - (void) setPC:(unsigned short)newPC;
 - (unsigned short) getPC;
 - (void) incrementPC;
