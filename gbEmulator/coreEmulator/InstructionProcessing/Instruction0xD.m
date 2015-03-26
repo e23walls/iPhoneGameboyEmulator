@@ -1,6 +1,7 @@
 #import "emulatorMain.h"
 
-extern void (^enableInterrupts)(bool, char *);;
+extern void (^enableInterrupts)(bool, char *);
+extern int16_t (^get16BitWordFromRAM)(short, char *);
 
 void (^execute0xDInstruction)(romState *,
                               int8_t,
@@ -23,8 +24,7 @@ void (^execute0xDInstruction)(romState *,
             prev_short = [state getSP];
             if ([state getCFlag] == false)
             {
-                d16 = ((ram[[state getSP]] & 0x00ff) << 8) | \
-                (((ram[[state getSP]+1] & 0xff00) >> 8) & 0x0ff);
+                d16 = get16BitWordFromRAM([state getSP], ram);
                 [state setSP:([state getSP]+2)];
                 [state setPC:(unsigned short)d16];
             }
@@ -33,8 +33,7 @@ void (^execute0xDInstruction)(romState *,
             break;
         case 1:
             // POP DE - Pop two bytes from SP into DE, and increment SP twice
-            d16 = ((ram[[state getSP]] & 0x00ff) << 8) | \
-            (((ram[[state getSP]+1] & 0xff00) >> 8) & 0x0ff);
+            d16 = get16BitWordFromRAM([state getSP], ram);
             [state setDE_big:d16];
             [state setSP:([state getSP] + 2)];
             PRINTDBG("0x%02x -- POP DE -- DE = 0x%02x -- SP is now at 0x%02x; (SP) = 0x%02x\n", currentInstruction & 0xff,
@@ -121,8 +120,7 @@ void (^execute0xDInstruction)(romState *,
             prev_short = [state getSP];
             if ([state getCFlag] == true)
             {
-                d16 = ((ram[[state getSP]] & 0x00ff) << 8) | \
-                (((ram[[state getSP]+1] & 0xff00) >> 8) & 0x0ff);
+                d16 = get16BitWordFromRAM([state getSP], ram);
                 [state setSP:([state getSP]+2)];
                 [state setPC:(unsigned short)d16];
             }
@@ -131,8 +129,7 @@ void (^execute0xDInstruction)(romState *,
             break;
         case 9:
             // RETI -- RET + enable interrupts
-            d16 = ((ram[[state getSP]] & 0x00ff) << 8) | \
-            (((ram[[state getSP]+1] & 0xff00) >> 8) & 0x0ff);
+            d16 = get16BitWordFromRAM([state getSP], ram);
             [state setSP:([state getSP]+2)];
             [state setPC:(unsigned short)d16];
             *incrementPC = false;

@@ -64,6 +64,7 @@ void (^execute0xcbEInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0xcbFInstruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^servicedInterrupt)(char *, int8_t);
 void (^pushPCForISR)(romState *, char *, unsigned short);
+int16_t (^get16BitWordFromRAM)(short, char *);
 
 #pragma mark - enableInterrupts
 void (^enableInterrupts)(bool, char *) = ^(bool maybe, char * ram)
@@ -91,6 +92,12 @@ void (^setKeysInMemory)(char *, int) = ^(char * ram, int buttons)
     {
         ram[joypadDataRegister] |= buttons & 0b00001111;
     }
+};
+
+int16_t (^get16BitWordFromRAM)(short, char *) = ^(short offset, char * ram)
+{
+    return (int16_t)(((ram[offset + 1] & 0x00ff) << 8) |
+        (((ram[offset])) & 0x0ff));
 };
 
 #pragma mark - executeInstruction

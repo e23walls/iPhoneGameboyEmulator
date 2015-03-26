@@ -1,5 +1,6 @@
 #import "emulatorMain.h"
 
+extern int16_t (^get16BitWordFromRAM)(short, char *);
 
 void (^execute0xEInstruction)(romState *,
                               int8_t,
@@ -33,8 +34,7 @@ void (^execute0xEInstruction)(romState *,
             break;
         case 1:
             // POP HL - Pop two bytes from SP into HL, and increment SP twice
-            d16 = ((ram[[state getSP]] & 0x00ff) << 8) | \
-            (((ram[[state getSP]+1] & 0xff00) >> 8) & 0x0ff);
+            d16 = get16BitWordFromRAM([state getSP], ram);
             [state setHL_big:d16];
             [state setSP:([state getSP] + 2)];
             PRINTDBG("0x%02x -- POP HL -- HL = 0x%02x -- SP is now at 0x%02x; (SP) = 0x%02x\n", currentInstruction & 0xff,
@@ -113,8 +113,7 @@ void (^execute0xEInstruction)(romState *,
             break;
         case 9:
             // JP (HL) -- Jump to address in register HL
-            d16 = (([state getHL_big] & 0x00ff) << 8) | \
-                ((([state getHL_big] & 0xff00) >> 8) & 0x0ff);
+            d16 = get16BitWordFromRAM([state getHL_big], ram);
             [state setPC:d16];
             *incrementPC = false;
             PRINTDBG("0x%02x -- JP (HL) -- HL = 0x%02x -- PC is now at 0x%02x\n", currentInstruction & 0xff,

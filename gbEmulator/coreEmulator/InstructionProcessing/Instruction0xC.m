@@ -2,6 +2,7 @@
 
 extern void (^enableInterrupts)(bool, char *);
 extern void (^execute0xcbInstruction)(romState *, char *, bool *, int8_t *, int8_t);
+extern int16_t (^get16BitWordFromRAM)(short, char *);
 
 void (^execute0xCInstruction)(romState *,
                               int8_t,
@@ -24,8 +25,7 @@ void (^execute0xCInstruction)(romState *,
             prev_short = [state getSP];
             if ([state getZFlag] == false)
             {
-                d16 = ((ram[[state getSP]] & 0x00ff) << 8) | \
-                (((ram[[state getSP]+1] & 0xff00) >> 8) & 0x0ff);
+                d16 = get16BitWordFromRAM([state getSP], ram);
                 [state setSP:([state getSP]+2)];
                 [state setPC:(unsigned short)d16];
             }
@@ -34,8 +34,7 @@ void (^execute0xCInstruction)(romState *,
             break;
         case 1:
             // POP BC -- Pop two bytes from SP into BC, and increment SP twice
-            d16 = ((ram[[state getSP]] & 0x00ff) << 8) | \
-            (((ram[[state getSP]+1] & 0xff00) >> 8) & 0x0ff);
+            d16 = get16BitWordFromRAM([state getSP], ram);
             [state setBC_big:d16];
             [state setSP:([state getSP] + 2)];
             PRINTDBG("0x%02x -- POP BC -- BC = 0x%02x -- SP is now at 0x%02x; (SP) = 0x%02x\n", currentInstruction & 0xff,
@@ -45,10 +44,10 @@ void (^execute0xCInstruction)(romState *,
             break;
         case 2:
             // JP NZ,a16 -- If !Z, jump to address a16
+            // This d16 fetch is correct, thanks to unit testing
             if ([state getZFlag] == false)
             {
-                d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
-                    (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+                d16 = get16BitWordFromRAM([state getPC], ram);
                 [state setPC:d16];
             }
             PRINTDBG("0x%02x -- JP NZ,a16 -- a16 = 0x%02x -- PC is now at 0x%02x\n", currentInstruction & 0xff,
@@ -57,8 +56,7 @@ void (^execute0xCInstruction)(romState *,
             break;
         case 3:
             // JP a16 -- Jump to address a16
-            d16 = ((ram[[state getPC]] & 0x00ff) << 8) | \
-            (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+            d16 = get16BitWordFromRAM([state getPC], ram);
             [state setPC:d16];
             PRINTDBG("0x%02x -- JP a16 -- a16 = 0x%02x -- PC is now at 0x%02x\n", currentInstruction & 0xff,
                      d16 & 0xffff, [state getPC]);
@@ -67,8 +65,7 @@ void (^execute0xCInstruction)(romState *,
         case 4:
             // CALL NZ,a16 -- If !Z, push PC onto stack, and jump to a16
             prev_short = [state getSP];
-            d16 = ((ram[[state getPC]] & 0x00ff) << 8) |
-                (((ram[[state getPC]+1] & 0xff00) >> 8) & 0x0ff);
+            d16 = get16BitWordFromRAM([state getPC], ram);
             [state incrementPC];
             if ([state getZFlag] == false)
             {
@@ -124,8 +121,7 @@ void (^execute0xCInstruction)(romState *,
             prev_short = [state getSP];
             if ([state getZFlag] == true)
             {
-                d16 = ((ram[[state getSP]] & 0x00ff) << 8) | \
-                (((ram[[state getSP]+1] & 0xff00) >> 8) & 0x0ff);
+                d16 = get16BitWordFromRAM([state getSP], ram);
                 [state setSP:([state getSP]+2)];
                 [state setPC:(unsigned short)d16];
             }
@@ -134,8 +130,7 @@ void (^execute0xCInstruction)(romState *,
             break;
         case 9:
             // RET -- return from subroutine; pop two bytes from SP and go to that address
-            d16 = ((ram[[state getSP]] & 0x00ff) << 8) | \
-            (((ram[[state getSP]+1] & 0xff00) >> 8) & 0x0ff);
+            d16 = get16BitWordFromRAM([state getSP], ram);
             [state setSP:([state getSP]+2)];
             [state setPC:(unsigned short)d16];
             *incrementPC =false;
