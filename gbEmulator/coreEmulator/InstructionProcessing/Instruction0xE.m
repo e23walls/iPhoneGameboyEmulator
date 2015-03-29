@@ -113,7 +113,7 @@ void (^execute0xEInstruction)(romState *,
             break;
         case 9:
             // JP (HL) -- Jump to address in register HL
-            d16 = get16BitWordFromRAM([state getHL_big], ram);
+            d16 = [state getHL_big];
             [state setPC:d16];
             *incrementPC = false;
             PRINTDBG("0x%02x -- JP (HL) -- HL = 0x%02x -- PC is now at 0x%02x\n", currentInstruction & 0xff,

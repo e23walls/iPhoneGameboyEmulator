@@ -133,7 +133,7 @@ void (^execute0xCInstruction)(romState *,
             d16 = get16BitWordFromRAM([state getSP], ram);
             [state setSP:([state getSP]+2)];
             [state setPC:(unsigned short)d16];
-            *incrementPC =false;
+            *incrementPC = false;
             PRINTDBG("0x%02x -- RET -- PC is now 0x%02x; (SP) = 0x%02x\n", currentInstruction & 0xff,
                      [state getPC],
                      (((ram[[state getSP]]) & 0x00ff)) |

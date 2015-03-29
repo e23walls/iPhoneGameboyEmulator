@@ -100,15 +100,13 @@ int16_t (^get16BitWordFromRAM)(short, char *) = ^(short offset, char * ram)
         (((ram[offset])) & 0x0ff));
 };
 
-#pragma mark - executeInstruction
-void (^executeInstruction)(romState *, char *, bool *, int8_t *) =
+void (^executeGivenInstruction)(romState *, int8_t, char *, bool *, int8_t *) =
 ^(romState * state,
+  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
-    unsigned char currentInstruction = ram[[state getPC]-1];
-    PRINTDBG("Instruction address: 0x%02x\n", ([state getPC]-1) & 0xff);
     switch ((currentInstruction & 0xF0) >> 4) {
         case 0:
             execute0x0Instruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
@@ -159,6 +157,18 @@ void (^executeInstruction)(romState *, char *, bool *, int8_t *) =
             execute0xFInstruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
             break;
     }
+};
+
+#pragma mark - executeInstruction
+void (^executeInstruction)(romState *, char *, bool *, int8_t *) =
+^(romState * state,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
+    unsigned char currentInstruction = ram[[state getPC]-1];
+    PRINTDBG("Instruction address: 0x%02x\n", ([state getPC]-1) & 0xff);
+    executeGivenInstruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
 };
 
 #pragma mark - execute0xcbInstruction
