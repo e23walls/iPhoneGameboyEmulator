@@ -178,7 +178,7 @@ void (^execute0xCInstruction)(romState *,
             prev_short = [state getSP];
             d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0xff);
             [state doubleIncPC];
-            [state setSP:(prev_short - 2)];
+            [state setSP:([state getSP] - 2)];
             ram[[state getSP]] = (int8_t)(([state getPC]) & 0xff);
             ram[[state getSP]+1] = (int8_t)((([state getPC]) & 0xff00) >> 8);
             [state setPC:d16];

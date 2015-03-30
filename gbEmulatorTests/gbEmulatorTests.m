@@ -56,6 +56,8 @@ describe(@"Instructions", ^{
     __block short instruction = 0;
     __block int16_t oldHL = 0;
     __block int16_t testHL = 0;
+    __block int16_t testSP = 0;
+    __block int16_t testPC = 0;
     __block short test16BitData = 0;
     __block int8_t test8BitData = 0;
     beforeEach(^{
@@ -67,6 +69,8 @@ describe(@"Instructions", ^{
         testDE = 0;
         oldHL = 0;
         testHL = 0;
+        testSP = 0;
+        testPC = 0;
         instruction = 0;
         test16BitData = 0;
         test8BitData = 0;
@@ -879,6 +883,64 @@ describe(@"Instructions", ^{
                 executeGivenInstruction(testState, instruction, testRam, incPC, nil);
                 free(incPC);
                 [[theValue(testRam[0x0ffff]) should] equal:theValue(0b00011111)];
+            });
+        });
+    });
+    describe(@"Subroutine calling instructions -- CALL <cond,> addr", ^{
+        beforeEach(^{
+            testState = [romState mock];
+            [testState stub:@selector(doubleIncPC)];
+            // After we've incremented PC
+            [testState stub:@selector(getPC)
+                  andReturn:theValue(1)];
+            [testState stub:@selector(setPC:)];
+            [testState stub:@selector(getHL_big)];
+            [testState stub:@selector(addToPC:)];
+            [testState stub:@selector(incrementPC)];
+            testRam = malloc(sizeof(char) * TESTRAMSIZE);
+            setupRamForTest(testRam, TESTRAMSIZE, 3);
+            // 16-bit address = 0x4645; do not change unless also
+            // changing the test which checks this value!
+            testRam[1] = 0x45;
+            testRam[2] = 0x46;
+            [testState stub:@selector(getSP)
+                  andReturn:theValue(3)];
+            [testState stub:@selector(setSP:)];
+            subject = [[emulatorMain alloc] init];
+            [subject stub:@selector(currentState)
+                andReturn:testState];
+            [subject stub:@selector(ram)
+                andReturn:theValue(testRam)];
+        });
+        context(@"when instruction is CALL a16 -- 0xCD", ^{
+            beforeEach(^{
+                instruction = 0xcd;
+            });
+            it(@"should set PC to 16-bit data", ^{
+                [[testState should] receive:@selector(setPC:)
+                              withArguments:theValue(0x4645)];
+                bool * incPC = malloc(sizeof(bool));
+                *incPC = false;
+                executeGivenInstruction(testState, instruction, testRam, incPC, nil);
+                free(incPC);
+            });
+            it(@"should set memory at SP to what was in PC", ^{
+                testSP = [testState getSP];
+                testPC = [testState getPC];
+                bool * incPC = malloc(sizeof(bool));
+                *incPC = false;
+                executeGivenInstruction(testState, instruction, testRam, incPC, nil);
+                [[theValue(get16BitWordFromRAM(testSP, subject.ram)) should] equal:theValue(testPC)];
+                free(incPC);
+            });
+            it(@"should subtract 2 from SP", ^{
+                [[testState should] receive:@selector(setSP:)
+                              withArguments:theValue([testState getSP]-2)];
+
+                bool * incPC = malloc(sizeof(bool));
+                *incPC = false;
+                executeGivenInstruction(testState, instruction, testRam, incPC, nil);
+                free(incPC);
             });
         });
     });
