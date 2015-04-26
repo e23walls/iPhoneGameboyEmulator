@@ -6,7 +6,7 @@ A work in progress. Check back periodically!
 ####Compiling and running the code:
 
 Use Xcode.
-Your device must be jailbroken to run it, with an OS version of at least 7.1.
+Your device must have an OS version of at least 7.1.
 
 ####Controls:
 
