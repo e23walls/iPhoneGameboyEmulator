@@ -16,70 +16,216 @@ void (^execute0xcbAInstruction)(romState *,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
-    switch (currentInstruction & 0x0F) {
-        case 0:
             // RES 4,B -- Reset bit 4 of B
             [state setB:resetBit(currentInstruction, [state getB], @"B", 4)];
-            break;
-        case 1:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 4,C -- Reset bit 4 of C
             [state setC:resetBit(currentInstruction, [state getC], @"C", 4)];
-            break;
-        case 2:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 4,D -- Reset bit 4 of D
             [state setD:resetBit(currentInstruction, [state getD], @"D", 4)];
-            break;
-        case 3:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 4,E -- Reset bit 4 of E
             [state setE:resetBit(currentInstruction, [state getE], @"E", 4)];
-            break;
-        case 4:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 4,H -- Reset bit 4 of H
             [state setH:resetBit(currentInstruction, [state getH], @"B", 4)];
-            break;
-        case 5:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 4,L -- Reset bit 4 of L
             [state setL:resetBit(currentInstruction, [state getL], @"L", 4)];
-            break;
-        case 6:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 4,(HL) -- Reset bit 4 of (HL)
             ram[(unsigned short)[state getHL_big]] = resetBit(currentInstruction, ram[(unsigned short)[state getHL_big]], @"(HL)", 4);
-            break;
-        case 7:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 4,A -- Reset bit 4 of A
             [state setA:resetBit(currentInstruction, [state getA], @"A", 4)];
-            break;
-        case 8:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 5,B -- Reset bit 5 of B
             [state setB:resetBit(currentInstruction, [state getB], @"B", 5)];
-            break;
-        case 9:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 5,C -- Reset bit 5 of C
             [state setC:resetBit(currentInstruction, [state getC], @"C", 5)];
-            break;
-        case 0xA:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 5,D -- Reset bit 5 of D
             [state setD:resetBit(currentInstruction, [state getD], @"D", 5)];
-            break;
-        case 0xB:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 5,E -- Reset bit 5 of E
             [state setE:resetBit(currentInstruction, [state getE], @"E", 5)];
-            break;
-        case 0xC:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 5,H -- Reset bit 5 of H
             [state setH:resetBit(currentInstruction, [state getH], @"H", 5)];
-            break;
-        case 0xD:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 5,L -- Reset bit 5 of L
             [state setL:resetBit(currentInstruction, [state getL], @"L", 5)];
-            break;
-        case 0xE:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 5,(HL) -- Reset bit 5 of (HL)
             ram[(unsigned short)[state getHL_big]] = resetBit(currentInstruction, ram[(unsigned short)[state getHL_big]], @"(HL)", 5);
-            break;
-        case 0xF:
+};
+void (^execute0xcbAInstruction)(romState *,
+                                int8_t,
+                                char *,
+                                bool *,
+                                int8_t *) =
+^(romState * state,
+  int8_t currentInstruction,
+  char * ram,
+  bool * incrementPC,
+  int8_t * interruptsEnabled)
+{
             // RES 5,A -- Reset bit 5 of A
             [state setA:resetBit(currentInstruction, [state getA], @"A", 5)];
-            break;
-    }
 };

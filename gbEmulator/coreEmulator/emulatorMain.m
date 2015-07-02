@@ -35,6 +35,10 @@ const int biosSize = 256;
 
 @end
 
+typedef void (^InstructionBlock)(romState *, int8_t, char *, bool *, int8_t *);
+
+extern void (^execute0x00Instruction)(romState *, int8_t, char *, bool *, int8_t *);
+
 extern void (^executeInstruction)(romState *, char *, bool *, int8_t *);
 extern void (^execute0x0Instruction)(romState *, int8_t, char *, bool *, int8_t *);
 extern void (^execute0x1Instruction)(romState *, int8_t, char *, bool *, int8_t *);
@@ -167,6 +171,38 @@ extern const unsigned short interruptEnableRegister;
 
 - (void) runRom
 {
+    NSMutableDictionary * blocks = [NSMutableDictionary dictionaryWithObjectsAndKeys:execute0x00Instruction, @(0x00),
+                                    execute0x01Instruction, @(0x01),
+                                    execute0x02Instruction, @(0x02)
+                                    execute0x03Instruction, @(0x03),
+                                    execute0x04Instruction, @(0x04),
+                                    execute0x05Instruction, @(0x05),
+                                    execute0x06Instruction, @(0x06),
+                                    execute0x07Instruction, @(0x07),
+                                    execute0x08Instruction, @(0x08),
+                                    execute0x09Instruction, @(0x09),
+                                    execute0x0AInstruction, @(0x0A),
+                                    execute0x0BInstruction, @(0x0B),
+                                    execute0x0CInstruction, @(0x0C),
+                                    execute0x0DInstruction, @(0x0D),
+                                    execute0x0EInstruction, @(0x0E),
+                                    execute0x0FInstruction, @(0x0F),
+                                    execute0x10Instruction, @(0x10),
+                                    execute0x11Instruction, @(0x11),
+                                    execute0x12Instruction, @(0x12)
+                                    execute0x13Instruction, @(0x13),
+                                    execute0x14Instruction, @(0x14),
+                                    execute0x15Instruction, @(0x15),
+                                    execute0x16Instruction, @(0x16),
+                                    execute0x17Instruction, @(0x17),
+                                    execute0x18Instruction, @(0x18),
+                                    execute0x19Instruction, @(0x19),
+                                    execute0x1AInstruction, @(0x1A),
+                                    execute0x1BInstruction, @(0x1B),
+                                    execute0x1CInstruction, @(0x1C),
+                                    execute0x1DInstruction, @(0x1D),
+                                    execute0x1EInstruction, @(0x1E),
+                                    execute0x1FInstruction, @(0x1F)];
     PRINTDBG("\nRunning rom '%s'\n\n", [[self.currentRom romName] cStringUsingEncoding:NSUTF8StringEncoding]);
     interruptsEnabled = 0;
     // This is probably necessary...

@@ -29,6 +29,10 @@ const unsigned short joypadDataRegister = 0xff00;
 const unsigned char RET = 0xc9;
 const unsigned char RETI = 0xd9;
 
+typedef void (^InstructionBlock)(romState *, int8_t, char *, bool *, int8_t *);
+
+NSMutableDictionary * blocks = [NSMutableDictionary dictionaryWithObjectsAndKeys:execute0x00Instruction, @(0x00)];
+
 void (^execute0x0Instruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0x1Instruction)(romState *, int8_t, char *, bool *, int8_t *);
 void (^execute0x2Instruction)(romState *, int8_t, char *, bool *, int8_t *);
