@@ -53,6 +53,7 @@
 		9C79FC361A6DAFC400C76513 /* up-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C79FC2D1A6DAFC400C76513 /* up-arrow.png */; };
 		9C79FC3A1A6DC66B00C76513 /* romState.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C79FC391A6DC66B00C76513 /* romState.m */; };
 		9C79FC3D1A6DF40400C76513 /* emulatorMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C79FC3C1A6DF40400C76513 /* emulatorMain.m */; };
+		9CB14B0B1B7D2ED0002B20C9 /* InstructionSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB14B0A1B7D2ED0002B20C9 /* InstructionSet.m */; };
 		9CB9CC0C1A6C9CC300DA02DD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB9CC0B1A6C9CC300DA02DD /* Foundation.framework */; };
 		9CB9CC0E1A6C9CC300DA02DD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB9CC0D1A6C9CC300DA02DD /* CoreGraphics.framework */; };
 		9CB9CC101A6C9CC300DA02DD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB9CC0F1A6C9CC300DA02DD /* UIKit.framework */; };
@@ -134,6 +135,8 @@
 		9C79FC391A6DC66B00C76513 /* romState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = romState.m; path = coreEmulator/romState.m; sourceTree = "<group>"; };
 		9C79FC3B1A6DF40400C76513 /* emulatorMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = emulatorMain.h; path = coreEmulator/emulatorMain.h; sourceTree = "<group>"; };
 		9C79FC3C1A6DF40400C76513 /* emulatorMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = emulatorMain.m; path = coreEmulator/emulatorMain.m; sourceTree = "<group>"; };
+		9CB14B091B7D2B10002B20C9 /* InstructionSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InstructionSet.h; sourceTree = "<group>"; };
+		9CB14B0A1B7D2ED0002B20C9 /* InstructionSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstructionSet.m; sourceTree = "<group>"; };
 		9CB9CC081A6C9CC300DA02DD /* gbEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gbEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CB9CC0B1A6C9CC300DA02DD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9CB9CC0D1A6C9CC300DA02DD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -195,6 +198,8 @@
 		9C0AB1971A98FE1800479721 /* InstructionProcessing */ = {
 			isa = PBXGroup;
 			children = (
+				9CB14B091B7D2B10002B20C9 /* InstructionSet.h */,
+				9CB14B0A1B7D2ED0002B20C9 /* InstructionSet.m */,
 				9C0AB19F1A9964A800479721 /* Instructions.m */,
 				9C0AB1C11A997FAD00479721 /* NormalInstructions */,
 				9C0AB1C21A997FC800479721 /* CBInstructions */,
@@ -563,6 +568,7 @@
 				9C0AB1D61A99815300479721 /* Instruction0xcb3.m in Sources */,
 				9C0AB1BA1A997ECF00479721 /* Instruction0x9.m in Sources */,
 				9C0AB1DA1A99815300479721 /* Instruction0xcb7.m in Sources */,
+				9CB14B0B1B7D2ED0002B20C9 /* InstructionSet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

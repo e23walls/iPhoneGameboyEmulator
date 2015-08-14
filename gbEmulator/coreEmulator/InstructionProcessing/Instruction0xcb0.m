@@ -1,12 +1,10 @@
 #import "emulatorMain.h"
 
 void (^execute0xcb00Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -22,15 +20,13 @@ void (^execute0xcb00Instruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RLC B -- B was 0x%02x; B is now 0x%02x\n", currentInstruction, prev, [state getB]);
+    PRINTDBG("0xCB00 -- RLC B -- B was 0x%02x; B is now 0x%02x\n", prev, [state getB]);
 };
 void (^execute0xcb01Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -46,15 +42,13 @@ void (^execute0xcb01Instruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RLC C -- C was 0x%02x; C is now 0x%02x\n", currentInstruction, prev, [state getC]);
+    PRINTDBG("0xCB01 -- RLC C -- C was 0x%02x; C is now 0x%02x\n", prev, [state getC]);
 };
 void (^execute0xcb02Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -70,15 +64,13 @@ void (^execute0xcb02Instruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RLC D -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, prev, [state getD]);
+    PRINTDBG("0xCB02 -- RLC D -- D was 0x%02x; D is now 0x%02x\n", prev, [state getD]);
 };
 void (^execute0xcb03Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -94,15 +86,13 @@ void (^execute0xcb03Instruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RLC E -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, prev, [state getE]);
+    PRINTDBG("0xCB03 -- RLC E -- E was 0x%02x; E is now 0x%02x\n", prev, [state getE]);
 };
 void (^execute0xcb04Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -118,15 +108,13 @@ void (^execute0xcb04Instruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RLC H -- H was 0x%02x; H is now 0x%02x\n", currentInstruction, prev, [state getH]);
+    PRINTDBG("0xCB04 -- RLC H -- H was 0x%02x; H is now 0x%02x\n", prev, [state getH]);
 };
 void (^execute0xcb05Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -142,15 +130,13 @@ void (^execute0xcb05Instruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RLC L -- L was 0x%02x; L is now 0x%02x\n", currentInstruction, prev, [state getL]);
+    PRINTDBG("0xCB05 -- RLC L -- L was 0x%02x; L is now 0x%02x\n", prev, [state getL]);
 };
 void (^execute0xcb06Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -166,15 +152,13 @@ void (^execute0xcb06Instruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RLC (HL) -- (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction, prev, ram[(unsigned short)[state getHL_big]]);
+    PRINTDBG("0xCB06 -- RLC (HL) -- (HL) was 0x%02x; (HL) is now 0x%02x\n", prev, ram[(unsigned short)[state getHL_big]]);
 };
 void (^execute0xcb07Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -190,15 +174,13 @@ void (^execute0xcb07Instruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RLC A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction, prev, [state getA]);
+    PRINTDBG("0xCB07 -- RLC A -- A was 0x%02x; A is now 0x%02x\n", prev, [state getA]);
 };
 void (^execute0xcb08Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -214,15 +196,13 @@ void (^execute0xcb08Instruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RRC B -- B was 0x%02x; B is now 0x%02x\n", currentInstruction, prev, [state getB]);
+    PRINTDBG("0xCB08 -- RRC B -- B was 0x%02x; B is now 0x%02x\n", prev, [state getB]);
 };
 void (^execute0xcb09Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -238,15 +218,13 @@ void (^execute0xcb09Instruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RRC C -- C was 0x%02x; C is now 0x%02x\n", currentInstruction, prev, [state getC]);
+    PRINTDBG("0xCB09 -- RRC C -- C was 0x%02x; C is now 0x%02x\n", prev, [state getC]);
 };
 void (^execute0xcb0AInstruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -262,15 +240,13 @@ void (^execute0xcb0AInstruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RRC D -- D was 0x%02x; D is now 0x%02x\n", currentInstruction, prev, [state getD]);
+    PRINTDBG("0xCB0A -- RRC D -- D was 0x%02x; D is now 0x%02x\n", prev, [state getD]);
 };
 void (^execute0xcb0BInstruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -286,15 +262,13 @@ void (^execute0xcb0BInstruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RRC E -- E was 0x%02x; E is now 0x%02x\n", currentInstruction, prev, [state getE]);
+    PRINTDBG("0xCB0B -- RRC E -- E was 0x%02x; E is now 0x%02x\n", prev, [state getE]);
 };
 void (^execute0xcb0CInstruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -310,15 +284,13 @@ void (^execute0xcb0CInstruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RRC H -- H was 0x%02x; H is now 0x%02x\n", currentInstruction, prev, [state getH]);
+    PRINTDBG("0xCB0C -- RRC H -- H was 0x%02x; H is now 0x%02x\n", prev, [state getH]);
 };
 void (^execute0xcb0DInstruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -334,15 +306,13 @@ void (^execute0xcb0DInstruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RRC L -- L was 0x%02x; L is now 0x%02x\n", currentInstruction, prev, [state getL]);
+    PRINTDBG("0xCB0D -- RRC L -- L was 0x%02x; L is now 0x%02x\n", prev, [state getL]);
 };
 void (^execute0xcb0EInstruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -358,15 +328,13 @@ void (^execute0xcb0EInstruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RRC (HL) -- (HL) was 0x%02x; (HL) is now 0x%02x\n", currentInstruction, prev, ram[(unsigned short)[state getHL_big]]);
+    PRINTDBG("0xCB0E -- RRC (HL) -- (HL) was 0x%02x; (HL) is now 0x%02x\n", prev, ram[(unsigned short)[state getHL_big]]);
 };
 void (^execute0xcb0FInstruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -382,5 +350,5 @@ void (^execute0xcb0FInstruction)(romState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0xCB%02x -- RRC A -- A was 0x%02x; A is now 0x%02x\n", currentInstruction, prev, [state getA]);
+    PRINTDBG("0xCB0F -- RRC A -- A was 0x%02x; A is now 0x%02x\n", prev, [state getA]);
 };

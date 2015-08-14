@@ -19,231 +19,199 @@ int8_t (^setBit)(int8_t,
 };
 
 void (^execute0xcbC0Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 0,B -- Set bit 0 of B
-    [state setB:setBit(currentInstruction, [state getB], @"B", 0)];
+    [state setB:setBit(0xC0, [state getB], @"B", 0)];
 };
 
 void (^execute0xcbC1Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 0,C -- Set bit 0 of C
-    [state setC:setBit(currentInstruction, [state getC], @"C", 0)];
+    [state setC:setBit(0xC1, [state getC], @"C", 0)];
 };
 void (^execute0xcbC2Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 0,D -- Set bit 0 of D
-    [state setD:setBit(currentInstruction, [state getD], @"D", 0)];
+    [state setD:setBit(0xC2, [state getD], @"D", 0)];
 };
 void (^execute0xcbC3Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 0,E -- Set bit 0 of E
-    [state setE:setBit(currentInstruction, [state getE], @"E", 0)];
+    [state setE:setBit(0xC3, [state getE], @"E", 0)];
 };
 void (^execute0xcbC4Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 0,H -- Set bit 0 of H
-    [state setH:setBit(currentInstruction, [state getH], @"H", 0)];
+    [state setH:setBit(0xC4, [state getH], @"H", 0)];
 };
 void (^execute0xcbC5Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 0,L -- Set bit 0 of L
-    [state setL:setBit(currentInstruction, [state getL], @"L", 0)];
+    [state setL:setBit(0xC5, [state getL], @"L", 0)];
 };
 void (^execute0xcbC6Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 0,(HL) -- Set bit 0 of (HL)
-    ram[(unsigned short)[state getHL_big]] = setBit(currentInstruction,
+    ram[(unsigned short)[state getHL_big]] = setBit(0xC6,
                                                     ram[(unsigned short)[state getHL_big]],
                                                     @"(HL)", 0);
 };
 void (^execute0xcbC7Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 0,A -- Set bit 0 of A
-    [state setA:setBit(currentInstruction, [state getA], @"A", 0)];
+    [state setA:setBit(0xC7, [state getA], @"A", 0)];
 };
 void (^execute0xcbC8Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 1,B -- Set bit 1 of B
-    [state setB:setBit(currentInstruction, [state getB], @"B", 1)];
+    [state setB:setBit(0xC8, [state getB], @"B", 1)];
 };
 void (^execute0xcbC9Instruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 1,C -- Set bit 1 of C
-    [state setC:setBit(currentInstruction, [state getC], @"C", 1)];
+    [state setC:setBit(0xC9, [state getC], @"C", 1)];
 };
 void (^execute0xcbCAInstruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 1,D -- Set bit 1 of D
-    [state setD:setBit(currentInstruction, [state getD], @"D", 1)];
+    [state setD:setBit(0xCA, [state getD], @"D", 1)];
 };
 void (^execute0xcbCBInstruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 1,E -- Set bit 1 of E
-    [state setE:setBit(currentInstruction, [state getE], @"E", 1)];
+    [state setE:setBit(0xCB, [state getE], @"E", 1)];
 };
 void (^execute0xcbCCInstruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 1,H -- Set bit 1 of H
-    [state setH:setBit(currentInstruction, [state getH], @"H", 1)];
+    [state setH:setBit(0xCC, [state getH], @"H", 1)];
 };
 void (^execute0xcbCDInstruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 1,L -- Set bit 1 of L
-    [state setL:setBit(currentInstruction, [state getL], @"L", 1)];
+    [state setL:setBit(0xCD, [state getL], @"L", 1)];
 };
 void (^execute0xcbCEInstruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 1,(HL) -- Set bit 1 of (HL)
-    ram[(unsigned short)[state getHL_big]] = setBit(currentInstruction,
+    ram[(unsigned short)[state getHL_big]] = setBit(0xCE,
                                                     ram[(unsigned short)[state getHL_big]],
                                                     @"(HL)", 1);
 };
 void (^execute0xcbCFInstruction)(romState *,
-                                int8_t,
                                 char *,
                                 bool *,
                                 int8_t *) =
 ^(romState * state,
-  int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
     // SET 1,A -- Set bit 1 of A
-    [state setA:setBit(currentInstruction, [state getA], @"A", 1)];
+    [state setA:setBit(0xCF, [state getA], @"A", 1)];
 };
