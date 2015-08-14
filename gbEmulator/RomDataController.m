@@ -6,17 +6,17 @@
 //  Copyright (c) 2015 Emily Walls. All rights reserved.
 //
 
-#import "romDataController.h"
+#import "RomDataController.h"
 
-@interface romDataController ()
+@interface RomDataController ()
 
 - (void) getListOfRomsFromFileSystem;
 
 @end
 
-@implementation romDataController
+@implementation RomDataController
 
-- (romDataController *) init
+- (RomDataController *) init
 {
     self = [super init];
     if (self)
@@ -68,7 +68,7 @@ void (^displayAlert) (NSString *) = ^(NSString * romDirectory)
                     NSLog(@"Substring = '%@'\n", last3Chars);
                     if ([last3Chars isEqual: @".gb"]) // I.e., is this file a GameBoy ROM?
                     {
-                        rom * r = [[rom alloc] init];
+                        Rom * r = [[Rom alloc] init];
                         r.romName = [fm displayNameAtPath:item];
                         r.fullPath = [romDirFull stringByAppendingString:item];
                         [self addRomsObject:r];
@@ -97,7 +97,7 @@ void (^displayAlert) (NSString *) = ^(NSString * romDirectory)
     }
 }
 
-- (void) addRomsObject:(rom *)romToAdd
+- (void) addRomsObject:(Rom *)romToAdd
 {
     [self.roms addObject:romToAdd];
 }
@@ -107,7 +107,7 @@ void (^displayAlert) (NSString *) = ^(NSString * romDirectory)
     return self.roms.count;
 }
 
-- (rom *) objectInRomsAtIndex:(NSUInteger)index
+- (Rom *) objectInRomsAtIndex:(NSUInteger)index
 {
     return self.roms[index];
 }

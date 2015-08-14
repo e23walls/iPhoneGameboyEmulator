@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "rom.h"
-#import "emulatorMain.h"
+#import "Rom.h"
+#import "EmulatorMain.h"
 
 @interface ViewController : UIViewController <UIGestureRecognizerDelegate>
 {
@@ -24,11 +24,11 @@
     IBOutlet UIButton * bButton;
     IBOutlet UIButton * startButton;
     IBOutlet UIButton * selectButton;
-    emulatorMain * emulator;
+    EmulatorMain * emulator;
 }
 
 - (ViewController *) init;
-- (ViewController *) initWithCurrentRom:(rom *) theRom;
+- (ViewController *) initWithCurrentRom:(Rom *) theRom;
 
 - (IBAction)upButtonDown:(id)sender;
 - (IBAction)downButtonDown:(id)sender;

@@ -2,11 +2,11 @@
 
 extern int16_t (^get16BitWordFromRAM)(short, char *);
 
-void (^execute0xE0Instruction)(romState *,
+void (^execute0xE0Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -26,11 +26,11 @@ void (^execute0xE0Instruction)(romState *,
              d16 & 0xffff, prev & 0xff, ram[(unsigned short)d16] & 0xff,
              [state getA] & 0xff);
 };
-void (^execute0xE1Instruction)(romState *,
+void (^execute0xE1Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -46,11 +46,11 @@ void (^execute0xE1Instruction)(romState *,
              (((ram[[state getSP]]) & 0x00ff)) |
              (((ram[[state getSP]+1]) << 8) & 0xff00));
 };
-void (^execute0xE2Instruction)(romState *,
+void (^execute0xE2Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -67,11 +67,11 @@ void (^execute0xE2Instruction)(romState *,
              d16 & 0xffff, prev & 0xff, ram[(unsigned short)d16] & 0xff, \
              [state getA] & 0xff);
 };
-void (^execute0xE3Instruction)(romState *,
+void (^execute0xE3Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -79,11 +79,11 @@ void (^execute0xE3Instruction)(romState *,
     // No instruction
     PRINTDBG("0xE3 -- invalid instruction\n");
 };
-void (^execute0xE4Instruction)(romState *,
+void (^execute0xE4Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -91,11 +91,11 @@ void (^execute0xE4Instruction)(romState *,
     // No instruction
     PRINTDBG("0xE4 -- invalid instruction\n");
 };
-void (^execute0xE5Instruction)(romState *,
+void (^execute0xE5Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -112,11 +112,11 @@ void (^execute0xE5Instruction)(romState *,
              (((ram[[state getSP]]) & 0x00ff)) |
              (((ram[[state getSP]+1]) << 8) & 0xff00));
 };
-void (^execute0xE6Instruction)(romState *,
+void (^execute0xE6Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -136,11 +136,11 @@ void (^execute0xE6Instruction)(romState *,
     PRINTDBG("0xE6 -- AND d8 -- A was 0x%02x; A is now 0x%02x; d8 = 0x%02x\n",
              prev & 0xff, [state getA], d8 & 0xff);
 };
-void (^execute0xE7Instruction)(romState *,
+void (^execute0xE7Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -158,11 +158,11 @@ void (^execute0xE7Instruction)(romState *,
              (((ram[[state getSP]]) & 0x00ff)) |
              (((ram[[state getSP]+1]) << 8) & 0xff00));
 };
-void (^execute0xE8Instruction)(romState *,
+void (^execute0xE8Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -186,11 +186,11 @@ void (^execute0xE8Instruction)(romState *,
     PRINTDBG("0xE8 -- ADD SP,r8 (r8 = %d) -- SP was 0x%02x; SP is now 0x%02x\n",
              (int)d8, prev_short, [state getSP]);
 };
-void (^execute0xE9Instruction)(romState *,
+void (^execute0xE9Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -204,11 +204,11 @@ void (^execute0xE9Instruction)(romState *,
     PRINTDBG("0xE9 -- JP (HL) -- HL = 0x%02x -- PC is now at 0x%02x\n",
              d16 & 0xffff, [state getPC]);
 };
-void (^execute0xEAInstruction)(romState *,
+void (^execute0xEAInstruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -225,11 +225,11 @@ void (^execute0xEAInstruction)(romState *,
              [state getA], (unsigned short)d16, \
              (unsigned short)prev_short, ram[(unsigned short)d16]);
 };
-void (^execute0xEBInstruction)(romState *,
+void (^execute0xEBInstruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -237,11 +237,11 @@ void (^execute0xEBInstruction)(romState *,
     // No instruction
     PRINTDBG("0xEB -- invalid instruction\n");
 };
-void (^execute0xECInstruction)(romState *,
+void (^execute0xECInstruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -249,11 +249,11 @@ void (^execute0xECInstruction)(romState *,
     // No instruction
     PRINTDBG("0xEC -- invalid instruction\n");
 };
-void (^execute0xEDInstruction)(romState *,
+void (^execute0xEDInstruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -261,11 +261,11 @@ void (^execute0xEDInstruction)(romState *,
     // No instruction
     PRINTDBG("0xED -- invalid instruction\n");
 };
-void (^execute0xEEInstruction)(romState *,
+void (^execute0xEEInstruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -285,11 +285,11 @@ void (^execute0xEEInstruction)(romState *,
     PRINTDBG("0xEE -- XOR d8 -- A was 0x%02x; A is now 0x%02x; d8 = 0x%02x\n",
              prev & 0xff, [state getA], d8 & 0xff);
 };
-void (^execute0xEFInstruction)(romState *,
+void (^execute0xEFInstruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)

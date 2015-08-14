@@ -30,14 +30,14 @@
 
 @implementation ViewController
 
-static rom * currentRom;
+static Rom * currentRom;
 
 - (ViewController *) init
 {
     self = [super init];
     return self;
 }
-- (ViewController *) initWithCurrentRom:(rom *)theRom
+- (ViewController *) initWithCurrentRom:(Rom *)theRom
 {
     self = [super init];
     if (self != nil)
@@ -52,7 +52,7 @@ static rom * currentRom;
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     romTitleLabel.text = currentRom.romName;
-    emulator = [[emulatorMain alloc] initWithRom:currentRom];
+    emulator = [[EmulatorMain alloc] initWithRom:currentRom];
 //    [self romNotRunning];
 }
 

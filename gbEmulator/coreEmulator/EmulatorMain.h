@@ -1,13 +1,5 @@
-//
-//  emulatorMain.h
-//  gbEmulator
-//
-//  Created by Emily Walls on 2015-01-19.
-//  Copyright (c) 2015 Emily Walls. All rights reserved.
-//
-
-#import "rom.h"
-#import "romState.h"
+#import "Rom.h"
+#import "RomState.h"
 
 #define MYDEBUG
 
@@ -26,9 +18,9 @@ enum interruptFlagBitNames
     JOYPAD_PRESS
 };
 
-@interface emulatorMain : NSObject
+@interface EmulatorMain : NSObject
 
-- (emulatorMain *) initWithRom: (rom *) theRom;
+- (EmulatorMain *) initWithRom: (Rom *) theRom;
 - (void) runRom;
 - (void) pressedKey:(int8_t)offset;
 - (void) printKeys;

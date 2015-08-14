@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class romDataController;
+@class RomDataController;
 
-@interface gbTableViewController : UITableViewController
+@interface GbTableViewController : UITableViewController
 
-@property (strong, nonatomic) romDataController * rdc;
+@property (strong, nonatomic) RomDataController * rdc;
 
 @end
