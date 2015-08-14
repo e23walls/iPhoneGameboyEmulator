@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "rom.h"
+#import "Rom.h"
 
-@interface romDataController : NSObject
+@interface RomDataController : NSObject
 
 @property (strong, nonatomic) NSMutableArray * roms;
 
 - (NSInteger) numberOfRoms;
-- (rom *) objectInRomsAtIndex:(NSUInteger)index;
-- (void) addRomsObject:(rom *)romToAdd;
+- (Rom *) objectInRomsAtIndex:(NSUInteger)index;
+- (void) addRomsObject:(Rom *)romToAdd;
 
 @end

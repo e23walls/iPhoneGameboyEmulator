@@ -18,11 +18,11 @@ int8_t (^resetBit)(int8_t,
     return reg;
 };
 
-void (^execute0xcb80Instruction)(romState *,
+void (^execute0xcb80Instruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -30,11 +30,11 @@ void (^execute0xcb80Instruction)(romState *,
     // RES 0,B -- Reset bit 0 of B
     [state setB:resetBit(0x80, [state getB], @"B", 0)];
 };
-void (^execute0xcb81Instruction)(romState *,
+void (^execute0xcb81Instruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -42,11 +42,11 @@ void (^execute0xcb81Instruction)(romState *,
     // RES 0,C -- Reset bit 0 of C
     [state setC:resetBit(0x81, [state getC], @"C", 0)];
 };
-void (^execute0xcb82Instruction)(romState *,
+void (^execute0xcb82Instruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -54,11 +54,11 @@ void (^execute0xcb82Instruction)(romState *,
     // RES 0,D -- Reset bit 0 of D
     [state setD:resetBit(0x82, [state getD], @"D", 0)];
 };
-void (^execute0xcb83Instruction)(romState *,
+void (^execute0xcb83Instruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -66,11 +66,11 @@ void (^execute0xcb83Instruction)(romState *,
     // RES 0,E -- Reset bit 0 of E
     [state setE:resetBit(0x83, [state getE], @"E", 0)];
 };
-void (^execute0xcb84Instruction)(romState *,
+void (^execute0xcb84Instruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -78,11 +78,11 @@ void (^execute0xcb84Instruction)(romState *,
     // RES 0,H -- Reset bit 0 of H
     [state setH:resetBit(0x84, [state getH], @"H", 0)];
 };
-void (^execute0xcb85Instruction)(romState *,
+void (^execute0xcb85Instruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -90,11 +90,11 @@ void (^execute0xcb85Instruction)(romState *,
     // RES 0,L -- Reset bit 0 of L
     [state setL:resetBit(0x85, [state getL], @"L", 0)];
 };
-void (^execute0xcb86Instruction)(romState *,
+void (^execute0xcb86Instruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -102,11 +102,11 @@ void (^execute0xcb86Instruction)(romState *,
     // RES 0,(HL) -- Reset bit 0 of (HL)
     ram[(unsigned short)[state getHL_big]] = resetBit(0x86, ram[(unsigned short)[state getHL_big]], @"(HL)", 0);
 };
-void (^execute0xcb87Instruction)(romState *,
+void (^execute0xcb87Instruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -114,11 +114,11 @@ void (^execute0xcb87Instruction)(romState *,
     // RES 0,A -- Reset bit 0 of A
     [state setA:resetBit(0x87, [state getA], @"A", 0)];
 };
-void (^execute0xcb88Instruction)(romState *,
+void (^execute0xcb88Instruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -126,11 +126,11 @@ void (^execute0xcb88Instruction)(romState *,
     // RES 1,B -- Reset bit 1 of B
     [state setB:resetBit(0x88, [state getB], @"B", 1)];
 };
-void (^execute0xcb89Instruction)(romState *,
+void (^execute0xcb89Instruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -138,11 +138,11 @@ void (^execute0xcb89Instruction)(romState *,
     // RES 1,C -- Reset bit 1 of C
     [state setC:resetBit(0x89, [state getC], @"C", 1)];
 };
-void (^execute0xcb8AInstruction)(romState *,
+void (^execute0xcb8AInstruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -150,11 +150,11 @@ void (^execute0xcb8AInstruction)(romState *,
     // RES 1,D -- Reset bit 1 of D
     [state setD:resetBit(0x8A, [state getD], @"D", 1)];
 };
-void (^execute0xcb8BInstruction)(romState *,
+void (^execute0xcb8BInstruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -162,11 +162,11 @@ void (^execute0xcb8BInstruction)(romState *,
     // RES 1,E -- Reset bit 1 of E
     [state setE:resetBit(0x8B, [state getE], @"E", 1)];
 };
-void (^execute0xcb8CInstruction)(romState *,
+void (^execute0xcb8CInstruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -174,11 +174,11 @@ void (^execute0xcb8CInstruction)(romState *,
     // RES 1,H -- Reset bit 1 of H
     [state setH:resetBit(0x8C, [state getH], @"H", 1)];
 };
-void (^execute0xcb8DInstruction)(romState *,
+void (^execute0xcb8DInstruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -186,11 +186,11 @@ void (^execute0xcb8DInstruction)(romState *,
     // RES 1,L -- Reset bit 1 of L
     [state setL:resetBit(0x8D, [state getL], @"L", 1)];
 };
-void (^execute0xcb8EInstruction)(romState *,
+void (^execute0xcb8EInstruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -198,11 +198,11 @@ void (^execute0xcb8EInstruction)(romState *,
     // RES 1,(HL) -- Reset bit 1 of (HL)
     ram[(unsigned short)[state getHL_big]] = resetBit(0x8E, ram[(unsigned short)[state getHL_big]], @"(HL)", 1);
 };
-void (^execute0xcb8FInstruction)(romState *,
+void (^execute0xcb8FInstruction)(RomState *,
                                 char *,
                                 bool *,
                                 int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface rom : NSObject
+@interface Rom : NSObject
 
 @property NSString * fullPath;
 @property NSString * romName;

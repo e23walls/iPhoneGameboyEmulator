@@ -1,14 +1,6 @@
-//
-//  romState.m
-//  gbEmulator
-//
-//  Created by Emily Walls on 2015-01-19.
-//  Copyright (c) 2015 Emily Walls. All rights reserved.
-//
+#import "RomState.h"
 
-#import "romState.h"
-
-@interface romState ()
+@interface RomState ()
 {
     unsigned short PC;
     unsigned short SP;
@@ -21,9 +13,9 @@
 
 @end
 
-@implementation romState
+@implementation RomState
 
-- (romState *) init
+- (RomState *) init
 {
     self = [super init];
     if (self)

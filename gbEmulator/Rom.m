@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Emily Walls. All rights reserved.
 //
 
-#import "rom.h"
+#import "Rom.h"
 
-@implementation rom
+@implementation Rom
 
 @end

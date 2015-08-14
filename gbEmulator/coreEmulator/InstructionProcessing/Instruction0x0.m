@@ -1,10 +1,10 @@
 #import "emulatorMain.h"
 
-void (^execute0x00Instruction)(romState *,
+void (^execute0x00Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -13,11 +13,11 @@ void (^execute0x00Instruction)(romState *,
     PRINTDBG("0x00 -- no-op\n");
 };
 
-void (^execute0x01Instruction)(romState *,
+void (^execute0x01Instruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -30,11 +30,11 @@ void (^execute0x01Instruction)(romState *,
     [state setBC_big:d16];
     PRINTDBG("0x01 -- LD BC, d16 -- d16 = %i\n", d16);
 };
-void (^execute0x02Instruction)(romState *,
+void (^execute0x02Instruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -45,11 +45,11 @@ void (^execute0x02Instruction)(romState *,
     ram[(unsigned short)[state getBC_big]] = [state getA];
     PRINTDBG("0x02 -- LD (BC), A -- A is now %d\n", [state getA]);
 };
-void (^execute0x03Instruction)(romState *,
+void (^execute0x03Instruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -58,11 +58,11 @@ void (^execute0x03Instruction)(romState *,
     [state setBC_big:([state getBC_big] + 1)];
     PRINTDBG("0x03 -- INC BC; BC is now %i\n", [state getBC_big]);
 };
-void (^execute0x04Instruction)(romState *,
+void (^execute0x04Instruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -79,11 +79,11 @@ void (^execute0x04Instruction)(romState *,
                   C:([state getCFlag])];
     PRINTDBG("0x04 -- INC B; B is now %i\n", [state getB]);
 };
-void (^execute0x05Instruction)(romState *,
+void (^execute0x05Instruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -99,11 +99,11 @@ void (^execute0x05Instruction)(romState *,
                   C:([state getCFlag])];
     PRINTDBG("0x05 -- DEC B; B was %i; B is now %i\n", prev, [state getB]);
 };
-void (^execute0x06Instruction)(romState *,
+void (^execute0x06Instruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -116,11 +116,11 @@ void (^execute0x06Instruction)(romState *,
     [state setB:d8];
     PRINTDBG("0x06 -- LD B, d8 -- d8 = %i\n", (int)d8);
 };
-void (^execute0x07Instruction)(romState *,
+void (^execute0x07Instruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -143,11 +143,11 @@ void (^execute0x07Instruction)(romState *,
                   C:C];
     PRINTDBG("0x07 -- RLCA -- A was 0x%02x; A is now 0x%02x\n", A, [state getA]);
 };
-void (^execute0x08Instruction)(romState *,
+void (^execute0x08Instruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -165,11 +165,11 @@ void (^execute0x08Instruction)(romState *,
              (ram[[state getSP]] & 0x0ff) | (ram[[state getSP]+1] << 8),
              prev_short, (ram[(unsigned short)(d16+1)] & 0x0ff) | (ram[(unsigned short)d16] << 8));
 };
-void (^execute0x09Instruction)(romState *,
+void (^execute0x09Instruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -194,11 +194,11 @@ void (^execute0x09Instruction)(romState *,
     PRINTDBG("0x09 -- ADD HL,BC -- add BC (%i) and HL (%i) = %i\n", \
              [state getBC_big], prev_short, [state getHL_big]);
 };
-void (^execute0x0AInstruction)(romState *,
+void (^execute0x0AInstruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -208,11 +208,11 @@ void (^execute0x0AInstruction)(romState *,
     PRINTDBG("0x0A -- LD A,(BC) -- load (BC == %i -> %i) into A\n", \
              [state getBC_big], (int)ram[(unsigned short)[state getBC_big]]);
 };
-void (^execute0x0BInstruction)(romState *,
+void (^execute0x0BInstruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -225,11 +225,11 @@ void (^execute0x0BInstruction)(romState *,
     PRINTDBG("0x0B -- DEC BC -- BC was %i; BC is now %i\n", \
              prev_int, [state getBC_big]);
 };
-void (^execute0x0CInstruction)(romState *,
+void (^execute0x0CInstruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -250,11 +250,11 @@ void (^execute0x0CInstruction)(romState *,
     PRINTDBG("0x0C -- INC C -- C was %i; C is now %i\n", \
              prev, (int)[state getC]);
 };
-void (^execute0x0DInstruction)(romState *,
+void (^execute0x0DInstruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -275,11 +275,11 @@ void (^execute0x0DInstruction)(romState *,
     PRINTDBG("0x0D -- DEC C -- C was %i; C is now %i\n", \
              prev, (int)[state getC]);
 };
-void (^execute0x0EInstruction)(romState *,
+void (^execute0x0EInstruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -293,11 +293,11 @@ void (^execute0x0EInstruction)(romState *,
     PRINTDBG("0x0E -- LD C, d8 -- d8 = 0x%02x; C is now 0x%02x\n", d8 & 0xff,
              [state getC] & 0xff);
 };
-void (^execute0x0FInstruction)(romState *,
+void (^execute0x0FInstruction)(RomState *,
                                char *,
                                bool *,
                                int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)

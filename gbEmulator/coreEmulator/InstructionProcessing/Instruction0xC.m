@@ -1,14 +1,14 @@
 #import "emulatorMain.h"
 
 extern void (^enableInterrupts)(bool, char *);
-extern void (^executeGivenInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^executeGivenInstruction)(RomState *, int8_t, char *, bool *, int8_t *);
 extern int16_t (^get16BitWordFromRAM)(short, char *);
 
-void (^execute0xC0Instruction)(romState *,
+void (^execute0xC0Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -27,11 +27,11 @@ void (^execute0xC0Instruction)(romState *,
     PRINTDBG("0xC0 -- RET NZ -- PC is now 0x%02x; SP was 0x%02x; SP is now 0x%02x\n",
              prev_short & 0xffff, [state getSP] & 0xffff, [state getPC]);
 };
-void (^execute0xC1Instruction)(romState *,
+void (^execute0xC1Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -47,11 +47,11 @@ void (^execute0xC1Instruction)(romState *,
              (((ram[[state getSP]]) & 0x00ff)) |
              (((ram[[state getSP]+1]) << 8) & 0xff00));
 };
-void (^execute0xC2Instruction)(romState *,
+void (^execute0xC2Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -69,11 +69,11 @@ void (^execute0xC2Instruction)(romState *,
              d16 & 0xffff, [state getPC]);
     *incrementPC = false;
 };
-void (^execute0xC3Instruction)(romState *,
+void (^execute0xC3Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -87,11 +87,11 @@ void (^execute0xC3Instruction)(romState *,
              d16 & 0xffff, [state getPC]);
     *incrementPC = false;
 };
-void (^execute0xC4Instruction)(romState *,
+void (^execute0xC4Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -116,11 +116,11 @@ void (^execute0xC4Instruction)(romState *,
              (((ram[[state getSP]]) & 0x00ff)) |
              (((ram[[state getSP]+1]) << 8) & 0xff00));
 };
-void (^execute0xC5Instruction)(romState *,
+void (^execute0xC5Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -137,11 +137,11 @@ void (^execute0xC5Instruction)(romState *,
              (((ram[[state getSP]]) & 0x00ff)) |
              (((ram[[state getSP]+1]) << 8) & 0xff00));
 };
-void (^execute0xC6Instruction)(romState *,
+void (^execute0xC6Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -161,11 +161,11 @@ void (^execute0xC6Instruction)(romState *,
     PRINTDBG("0xC6 -- ADD d8 -- A was 0x%02x; A is now 0x%02x; d8 = 0x%02x\n",
              prev & 0xff, [state getA], d8 & 0xff);
 };
-void (^execute0xC7Instruction)(romState *,
+void (^execute0xC7Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -183,11 +183,11 @@ void (^execute0xC7Instruction)(romState *,
              (((ram[[state getSP]]) & 0x00ff)) |
              (((ram[[state getSP]+1]) << 8) & 0xff00));
 };
-void (^execute0xC8Instruction)(romState *,
+void (^execute0xC8Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -206,11 +206,11 @@ void (^execute0xC8Instruction)(romState *,
     PRINTDBG("0xC8 -- RET Z -- PC is now 0x%02x; SP was 0x%02x; SP is now 0x%02x\n", \
              prev_short & 0xffff, [state getSP] & 0xffff, [state getPC]);
 };
-void (^execute0xC9Instruction)(romState *,
+void (^execute0xC9Instruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -227,11 +227,11 @@ void (^execute0xC9Instruction)(romState *,
              (((ram[[state getSP]]) & 0x00ff)) |
              (((ram[[state getSP]+1]) << 8) & 0xff00));
 };
-void (^execute0xCAInstruction)(romState *,
+void (^execute0xCAInstruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -249,11 +249,11 @@ void (^execute0xCAInstruction)(romState *,
     PRINTDBG("0xCA -- JP Z,a16 -- a16 = 0x%02x -- PC is now at 0x%02x\n",
              d16 & 0xffff, [state getPC]);
 };
-void (^execute0xCBInstruction)(romState *,
+void (^execute0xCBInstruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -263,11 +263,11 @@ void (^execute0xCBInstruction)(romState *,
     int8_t currentInstruction = ram[[state getPC]];
     executeGivenInstruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
 };
-void (^execute0xCCInstruction)(romState *,
+void (^execute0xCCInstruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -290,11 +290,11 @@ void (^execute0xCCInstruction)(romState *,
              d16 & 0xffff, prev_short, [state getSP],
              [state getPC]);
 };
-void (^execute0xCDInstruction)(romState *,
+void (^execute0xCDInstruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -316,11 +316,11 @@ void (^execute0xCDInstruction)(romState *,
              (((ram[[state getSP]]) & 0x00ff)) |
              (((ram[[state getSP]+1]) << 8) & 0xff00));
 };
-void (^execute0xCEInstruction)(romState *,
+void (^execute0xCEInstruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -355,11 +355,11 @@ void (^execute0xCEInstruction)(romState *,
     PRINTDBG("0xCE -- ADC A,d8 -- A was 0x%02x; A is now 0x%02x; d8 = 0x%02x\n",
              prev, [state getA], d8 & 0xff);
 };
-void (^execute0xCFInstruction)(romState *,
+void (^execute0xCFInstruction)(RomState *,
                               char *,
                               bool *,
                               int8_t *) =
-^(romState * state,
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)

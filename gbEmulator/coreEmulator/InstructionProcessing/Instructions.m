@@ -30,10 +30,10 @@ const unsigned short joypadDataRegister = 0xff00;
 const unsigned char RET = 0xc9;
 const unsigned char RETI = 0xd9;
 
-typedef void (^InstructionBlock)(romState *, char *, bool *, int8_t *);
+typedef void (^InstructionBlock)(RomState *, char *, bool *, int8_t *);
 
 void (^servicedInterrupt)(char *, int8_t);
-void (^pushPCForISR)(romState *, char *, unsigned short);
+void (^pushPCForISR)(RomState *, char *, unsigned short);
 int16_t (^get16BitWordFromRAM)(short, char *);
 
 #pragma mark - enableInterrupts
@@ -70,8 +70,8 @@ int16_t (^get16BitWordFromRAM)(short, char *) = ^(short offset, char * ram)
         (((ram[offset])) & 0x0ff));
 };
 
-void (^executeGivenInstruction)(romState *, int8_t, char *, bool *, int8_t *) =
-^(romState * state,
+void (^executeGivenInstruction)(RomState *, int8_t, char *, bool *, int8_t *) =
+^(RomState * state,
   int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
@@ -83,8 +83,8 @@ void (^executeGivenInstruction)(romState *, int8_t, char *, bool *, int8_t *) =
 };
 
 #pragma mark - executeInstruction
-void (^executeInstruction)(romState *, char *, bool *, int8_t *) =
-^(romState * state,
+void (^executeInstruction)(RomState *, char *, bool *, int8_t *) =
+^(RomState * state,
   char * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
@@ -97,8 +97,8 @@ void (^executeInstruction)(romState *, char *, bool *, int8_t *) =
 // TODO: should the IF be set to 0 upon startup? (Hypothesis: Yes)
 // Note: We will denote being in an ISR by having '>' before
 // every instruction while in the ISR.
-void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *) = ^
-(romState * state,
+void (^interruptServiceRoutineCaller)(RomState *, char *, bool *, int8_t *) = ^
+(RomState * state,
  char * ram,
  bool * incrementPC,
  int8_t * interruptsEnabled)
@@ -182,8 +182,8 @@ void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *) = ^
     }
 };
 
-void (^pushPCForISR)(romState *, char *, unsigned short) = ^
-(romState * state,
+void (^pushPCForISR)(RomState *, char *, unsigned short) = ^
+(RomState * state,
  char * ram,
  unsigned short ISRAddress)
 {

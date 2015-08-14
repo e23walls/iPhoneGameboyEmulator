@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
-#import "gbTableViewController.h"
+#import "GbTableViewController.h"
 
 @implementation AppDelegate
 
@@ -18,7 +18,7 @@
     
     navigationController = [[UINavigationController alloc] init];
     [navigationController setNavigationBarHidden:YES];
-    gbTableViewController * vc = [[gbTableViewController alloc] init];
+    GbTableViewController * vc = [[GbTableViewController alloc] init];
     [navigationController pushViewController:vc animated:YES];
     [vc loadView];
     

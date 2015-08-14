@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Emily Walls. All rights reserved.
 //
 
-#import "emulatorMain.h"
+#import "EmulatorMain.h"
 #include <sys/stat.h>
 
 const int k = 1024;
@@ -17,15 +17,15 @@ const int biosSize = 256;
 // To fix this, simply AND the value being printed with 0xFF, if it's one byte, and 0xFFFF if it's two bytes.
 // Similarly, printing 2 byte values needs to have 4 hex digits display at once, not just 2.
 
-@interface emulatorMain ()
+@interface EmulatorMain ()
 {
     bool incrementPC;
     int8_t interruptsEnabled;
 }
 
 @property char * ram;
-@property rom * currentRom;
-@property romState * currentState;
+@property Rom * currentRom;
+@property RomState * currentState;
 /*
  Keys:
  [Start][Select][B][A][Down][Up][Left][Right]
@@ -35,17 +35,17 @@ const int biosSize = 256;
 
 @end
 
-void (^executeInstruction)(romState *, char *, bool *, int8_t *);
+void (^executeInstruction)(RomState *, char *, bool *, int8_t *);
 
 extern void (^setKeysInMemory)(char *, int);
 extern void (^enableInterrupts)(bool, char *);
-extern void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *);
+extern void (^interruptServiceRoutineCaller)(RomState *, char *, bool *, int8_t *);
 extern const unsigned short interruptFlagAddress;
 extern const unsigned short interruptEnableRegister;
 
-@implementation emulatorMain
+@implementation EmulatorMain
 
-- (emulatorMain *) initWithRom:(rom *) theRom
+- (EmulatorMain *) initWithRom:(Rom *) theRom
 {
     self = [super init];
     if (self != nil)
@@ -113,7 +113,7 @@ extern const unsigned short interruptEnableRegister;
         }
         fclose(romFileHandler);
         NSLog(@"Setting up the ROM initial state...");
-        self.currentState = [[romState alloc] init];
+        self.currentState = [[RomState alloc] init];
         enableInterrupts(false, self.ram);
         NSLog(@"Loading BIOS into RAM...");
         for (int i = 0; i < biosSize; i++)

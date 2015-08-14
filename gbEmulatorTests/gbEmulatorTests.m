@@ -1,19 +1,19 @@
 #import <Kiwi.h>
-#import "emulatorMain.h"
-#import "rom.h"
+#import "EmulatorMain.h"
+#import "Rom.h"
 
 #define TESTRAMSIZE 5
 
-extern void (^executeGivenInstruction)(romState *, int8_t, char *, bool *, int8_t *);
+extern void (^executeGivenInstruction)(RomState *, int8_t, char *, bool *, int8_t *);
 extern void (^servicedInterrupt)(char *, int8_t);
-extern void (^pushPCForISR)(romState *, char *, unsigned short);
+extern void (^pushPCForISR)(RomState *, char *, unsigned short);
 extern void (^enableInterrupts)(bool, char *);
 extern void (^setKeysInMemory)(char *, int);
-extern void (^executeInstruction)(romState *, char *, bool *, int8_t *);
-extern void (^interruptServiceRoutineCaller)(romState *, char *, bool *, int8_t *);
+extern void (^executeInstruction)(RomState *, char *, bool *, int8_t *);
+extern void (^interruptServiceRoutineCaller)(RomState *, char *, bool *, int8_t *);
 extern int16_t (^get16BitWordFromRAM)(short, char *);
 
-@interface romState (Testing)
+@interface RomState (Testing)
 
 @property unsigned short PC;
 @property unsigned short SP;
@@ -25,11 +25,11 @@ extern int16_t (^get16BitWordFromRAM)(short, char *);
 
 @end
 
-@interface emulatorMain (Testing)
+@interface EmulatorMain (Testing)
 
 @property char * ram;
-@property rom * currentRom;
-@property romState * currentState;
+@property Rom * currentRom;
+@property RomState * currentState;
 
 @end
 
@@ -47,9 +47,9 @@ void (^setupRamForTest)(char *, int, int) = ^
 SPEC_BEGIN(InstructionsTests)
 
 describe(@"Instructions", ^{
-    __block emulatorMain * subject = nil;
+    __block EmulatorMain * subject = nil;
     __block char * testRam = nil;
-    __block romState * testState = nil;
+    __block RomState * testState = nil;
     __block int8_t testA = 0;
     __block int16_t testBC = 0;
     __block int16_t testDE = 0;
@@ -79,14 +79,14 @@ describe(@"Instructions", ^{
         free(testRam);
     });
     describe(@"Instructions LD (nn),A", ^{
-        __block emulatorMain * subject = nil;
+        __block EmulatorMain * subject = nil;
         beforeEach(^{
-            testState = [romState mock];
+            testState = [RomState mock];
             [testState stub:@selector(doubleIncPC)];
             [testState stub:@selector(getPC)
                   andReturn:theValue(0)];
             testRam = malloc(sizeof(char) * TESTRAMSIZE);
-            subject = [[emulatorMain alloc] init];
+            subject = [[EmulatorMain alloc] init];
             [subject stub:@selector(currentState)
                 andReturn:testState];
         });
@@ -133,12 +133,12 @@ describe(@"Instructions", ^{
     });
     describe(@"Instructions LD (HL+/-),A", ^{
         beforeEach(^{
-            testState = [romState mock];
+            testState = [RomState mock];
             [testState stub:@selector(doubleIncPC)];
             [testState stub:@selector(getPC)
                   andReturn:theValue(0)];
             testRam = malloc(sizeof(char) * TESTRAMSIZE);
-            subject = [[emulatorMain alloc] init];
+            subject = [[EmulatorMain alloc] init];
             [subject stub:@selector(currentState)
                 andReturn:testState];
         });
@@ -199,7 +199,7 @@ describe(@"Instructions", ^{
     });
     describe(@"jump instructions -- JP/JR <cond,> a16", ^{
         beforeEach(^{
-            testState = [romState mock];
+            testState = [RomState mock];
             [testState stub:@selector(doubleIncPC)];
             [testState stub:@selector(getPC)
                   andReturn:theValue(1)];
@@ -213,7 +213,7 @@ describe(@"Instructions", ^{
             // changing the test which checks this value!
             testRam[1] = 0x45;
             testRam[2] = 0x46;
-            subject = [[emulatorMain alloc] init];
+            subject = [[EmulatorMain alloc] init];
             [subject stub:@selector(currentState)
                 andReturn:testState];
             [subject stub:@selector(ram)
@@ -595,7 +595,7 @@ describe(@"Instructions", ^{
     });
     describe(@"Return from subroutine instructions -- RET[I] <cond>", ^{
         beforeEach(^{
-            testState = [romState mock];
+            testState = [RomState mock];
             [testState stub:@selector(doubleIncPC)];
             // After we've incremented PC
             [testState stub:@selector(getPC)
@@ -613,7 +613,7 @@ describe(@"Instructions", ^{
             [testState stub:@selector(getSP)
                   andReturn:theValue(3)];
             [testState stub:@selector(setSP:)];
-            subject = [[emulatorMain alloc] init];
+            subject = [[EmulatorMain alloc] init];
             [subject stub:@selector(currentState)
                 andReturn:testState];
             [subject stub:@selector(ram)
@@ -888,7 +888,7 @@ describe(@"Instructions", ^{
     });
     describe(@"Subroutine calling instructions -- CALL <cond,> addr", ^{
         beforeEach(^{
-            testState = [romState mock];
+            testState = [RomState mock];
             [testState stub:@selector(doubleIncPC)];
             // After we've incremented PC
             [testState stub:@selector(getPC)
@@ -906,7 +906,7 @@ describe(@"Instructions", ^{
             [testState stub:@selector(getSP)
                   andReturn:theValue(3)];
             [testState stub:@selector(setSP:)];
-            subject = [[emulatorMain alloc] init];
+            subject = [[EmulatorMain alloc] init];
             [subject stub:@selector(currentState)
                 andReturn:testState];
             [subject stub:@selector(ram)

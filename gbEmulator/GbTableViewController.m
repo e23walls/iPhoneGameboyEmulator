@@ -6,21 +6,21 @@
 //  Copyright (c) 2015 Emily Walls. All rights reserved.
 //
 
-#import "gbTableViewController.h"
+#import "GbTableViewController.h"
 #import "ViewController.h"
-#import "rom.h"
-#import "romDataController.h"
+#import "Rom.h"
+#import "RomDataController.h"
 
-@interface gbTableViewController ()
+@interface GbTableViewController ()
 
 @end
 
-@implementation gbTableViewController
+@implementation GbTableViewController
 
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.rdc = [[romDataController alloc] init];
+    self.rdc = [[RomDataController alloc] init];
 }
 
 - (void) viewDidLoad
@@ -56,7 +56,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
 
-    rom * romAtIndex = [self.rdc objectInRomsAtIndex:indexPath.row];
+    Rom * romAtIndex = [self.rdc objectInRomsAtIndex:indexPath.row];
     cell.textLabel.text = romAtIndex.romName;
     
     return cell;
@@ -64,7 +64,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    rom * currRom = [self.rdc objectInRomsAtIndex:[self.tableView indexPathForSelectedRow].row];
+    Rom * currRom = [self.rdc objectInRomsAtIndex:[self.tableView indexPathForSelectedRow].row];
     ViewController * detailViewController = [[ViewController alloc] initWithCurrentRom:currRom];
     [self.navigationController pushViewController:detailViewController animated:NO];
     [self.navigationController setNavigationBarHidden:YES];
