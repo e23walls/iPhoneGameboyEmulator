@@ -247,7 +247,7 @@ void (^execute0x0CInstruction)(romState *,
                   N:false
                   H:H
                   C:[state getCFlag]];
-    PRINTDBG("0x%0C -- INC C -- C was %i; C is now %i\n", \
+    PRINTDBG("0x0C -- INC C -- C was %i; C is now %i\n", \
              prev, (int)[state getC]);
 };
 void (^execute0x0DInstruction)(romState *,
