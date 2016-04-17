@@ -1,7 +1,7 @@
 #import "emulatorMain.h"
 
 extern void (^enableInterrupts)(bool, char *);
-extern void (^executeGivenInstruction)(RomState *, int8_t, char *, bool *, int8_t *);
+extern void (^executeGivenInstruction)(RomState *, int8_t, char *, bool *, int8_t *, bool);
 extern int16_t (^get16BitWordFromRAM)(short, char *);
 
 void (^execute0xC0Instruction)(RomState *,
@@ -260,8 +260,9 @@ void (^execute0xCBInstruction)(RomState *,
 {
     // Instruction with 0xCB prefix
     PRINTDBG("CB instruction...\n");
-    int8_t currentInstruction = ram[[state getPC]];
-    executeGivenInstruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+    int8_t currentInstruction = (0xcb * 0x100) | ram[[state getPC]];
+    [state incrementPC];
+    executeGivenInstruction(state, currentInstruction, ram, incrementPC, interruptsEnabled, true);
 };
 void (^execute0xCCInstruction)(RomState *,
                               char *,

@@ -48,5 +48,6 @@
 - (IBAction)startButtonUp:(id)sender;
 - (IBAction)stopButton:(id)sender;
 - (IBAction)run:(id)sender;
+- (void) changeImageView:(UIImage *)image;
 
 @end

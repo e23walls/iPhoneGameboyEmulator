@@ -16,6 +16,9 @@ void (^execute0x10Instruction)(RomState *,
     //            while ((self.buttons ^ previousButtons) == 0)
     //            {/* Do nothing but wait */}
     PRINTDBG("0x10 -- STOP\n");
+    // Pause execution
+    // When view gets keyboard input, resume.
+    
 };
 void (^execute0x11Instruction)(RomState *,
                                char *,

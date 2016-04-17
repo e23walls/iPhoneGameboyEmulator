@@ -10,6 +10,7 @@
     int16_t DE;
     int16_t HL;
 }
+@property UIImage * screen;
 
 @end
 
@@ -27,12 +28,48 @@
         DE = 0;
         HL = 0;
         SP = 0xFFFE; // Highest word location in RAM
+        NSUInteger width = 160;
+        NSUInteger height = 144;
+//        NSInteger firstColour = 255;
+
+//        UInt32 * screenContent = (UInt32 *) calloc(height * width, sizeof(UInt32));
+
+        CGRect rect = CGRectMake(0.0f, 0.0f, width, height);
+
+        UIGraphicsBeginImageContext(rect.size);
+
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        UIColor * color = [UIColor blackColor];
+
+        CGContextSetFillColorWithColor(context, [color CGColor]);
+
+        CGContextFillRect(context, rect);
+
+        self.screen = UIGraphicsGetImageFromCurrentImageContext();
+        
+        UIGraphicsEndImageContext();
     }
     else
     {
         printf("Error! Couldn't allocate enough memory for ROM state!\n");
     }
     return self;
+}
+
+- (UIImage *) getScreen
+{
+    return self.screen;
+}
+
+- (void) setPoint:(int)x andY:(int)y andColour:(UIColor *)colour
+{
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGColorRef c = [colour CGColor];
+    CGContextSetFillColorWithColor(context, c);
+    CGContextFillRect(context, CGRectMake(x, y, 1.0, 1.0));
+    self.screen = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    // Need to tell view that the screen has changed...
 }
 
 #pragma mark - Flag methods
@@ -105,6 +142,11 @@
 - (void) addToSP:(int8_t)offset
 {
     SP += offset;
+}
+
+- (UIImage *) getImage
+{
+    return self.screen;
 }
 
 #pragma mark - Regular register methods

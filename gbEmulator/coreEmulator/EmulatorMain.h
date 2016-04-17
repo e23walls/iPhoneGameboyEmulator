@@ -24,5 +24,6 @@ enum interruptFlagBitNames
 - (void) runRom;
 - (void) pressedKey:(int8_t)offset;
 - (void) printKeys;
+- (UIImage *) getScreen;
 
 @end

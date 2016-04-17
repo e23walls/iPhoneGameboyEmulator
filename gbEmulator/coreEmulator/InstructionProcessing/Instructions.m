@@ -70,16 +70,21 @@ int16_t (^get16BitWordFromRAM)(short, char *) = ^(short offset, char * ram)
         (((ram[offset])) & 0x0ff));
 };
 
-void (^executeGivenInstruction)(RomState *, int8_t, char *, bool *, int8_t *) =
+void (^executeGivenInstruction)(RomState *, int8_t, char *, bool *, int8_t *, bool) =
 ^(RomState * state,
   int8_t currentInstruction,
   char * ram,
   bool * incrementPC,
-  int8_t * interruptsEnabled)
+  int8_t * interruptsEnabled,
+  bool isCB)
 {
     printf("CURRENT INSTRUCTION = 0x%02x\n", currentInstruction & 0xff);
     NSDictionary * blocks = [InstructionDictionary getConstDictionary];
-    ((InstructionBlock)(blocks[@(currentInstruction & 0xff)]))(state, ram, incrementPC, interruptsEnabled);
+    if (isCB) {
+        ((InstructionBlock)(blocks[@((0xcb * 0x100) | (currentInstruction & 0xff))]))(state, ram, incrementPC, interruptsEnabled);
+    } else {
+        ((InstructionBlock)(blocks[@(currentInstruction & 0xff)]))(state, ram, incrementPC, interruptsEnabled);
+    }
 };
 
 #pragma mark - executeInstruction
@@ -91,7 +96,7 @@ void (^executeInstruction)(RomState *, char *, bool *, int8_t *) =
 {
     unsigned char currentInstruction = ram[[state getPC]-1];
     PRINTDBG("Instruction address: 0x%02x\n", ([state getPC]-1) & 0xff);
-    executeGivenInstruction(state, currentInstruction, ram, incrementPC, interruptsEnabled);
+    executeGivenInstruction(state, currentInstruction, ram, incrementPC, interruptsEnabled, false);
 };
 
 // TODO: should the IF be set to 0 upon startup? (Hypothesis: Yes)

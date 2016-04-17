@@ -230,6 +230,12 @@ enum KeyNames
     }
 }
 
+- (void) changeImageView:(UIImage *)image
+{
+    UIImage * i = [emulator getScreen];
+    [imageView setImage:i];
+}
+
 - (void) romRunning:(BOOL)isRunning
 {
     isRunningRom = isRunning;

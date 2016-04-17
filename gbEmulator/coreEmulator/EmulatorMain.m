@@ -11,6 +11,14 @@
 
 const int k = 1024;
 const int ramSize = 64 * k; // For readability purposes; an unsigned short spans the same set of integers.
+
+/* ROM Bank 0:             0000 - 3FFF
+ * ROM Bank X:             4000 - 7FFF
+ * GPU VRAM:               8000 - 9FFF
+ * External/cartridge RAM: A000 - BFFF
+ * 
+ */
+
 const int biosSize = 256;
 
 // At some point, it'd be nice if the print statements didn't sign-extend negative values out to 32-bits.
@@ -20,6 +28,7 @@ const int biosSize = 256;
 @interface EmulatorMain ()
 {
     bool incrementPC;
+    bool isRunning;
     int8_t interruptsEnabled;
 }
 
@@ -50,6 +59,7 @@ extern const unsigned short interruptEnableRegister;
     self = [super init];
     if (self != nil)
     {
+        isRunning = true;
         incrementPC = true;
         self.buttons = 0b00000000;
         self.keys = calloc(8, sizeof(int));
@@ -87,7 +97,7 @@ extern const unsigned short interruptEnableRegister;
         BOOL hitEOF = NO;
         int counter = 0;
         ch = fgetc(romFileHandler);
-        while (counter < ramSize)
+        while (counter < ramSize - biosSize)
         {
             if (ch == EOF)
             {
@@ -95,7 +105,7 @@ extern const unsigned short interruptEnableRegister;
                 ch = 0;
                 printf("HIT EOF!\n");
             }
-            self.ram[counter] = (unsigned char)ch;
+            self.ram[counter+biosSize] = (unsigned char)ch;
             counter++;
             if (hitEOF == NO)
             {
@@ -133,13 +143,22 @@ extern const unsigned short interruptEnableRegister;
     free(self.ram);
 }
 
+- (UIImage *) getScreen
+{
+    if (self.currentState != nil)
+    {
+        return [self.currentState getScreen];
+    }
+    return nil;
+}
+
 - (void) runRom
 {
     PRINTDBG("\nRunning rom '%s'\n\n", [[self.currentRom romName] cStringUsingEncoding:NSUTF8StringEncoding]);
     interruptsEnabled = 0;
     // This is probably necessary...
     self.ram[interruptFlagAddress] = 0;
-    while ([self.currentState getPC] < ramSize)
+    while ([self.currentState getPC] < ramSize && isRunning)
     {
         // For when enabling interrupts doesn't take effect until after the next instruction.
         // Otherwise, the instruction can directly call the method enableInterrupts
@@ -172,6 +191,7 @@ extern const unsigned short interruptEnableRegister;
         // length of the current instruction at this point. It will
         // always be pointing 1 byte ahead of the current instruction.
         // If the current instruction is 1 byte, it should be correct.
+        // ^ That's an old comment...
         PRINTDBG("\nPC = 0x%02x\n", [self.currentState getPC]);
         incrementPC = true;
         if ([self interruptOccurred])
