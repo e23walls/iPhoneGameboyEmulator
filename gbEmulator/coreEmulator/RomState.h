@@ -45,7 +45,7 @@
 - (bool) getNFlag;
 - (bool) getHFlag;
 - (bool) getCFlag;
-- (void) printState:(char *)ram;
+- (void) printState:(int8_t *)ram;
 - (UIImage *) getScreen;
 
 // Keep track of registers, the display, timers, etc.

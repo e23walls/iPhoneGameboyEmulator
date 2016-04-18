@@ -278,7 +278,7 @@
 {
     HL = ((newHL & 0x00FF) << 8) | ((newHL & 0xFF00) >> 8);
 }
-- (void) printState:(char *)ram
+- (void) printState:(int8_t *)ram
 {
     printf("*****************************\n");
     printf("  A = 0x%02x; F = 0x%02x\n", A & 0xff, F & 0xff);
