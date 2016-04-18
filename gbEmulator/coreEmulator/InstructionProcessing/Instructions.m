@@ -17,18 +17,18 @@
 #import "InstructionSet.h"
 
 // Do not change these addresses!!!
-const unsigned short ISRAddress_VerticalBlank = 0x40;
-const unsigned short ISRAddress_LCDStatusTriggers = 0x48;
-const unsigned short ISRAddress_Timer = 0x50;
-const unsigned short ISRAddress_SerialLink = 0x58;
-const unsigned short ISRAddress_JoypadPress = 0x60;
-const unsigned short interruptFlagAddress = 0xff0f;
-const unsigned short interruptEnableRegister = 0xffff;
-const unsigned short joypadDataRegister = 0xff00;
+const unsigned short ISRAddress_VerticalBlank = 0x040;
+const unsigned short ISRAddress_LCDStatusTriggers = 0x048;
+const unsigned short ISRAddress_Timer = 0x050;
+const unsigned short ISRAddress_SerialLink = 0x058;
+const unsigned short ISRAddress_JoypadPress = 0x060;
+const unsigned short interruptFlagAddress = 0x0ff0f;
+const unsigned short interruptEnableRegister = 0x0ffff;
+const unsigned short joypadDataRegister = 0x0ff00;
 
 // Do not change these instruction definitions!
-const unsigned char RET = 0xc9;
-const unsigned char RETI = 0xd9;
+const unsigned char RET = 0x0c9;
+const unsigned char RETI = 0x0d9;
 
 typedef void (^InstructionBlock)(RomState *, int8_t *, bool *, int8_t *);
 
@@ -42,12 +42,12 @@ void (^enableInterrupts)(bool, int8_t *) = ^(bool maybe, int8_t * ram)
     if (maybe == true)
     {
         PRINTDBG("Interrupts have been ENabled...\n");
-        ram[0x0ffff] = 0b00011111;
+        ram[interruptEnableRegister] = 0b00011111;
     }
     else
     {
         PRINTDBG("Interrupts have been DISabled...\n");
-        ram[0x0ffff] = 0;
+        ram[interruptEnableRegister] = 0;
     }
 };
 

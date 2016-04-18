@@ -12,22 +12,9 @@
 const int k = 1024;
 const int ramSize = 64 * k; // For readability purposes; an unsigned short spans the same set of integers.
 const int switchRomBankEnd = 0x8000;
-int8_t * WX;
-int8_t * WY;
-//int8_t wx_curr;
-//int8_t wy_curr;
-int8_t * SCX;
-int8_t * SCY;
-//int8_t scx_curr;
-//int8_t scy_curr;
-int8_t * LCDC;
-int8_t * STAT;
-int8_t * LY;
-int8_t * LYC;
-int8_t * DMA;
-int8_t * BGP;
-int8_t * OBP0;
-int8_t * OBP1;
+
+extern const unsigned short interruptFlagAddress;
+extern const unsigned short interruptEnableRegister;
 
 /* ROM Bank 0:             0000 - 3FFF
  * ROM Bank X:             4000 - 7FFF
@@ -48,11 +35,32 @@ const int biosSize = 256;
     bool incrementPC;
     bool isRunning;
     int8_t interruptsEnabled;
+    time_t start;
+    time_t timer;
+    time_t clock_start;
+    pthread_mutex_t timerMutex;
+    int8_t * WX;
+    int8_t * WY;
+    int8_t * SCX;
+    int8_t * SCY;
+    int8_t * LCDC;
+    int8_t * STAT;
+    int8_t * LY;
+    int8_t * LYC;
+    int8_t * DMA;
+    int8_t * BGP;
+    int8_t * OBP0;
+    int8_t * OBP1;
+    int8_t * TIMA;
+    int8_t * TMA;
+    int8_t * TAC;
+    int8_t * DIV;
 }
 
 @property int8_t * ram;
 @property Rom * currentRom;
 @property RomState * currentState;
+@property NSTimer * t;
 /*
  Keys:
  [Start][Select][B][A][Down][Up][Left][Right]
@@ -80,9 +88,13 @@ extern const unsigned short interruptEnableRegister;
         isRunning = true;
         incrementPC = true;
         self.buttons = 0b00000000;
+        start = 0;
+        timer = 0;
+        clock_start = clock();
+        pthread_mutex_init(&timerMutex, NULL);
         self.keys = calloc(8, sizeof(int));
         self.currentRom = theRom;
-        self.ram = (int8_t *)malloc(ramSize * sizeof(char));
+        self.ram = (int8_t *)calloc(ramSize, sizeof(char));
         char bios[] = {0x31, 0xfe, 0xff, 0xaf, 0x21, 0xff, 0x9f, 0x32, 0xcb, 0x7c, 0x20, 0xfb, 0x21, 0x26, \
             0xff, 0x0e, 0x11, 0x3e, 0x80, 0x32, 0xe2, 0x0c, 0x3e, 0xf3, 0xe2, 0x32, 0x3e, 0x77, 0x77, 0x3e, 0xfc, \
             0xe0, 0x47, 0x11, 0x04, 0x01, 0x21, 0x10, 0x80, 0x1a, 0xcd, 0x95, 0x00, 0xcd, 0x96, 0x00, 0x13, 0x7b, \
@@ -165,21 +177,23 @@ extern const unsigned short interruptEnableRegister;
 -(void) setupRegisters
 {
     WX = self.ram + 0x0FF4B;
-//    wx_curr = *WX;
     WY = self.ram + 0x0FF4A;
-//    wy_curr = *WY;
     SCX = self.ram + 0x0FF43;
     SCY = self.ram + 0x0FF42;
-//    scx_curr = *SCX;
-//    scy_curr = *SCY;
     LCDC = self.ram + 0x0FF40;
     STAT = self.ram + 0x0FF41;
     LY = self.ram + 0x0FF44;
     LYC = self.ram + 0x0FF45;
     DMA = self.ram + 0x0FF46;
     BGP = self.ram + 0x0FF47;
+    *BGP = 0x0fc;
     OBP0 = self.ram + 0x0FF48;
     OBP1 = self.ram + 0x0FF49;
+    TIMA = self.ram + 0x0FF05;
+    TMA = self.ram + 0x0FF06;
+    TAC = self.ram + 0x0FF07;
+    DIV = self.ram + 0x0FF04;
+    *DIV = 0;
 }
 
 - (UIImage *) getScreen
@@ -191,12 +205,71 @@ extern const unsigned short interruptEnableRegister;
     return nil;
 }
 
+- (time_t) incrementTimerValue
+{
+    time_t curr = timer + 1;
+    pthread_mutex_lock(&timerMutex);
+    timer++;
+    pthread_mutex_unlock(&timerMutex);
+    return curr;
+}
+
+- (time_t) getTimerValue
+{
+    time_t ret = 0;
+    pthread_mutex_lock(&timerMutex);
+    ret = timer;
+    pthread_mutex_unlock(&timerMutex);
+    return ret;
+}
+
+- (void) clearTimerValue
+{
+    pthread_mutex_lock(&timerMutex);
+    timer = 0;
+    pthread_mutex_unlock(&timerMutex);
+}
+
+// Timer has frequency of 4.194304 MHz.
+- (void) fireTimers
+{
+    while (true)
+    {
+        // Busy waiting... Gross
+        // Note: TAC bits 0-1 indicate the clock input; bit 2 indicates the timer being on or off.
+        // TMV stores the timer value currently being used. The other counters have their own registers.
+        if (*TAC & 0b0100)
+        {
+            // This has race conditions. :( TODO: Fix!
+            int8_t curr = [self incrementTimerValue];
+            if (!(curr & (1 << 7)) && ((curr-1) & (1 << 7)))
+            {
+                // Overflow!
+                self.ram[interruptFlagAddress] |= (1 << TIMER_OVERFLOW);
+                PRINTDBG("Timer interrupt occurred! Timer overflowed; %f.\n", (float)(clock() - clock_start) * 1000000000/CLOCKS_PER_SEC);
+                clock_start = clock();
+            }
+            *DIV = curr;
+            
+            sleep(0.000000238418579);
+        }
+    }
+}
+
 - (void) runRom
 {
     PRINTDBG("\nRunning rom '%s'\n\n", [[self.currentRom romName] cStringUsingEncoding:NSUTF8StringEncoding]);
     interruptsEnabled = 0;
     // This is probably necessary...
     self.ram[interruptFlagAddress] = 0;
+    // AFTER HERE: timer is protected by the "timerMutex" mutex.
+
+    NSThread* timerThread = [[NSThread alloc] initWithTarget:self
+                                                 selector:@selector(fireTimers)
+                                                   object:nil];
+    [timerThread start];
+
+
     while ([self.currentState getPC] < ramSize && isRunning)
     {
         // For when enabling interrupts doesn't take effect until after the next instruction.
@@ -239,8 +312,10 @@ extern const unsigned short interruptEnableRegister;
             interruptServiceRoutineCaller(self.currentState, self.ram, &incrementPC, &interruptsEnabled);
         }
         executeInstruction(self.currentState, self.ram, &incrementPC, &interruptsEnabled);
+
         printf("After:\n");
         [self.currentState printState:self.ram];
+        PRINTDBG("BGP = 0x%02x\n", (0xff & *BGP));
         printf("\n\n");
     }
 }
@@ -250,6 +325,7 @@ extern const unsigned short interruptEnableRegister;
     self.ram[interruptFlagAddress] |= (1 << bit);
     PRINTDBG("Set IF flag bit #%i\n", bit);
 }
+
 - (bool) interruptOccurred
 {
     return (bool)(self.ram[interruptEnableRegister] & self.ram[interruptFlagAddress]);

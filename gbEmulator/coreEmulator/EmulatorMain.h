@@ -1,5 +1,6 @@
 #import "Rom.h"
 #import "RomState.h"
+#import <pthread.h>
 
 #define MYDEBUG
 
@@ -11,7 +12,7 @@
 
 enum interruptFlagBitNames
 {
-    VERTICAL_BLANK,
+    VERTICAL_BLANK = 0,
     LCD_STATUS_TRIGGERS,
     TIMER_OVERFLOW,
     SERIAL_LINK,
@@ -25,5 +26,9 @@ enum interruptFlagBitNames
 - (void) pressedKey:(int8_t)offset;
 - (void) printKeys;
 - (UIImage *) getScreen;
+- (void) fireTimers;
+- (time_t) incrementTimerValue;
+- (void) clearTimerValue;
+- (time_t) getTimerValue;
 
 @end
