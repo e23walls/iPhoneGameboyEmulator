@@ -1,11 +1,11 @@
 #import "emulatorMain.h"
 
 void (^execute0x30Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -24,11 +24,11 @@ void (^execute0x30Instruction)(RomState *,
 };
 
 void (^execute0x31Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -43,11 +43,11 @@ void (^execute0x31Instruction)(RomState *,
 };
 
 void (^execute0x32Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -63,11 +63,11 @@ void (^execute0x32Instruction)(RomState *,
 };
 
 void (^execute0x33Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -77,11 +77,11 @@ void (^execute0x33Instruction)(RomState *,
 };
 
 void (^execute0x34Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -98,11 +98,11 @@ void (^execute0x34Instruction)(RomState *,
 };
 
 void (^execute0x35Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -121,11 +121,11 @@ void (^execute0x35Instruction)(RomState *,
 };
 
 void (^execute0x36Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -139,11 +139,11 @@ void (^execute0x36Instruction)(RomState *,
 };
 
 void (^execute0x37Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -156,11 +156,11 @@ void (^execute0x37Instruction)(RomState *,
 };
 
 void (^execute0x38Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -179,11 +179,11 @@ void (^execute0x38Instruction)(RomState *,
 };
 
 void (^execute0x39Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -210,11 +210,11 @@ void (^execute0x39Instruction)(RomState *,
 };
 
 void (^execute0x3AInstruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -226,11 +226,11 @@ void (^execute0x3AInstruction)(RomState *,
 };
 
 void (^execute0x3BInstruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -244,11 +244,11 @@ void (^execute0x3BInstruction)(RomState *,
 };
 
 void (^execute0x3CInstruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -265,11 +265,11 @@ void (^execute0x3CInstruction)(RomState *,
 };
 
 void (^execute0x3DInstruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -291,11 +291,11 @@ void (^execute0x3DInstruction)(RomState *,
 };
 
 void (^execute0x3EInstruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -309,11 +309,11 @@ void (^execute0x3EInstruction)(RomState *,
 };
 
 void (^execute0x3FInstruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {

@@ -1,11 +1,11 @@
 #import "emulatorMain.h"
 
 void (^execute0x80Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -26,11 +26,11 @@ void (^execute0x80Instruction)(RomState *,
              prev, [state getB], [state getA]);
 };
 void (^execute0x81Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -51,11 +51,11 @@ void (^execute0x81Instruction)(RomState *,
              prev, [state getC], [state getA]);
 };
 void (^execute0x82Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -76,11 +76,11 @@ void (^execute0x82Instruction)(RomState *,
              prev, [state getD], [state getA]);
 };
 void (^execute0x83Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -101,11 +101,11 @@ void (^execute0x83Instruction)(RomState *,
              prev, [state getE], [state getA]);
 };
 void (^execute0x84Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -126,11 +126,11 @@ void (^execute0x84Instruction)(RomState *,
              prev, [state getH], [state getA]);
 };
 void (^execute0x85Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -151,11 +151,11 @@ void (^execute0x85Instruction)(RomState *,
              prev, [state getL], [state getA]);
 };
 void (^execute0x86Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -178,11 +178,11 @@ void (^execute0x86Instruction)(RomState *,
              prev, d8, [state getA]);
 };
 void (^execute0x87Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -205,11 +205,11 @@ void (^execute0x87Instruction)(RomState *,
              prev, prev, [state getA]);
 };
 void (^execute0x88Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -239,11 +239,11 @@ void (^execute0x88Instruction)(RomState *,
              prev, [state getA], [state getB]);
 };
 void (^execute0x89Instruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -273,11 +273,11 @@ void (^execute0x89Instruction)(RomState *,
              prev, [state getA], [state getC]);
 };
 void (^execute0x8AInstruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -307,11 +307,11 @@ void (^execute0x8AInstruction)(RomState *,
              prev, [state getA], [state getD]);
 };
 void (^execute0x8BInstruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -341,11 +341,11 @@ void (^execute0x8BInstruction)(RomState *,
              prev, [state getA], [state getE]);
 };
 void (^execute0x8CInstruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -375,11 +375,11 @@ void (^execute0x8CInstruction)(RomState *,
              prev, [state getA], [state getH]);
 };
 void (^execute0x8DInstruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -409,11 +409,11 @@ void (^execute0x8DInstruction)(RomState *,
              prev, [state getA], [state getL]);
 };
 void (^execute0x8EInstruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -445,11 +445,11 @@ void (^execute0x8EInstruction)(RomState *,
              prev, [state getA], [state getHL_big] & 0xffff, d8 & 0xff);
 };
 void (^execute0x8FInstruction)(RomState *,
-                              char *,
+                              int8_t *,
                               bool *,
                               int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {

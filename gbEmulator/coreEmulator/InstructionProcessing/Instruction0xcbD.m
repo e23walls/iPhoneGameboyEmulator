@@ -6,11 +6,11 @@ extern int8_t (^setBit)(int8_t,
                         unsigned int);
 
 void (^execute0xcbD0Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -18,11 +18,11 @@ void (^execute0xcbD0Instruction)(RomState *,
     [state setB:setBit(0xD0, [state getB], @"B", 2)];
 };
 void (^execute0xcbD1Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -30,11 +30,11 @@ void (^execute0xcbD1Instruction)(RomState *,
     [state setC:setBit(0xD1, [state getC], @"C", 2)];
 };
 void (^execute0xcbD2Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -42,11 +42,11 @@ void (^execute0xcbD2Instruction)(RomState *,
     [state setD:setBit(0xD2, [state getD], @"D", 2)];
 };
 void (^execute0xcbD3Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -54,11 +54,11 @@ void (^execute0xcbD3Instruction)(RomState *,
     [state setE:setBit(0xD3, [state getE], @"E", 2)];
 };
 void (^execute0xcbD4Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -66,11 +66,11 @@ void (^execute0xcbD4Instruction)(RomState *,
     [state setH:setBit(0xD4, [state getH], @"H", 2)];
 };
 void (^execute0xcbD5Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -78,11 +78,11 @@ void (^execute0xcbD5Instruction)(RomState *,
     [state setL:setBit(0xD5, [state getL], @"L", 2)];
 };
 void (^execute0xcbD6Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -92,11 +92,11 @@ void (^execute0xcbD6Instruction)(RomState *,
                                                     @"(HL)", 2);
 };
 void (^execute0xcbD7Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -104,11 +104,11 @@ void (^execute0xcbD7Instruction)(RomState *,
     [state setA:setBit(0xD7, [state getA], @"A", 2)];
 };
 void (^execute0xcbD8Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -116,11 +116,11 @@ void (^execute0xcbD8Instruction)(RomState *,
     [state setB:setBit(0xD8, [state getB], @"B", 3)];
 };
 void (^execute0xcbD9Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -128,11 +128,11 @@ void (^execute0xcbD9Instruction)(RomState *,
     [state setC:setBit(0xD9, [state getC], @"C", 3)];
 };
 void (^execute0xcbDAInstruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -140,11 +140,11 @@ void (^execute0xcbDAInstruction)(RomState *,
     [state setD:setBit(0xDA, [state getD], @"D", 3)];
 };
 void (^execute0xcbDBInstruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -152,11 +152,11 @@ void (^execute0xcbDBInstruction)(RomState *,
     [state setE:setBit(0xDB, [state getE], @"E", 3)];
 };
 void (^execute0xcbDCInstruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -164,11 +164,11 @@ void (^execute0xcbDCInstruction)(RomState *,
     [state setH:setBit(0xDC, [state getH], @"H", 3)];
 };
 void (^execute0xcbDDInstruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -176,11 +176,11 @@ void (^execute0xcbDDInstruction)(RomState *,
     [state setL:setBit(0xDD, [state getL], @"L", 3)];
 };
 void (^execute0xcbDEInstruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -190,11 +190,11 @@ void (^execute0xcbDEInstruction)(RomState *,
                                                     @"(HL)", 3);
 };
 void (^execute0xcbDFInstruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {

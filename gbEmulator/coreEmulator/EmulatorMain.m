@@ -11,6 +11,23 @@
 
 const int k = 1024;
 const int ramSize = 64 * k; // For readability purposes; an unsigned short spans the same set of integers.
+const int switchRomBankEnd = 0x8000;
+int8_t * WX;
+int8_t * WY;
+//int8_t wx_curr;
+//int8_t wy_curr;
+int8_t * SCX;
+int8_t * SCY;
+//int8_t scx_curr;
+//int8_t scy_curr;
+int8_t * LCDC;
+int8_t * STAT;
+int8_t * LY;
+int8_t * LYC;
+int8_t * DMA;
+int8_t * BGP;
+int8_t * OBP0;
+int8_t * OBP1;
 
 /* ROM Bank 0:             0000 - 3FFF
  * ROM Bank X:             4000 - 7FFF
@@ -20,6 +37,7 @@ const int ramSize = 64 * k; // For readability purposes; an unsigned short spans
  */
 
 const int biosSize = 256;
+
 
 // At some point, it'd be nice if the print statements didn't sign-extend negative values out to 32-bits.
 // To fix this, simply AND the value being printed with 0xFF, if it's one byte, and 0xFFFF if it's two bytes.
@@ -32,7 +50,7 @@ const int biosSize = 256;
     int8_t interruptsEnabled;
 }
 
-@property char * ram;
+@property int8_t * ram;
 @property Rom * currentRom;
 @property RomState * currentState;
 /*
@@ -44,11 +62,11 @@ const int biosSize = 256;
 
 @end
 
-void (^executeInstruction)(RomState *, char *, bool *, int8_t *);
+void (^executeInstruction)(RomState *, int8_t *, bool *, int8_t *);
 
-extern void (^setKeysInMemory)(char *, int);
-extern void (^enableInterrupts)(bool, char *);
-extern void (^interruptServiceRoutineCaller)(RomState *, char *, bool *, int8_t *);
+extern void (^setKeysInMemory)(int8_t *, int);
+extern void (^enableInterrupts)(bool, int8_t *);
+extern void (^interruptServiceRoutineCaller)(RomState *, int8_t *, bool *, int8_t *);
 extern const unsigned short interruptFlagAddress;
 extern const unsigned short interruptEnableRegister;
 
@@ -64,7 +82,7 @@ extern const unsigned short interruptEnableRegister;
         self.buttons = 0b00000000;
         self.keys = calloc(8, sizeof(int));
         self.currentRom = theRom;
-        self.ram = (char *)malloc(ramSize * sizeof(char));
+        self.ram = (int8_t *)malloc(ramSize * sizeof(char));
         char bios[] = {0x31, 0xfe, 0xff, 0xaf, 0x21, 0xff, 0x9f, 0x32, 0xcb, 0x7c, 0x20, 0xfb, 0x21, 0x26, \
             0xff, 0x0e, 0x11, 0x3e, 0x80, 0x32, 0xe2, 0x0c, 0x3e, 0xf3, 0xe2, 0x32, 0x3e, 0x77, 0x77, 0x3e, 0xfc, \
             0xe0, 0x47, 0x11, 0x04, 0x01, 0x21, 0x10, 0x80, 0x1a, 0xcd, 0x95, 0x00, 0xcd, 0x96, 0x00, 0x13, 0x7b, \
@@ -97,7 +115,7 @@ extern const unsigned short interruptEnableRegister;
         BOOL hitEOF = NO;
         int counter = 0;
         ch = fgetc(romFileHandler);
-        while (counter < ramSize - biosSize)
+        while (counter < switchRomBankEnd)
         {
             if (ch == EOF)
             {
@@ -105,7 +123,7 @@ extern const unsigned short interruptEnableRegister;
                 ch = 0;
                 printf("HIT EOF!\n");
             }
-            self.ram[counter+biosSize] = (unsigned char)ch;
+            self.ram[counter+biosSize] = (int8_t)ch;
             counter++;
             if (hitEOF == NO)
             {
@@ -130,6 +148,7 @@ extern const unsigned short interruptEnableRegister;
         {
             self.ram[i] = bios[i];
         }
+        [self setupRegisters];
     }
     else
     {
@@ -141,6 +160,26 @@ extern const unsigned short interruptEnableRegister;
 - (void) dealloc
 {
     free(self.ram);
+}
+
+-(void) setupRegisters
+{
+    WX = self.ram + 0x0FF4B;
+//    wx_curr = *WX;
+    WY = self.ram + 0x0FF4A;
+//    wy_curr = *WY;
+    SCX = self.ram + 0x0FF43;
+    SCY = self.ram + 0x0FF42;
+//    scx_curr = *SCX;
+//    scy_curr = *SCY;
+    LCDC = self.ram + 0x0FF40;
+    STAT = self.ram + 0x0FF41;
+    LY = self.ram + 0x0FF44;
+    LYC = self.ram + 0x0FF45;
+    DMA = self.ram + 0x0FF46;
+    BGP = self.ram + 0x0FF47;
+    OBP0 = self.ram + 0x0FF48;
+    OBP1 = self.ram + 0x0FF49;
 }
 
 - (UIImage *) getScreen

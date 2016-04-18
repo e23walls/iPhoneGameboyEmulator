@@ -2,11 +2,11 @@
 
 
 void (^execute0xcb60Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -21,11 +21,11 @@ void (^execute0xcb60Instruction)(RomState *,
     PRINTDBG("0xCB60 -- BIT 4,B -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb61Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -40,11 +40,11 @@ void (^execute0xcb61Instruction)(RomState *,
     PRINTDBG("0xCB61 -- BIT 4,C -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb62Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -59,11 +59,11 @@ void (^execute0xcb62Instruction)(RomState *,
     PRINTDBG("0xCB62 -- BIT 4,D -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb63Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -78,11 +78,11 @@ void (^execute0xcb63Instruction)(RomState *,
     PRINTDBG("0xCB63 -- BIT 4,E -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb64Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -97,11 +97,11 @@ void (^execute0xcb64Instruction)(RomState *,
     PRINTDBG("0xCB64 -- BIT 4,H -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb65Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -116,11 +116,11 @@ void (^execute0xcb65Instruction)(RomState *,
     PRINTDBG("0xCB65 -- BIT 4,L -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb66Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -135,11 +135,11 @@ void (^execute0xcb66Instruction)(RomState *,
     PRINTDBG("0xCB66 -- BIT 4,(HL) -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb67Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -154,11 +154,11 @@ void (^execute0xcb67Instruction)(RomState *,
     PRINTDBG("0xCB67 -- BIT 4,A -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb68Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -173,11 +173,11 @@ void (^execute0xcb68Instruction)(RomState *,
     PRINTDBG("0xCB68 -- BIT 5,B -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb69Instruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -192,11 +192,11 @@ void (^execute0xcb69Instruction)(RomState *,
     PRINTDBG("0xCB69 -- BIT 5,C -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb6AInstruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -211,11 +211,11 @@ void (^execute0xcb6AInstruction)(RomState *,
     PRINTDBG("0xCB6A -- BIT 5,D -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb6BInstruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -230,11 +230,11 @@ void (^execute0xcb6BInstruction)(RomState *,
     PRINTDBG("0xCB6B -- BIT 5,E -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb6CInstruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -249,11 +249,11 @@ void (^execute0xcb6CInstruction)(RomState *,
     PRINTDBG("0xCB6C -- BIT 5,H -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb6DInstruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -268,11 +268,11 @@ void (^execute0xcb6DInstruction)(RomState *,
     PRINTDBG("0xCB6D -- BIT 5,L -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb6EInstruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -287,11 +287,11 @@ void (^execute0xcb6EInstruction)(RomState *,
     PRINTDBG("0xCB6E -- BIT 5,(HL) -- Z is now %i\n", [state getZFlag]);
 };
 void (^execute0xcb6FInstruction)(RomState *,
-                                char *,
+                                int8_t *,
                                 bool *,
                                 int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {

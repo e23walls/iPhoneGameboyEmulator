@@ -30,14 +30,14 @@ const unsigned short joypadDataRegister = 0xff00;
 const unsigned char RET = 0xc9;
 const unsigned char RETI = 0xd9;
 
-typedef void (^InstructionBlock)(RomState *, char *, bool *, int8_t *);
+typedef void (^InstructionBlock)(RomState *, int8_t *, bool *, int8_t *);
 
-void (^servicedInterrupt)(char *, int8_t);
-void (^pushPCForISR)(RomState *, char *, unsigned short);
-int16_t (^get16BitWordFromRAM)(short, char *);
+void (^servicedInterrupt)(int8_t *, int8_t);
+void (^pushPCForISR)(RomState *, int8_t *, unsigned short);
+int16_t (^get16BitWordFromRAM)(short, int8_t *);
 
 #pragma mark - enableInterrupts
-void (^enableInterrupts)(bool, char *) = ^(bool maybe, char * ram)
+void (^enableInterrupts)(bool, int8_t *) = ^(bool maybe, int8_t * ram)
 {
     if (maybe == true)
     {
@@ -64,16 +64,16 @@ void (^setKeysInMemory)(char *, int) = ^(char * ram, int buttons)
     }
 };
 
-int16_t (^get16BitWordFromRAM)(short, char *) = ^(short offset, char * ram)
+int16_t (^get16BitWordFromRAM)(short, int8_t *) = ^(short offset, int8_t * ram)
 {
     return (int16_t)(((ram[offset + 1] & 0x00ff) << 8) |
         (((ram[offset])) & 0x0ff));
 };
 
-void (^executeGivenInstruction)(RomState *, int8_t, char *, bool *, int8_t *, bool) =
+void (^executeGivenInstruction)(RomState *, int8_t, int8_t *, bool *, int8_t *, bool) =
 ^(RomState * state,
   int8_t currentInstruction,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled,
   bool isCB)
@@ -88,9 +88,9 @@ void (^executeGivenInstruction)(RomState *, int8_t, char *, bool *, int8_t *, bo
 };
 
 #pragma mark - executeInstruction
-void (^executeInstruction)(RomState *, char *, bool *, int8_t *) =
+void (^executeInstruction)(RomState *, int8_t *, bool *, int8_t *) =
 ^(RomState * state,
-  char * ram,
+  int8_t * ram,
   bool * incrementPC,
   int8_t * interruptsEnabled)
 {
@@ -102,9 +102,9 @@ void (^executeInstruction)(RomState *, char *, bool *, int8_t *) =
 // TODO: should the IF be set to 0 upon startup? (Hypothesis: Yes)
 // Note: We will denote being in an ISR by having '>' before
 // every instruction while in the ISR.
-void (^interruptServiceRoutineCaller)(RomState *, char *, bool *, int8_t *) = ^
+void (^interruptServiceRoutineCaller)(RomState *, int8_t *, bool *, int8_t *) = ^
 (RomState * state,
- char * ram,
+ int8_t * ram,
  bool * incrementPC,
  int8_t * interruptsEnabled)
 {
@@ -187,9 +187,9 @@ void (^interruptServiceRoutineCaller)(RomState *, char *, bool *, int8_t *) = ^
     }
 };
 
-void (^pushPCForISR)(RomState *, char *, unsigned short) = ^
+void (^pushPCForISR)(RomState *, int8_t *, unsigned short) = ^
 (RomState * state,
- char * ram,
+ int8_t * ram,
  unsigned short ISRAddress)
 {
     unsigned short prev_PC = [state getPC];
@@ -203,8 +203,8 @@ void (^pushPCForISR)(RomState *, char *, unsigned short) = ^
              (((ram[[state getSP]]) & 0x00ff)) | (((ram[[state getSP]+1]) << 8) & 0xff00));
 };
 
-void (^servicedInterrupt)(char *, int8_t) = ^
-(char * ram,
+void (^servicedInterrupt)(int8_t *, int8_t) = ^
+(int8_t * ram,
  int8_t pos)
 {
     // Acknowledge the interrupt has been handled by writing a 0 to
