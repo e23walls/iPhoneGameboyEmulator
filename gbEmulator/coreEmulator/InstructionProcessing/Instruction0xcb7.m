@@ -237,7 +237,7 @@ void (^execute0xcb7CInstruction)(RomState *,
   int8_t * interruptsEnabled)
 {
     // BIT 7,H -- test 7th bit of H register
-    [state setFlags:(bool)([state getH] & (int8_t)0b10000000)
+    [state setFlags:!(bool)([state getH] & (int8_t)0b10000000)
                   N:false
                   H:true
                   C:[state getCFlag]];
