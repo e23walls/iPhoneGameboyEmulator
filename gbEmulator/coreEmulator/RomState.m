@@ -177,7 +177,8 @@
 }
 - (void) setC: (int8_t) newC
 {
-    BC = (int16_t) (newC | (BC & 0xFF00));
+    int8_t B = [self getB];
+    BC = (int16_t) ((newC & 0xff) | (B << 8));
 }
 - (int8_t) getC
 {
@@ -193,7 +194,8 @@
 }
 - (void) setE: (int8_t) newE
 {
-    DE = (int16_t) (newE | (DE & 0xFF00));
+    int8_t D = [self getD];
+    DE = (int16_t) ((newE & 0xff) | (D << 8));
 }
 - (int8_t) getE
 {
@@ -210,6 +212,8 @@
 - (void) setL: (int8_t) newL
 {
     HL = (int16_t)(newL | ((HL & 0xFF00)));
+    int8_t H = [self getH];
+    HL = (int16_t) ((newL & 0xff) | (H << 8));
 }
 - (int8_t) getL
 {
