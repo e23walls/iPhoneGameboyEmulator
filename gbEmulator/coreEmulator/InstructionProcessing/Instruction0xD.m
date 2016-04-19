@@ -19,7 +19,8 @@ void (^execute0xD0Instruction)(RomState *,
     prev_short = [state getSP];
     if ([state getCFlag] == false)
     {
-        d16 = get16BitWordFromRAM([state getSP], ram);
+        d16 = (((ram[[state getSP]]) & 0x00ff)) |
+        (((ram[[state getSP]+1]) << 8) & 0xff00);
         [state setSP:([state getSP]+2)];
         [state setPC:(unsigned short)d16];
     }
@@ -38,9 +39,10 @@ void (^execute0xD1Instruction)(RomState *,
     int16_t d16 = 0;
 
     // POP DE - Pop two bytes from SP into DE, and increment SP twice
-    d16 = get16BitWordFromRAM([state getSP], ram);
-    [state setDE_big:d16];
     [state setSP:([state getSP] + 2)];
+    d16 = (((ram[[state getSP]]) & 0x00ff)) |
+    (((ram[[state getSP]+1]) << 8) & 0xff00);
+    [state setDE_big:d16];
     PRINTDBG("0xD1 -- POP DE -- DE = 0x%02x -- SP is now at 0x%02x; (SP) = 0x%02x\n",
              [state getDE_big], [state getSP],
              (((ram[[state getSP]]) & 0x00ff)) |
@@ -120,9 +122,9 @@ void (^execute0xD5Instruction)(RomState *,
 
     // PUSH DE -- push DE onto SP, and decrement SP twice
     d16 = [state getDE_little];
-    [state setSP:([state getSP] - 2)];
     ram[[state getSP]] = (d16 & 0xff00) >> 8;
     ram[[state getSP]+1] = d16 & 0x00ff;
+    [state setSP:([state getSP] - 2)];
     PRINTDBG("0xD5 -- PUSH DE -- DE = 0x%02x -- SP is now at 0x%02x; (SP) = 0x%02x\n",
              [state getDE_big], [state getSP],
              (((ram[[state getSP]]) & 0x00ff)) |
@@ -196,8 +198,9 @@ void (^execute0xD8Instruction)(RomState *,
     prev_short = [state getSP];
     if ([state getCFlag] == true)
     {
-        d16 = get16BitWordFromRAM([state getSP], ram);
         [state setSP:([state getSP]+2)];
+        d16 = (((ram[[state getSP]]) & 0x00ff)) |
+        (((ram[[state getSP]+1]) << 8) & 0xff00);
         [state setPC:(unsigned short)d16];
     }
     PRINTDBG("0xD8 -- RET C -- PC is now 0x%02x; SP was 0x%02x; SP is now 0x%02x\n",
@@ -215,8 +218,9 @@ void (^execute0xD9Instruction)(RomState *,
     int16_t d16 = 0;
 
     // RETI -- RET + enable interrupts
-    d16 = get16BitWordFromRAM([state getSP], ram);
     [state setSP:([state getSP]+2)];
+    d16 = (((ram[[state getSP]]) & 0x00ff)) |
+    (((ram[[state getSP]+1]) << 8) & 0xff00);
     [state setPC:(unsigned short)d16];
     *incrementPC = false;
     enableInterrupts(true, ram);

@@ -38,9 +38,10 @@ void (^execute0xE1Instruction)(RomState *,
     int16_t d16 = 0;
 
     // POP HL - Pop two bytes from SP into HL, and increment SP twice
-    d16 = get16BitWordFromRAM([state getSP], ram);
-    [state setHL_big:d16];
     [state setSP:([state getSP] + 2)];
+    d16 = (((ram[[state getSP]]) & 0x00ff)) |
+    (((ram[[state getSP]+1]) << 8) & 0xff00);
+    [state setHL_big:d16];
     PRINTDBG("0xE1 -- POP HL -- HL = 0x%02x -- SP is now at 0x%02x; (SP) = 0x%02x\n",
              [state getHL_big], [state getSP],
              (((ram[[state getSP]]) & 0x00ff)) |
@@ -104,9 +105,9 @@ void (^execute0xE5Instruction)(RomState *,
 
     // PUSH HL -- push HL onto SP, and decrement SP twice
     d16 = [state getHL_little];
-    [state setSP:([state getSP] - 2)];
     ram[[state getSP]] = (d16 & 0xff00) >> 8;
     ram[[state getSP]+1] = d16 & 0x00ff;
+    [state setSP:([state getSP] - 2)];
     PRINTDBG("0xE5 -- PUSH HL -- HL = 0x%02x -- SP is now at 0x%02x; (SP) = 0x%02x\n",
              [state getHL_big], [state getSP],
              (((ram[[state getSP]]) & 0x00ff)) |

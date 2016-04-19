@@ -36,10 +36,10 @@ void (^execute0xcb11Instruction)(RomState *,
     bool C = false;
 
     // RL C -- Rotate C left through C-flag
-    prev = [state getC] << 1;
+    prev = [state getC];
     C = (bool)([state getC] & 0b10000000);
     // Set LSb of C to its previous C-value
-    [state getCFlag] ? [state setC:(prev | 1)] : [state setC:(prev & 0b11111110)];
+    [state getCFlag] ? [state setC:((prev << 1) | 1)] : [state setC:((prev << 1) & 0b11111110)];
     [state setFlags:[state getC] == 0
                   N:false
                   H:false

@@ -36,9 +36,9 @@ void (^execute0xF1Instruction)(RomState *,
   int8_t * interruptsEnabled)
 {
     // POP AF -- Pop two bytes from SP into AF, and increment SP twice
+    [state setSP:([state getSP] + 2)];
     [state setA:ram[(([state getSP] & 0xff00) >> 8)]];
     // We don't want to change F
-    [state setSP:([state getSP] + 2)];
     PRINTDBG("0xF1 -- POP AF -- AF = 0x%02x -- SP is now at 0x%02x; (SP) = 0x%02x\n",
              [state getAF_big], [state getSP],
              (((ram[[state getSP]]) & 0x00ff)) |
@@ -103,9 +103,9 @@ void (^execute0xF5Instruction)(RomState *,
 
     // PUSH AF -- push AF onto SP, and decrement SP twice
     d16 = [state getAF_little];
-    [state setSP:([state getSP] - 2)];
     ram[[state getSP]] = (d16 & 0xff00) >> 8;
     ram[[state getSP]+1] = d16 & 0x00ff;
+    [state setSP:([state getSP] - 2)];
     PRINTDBG("0xF5 -- PUSH AF -- AF = 0x%02x -- SP is now at 0x%02x; (SP) = 0x%02x\n",
              [state getAF_big], [state getSP],
              (((ram[[state getSP]]) & 0x00ff)) |

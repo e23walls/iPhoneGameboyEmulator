@@ -66,8 +66,8 @@ void (^setKeysInMemory)(char *, int) = ^(char * ram, int buttons)
 
 int16_t (^get16BitWordFromRAM)(short, int8_t *) = ^(short offset, int8_t * ram)
 {
-    return (int16_t)(((ram[offset + 1] & 0x00ff) << 8) |
-        (((ram[offset])) & 0x0ff));
+    int16_t data = (((ram[offset]) & 0x00ff)) | (((ram[offset+1]) << 8) & 0xff00);
+    return data;
 };
 
 void (^executeGivenInstruction)(RomState *, int8_t, int8_t *, bool *, int8_t *, bool) =
