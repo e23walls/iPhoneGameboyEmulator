@@ -35,7 +35,7 @@ void (^execute0x11Instruction)(RomState *,
     d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0x0ff);
     [state doubleIncPC];
     [state setDE_big:d16];
-    PRINTDBG("0x11 -- LD DE, d16 -- d16 = 0x%02x\n", d16);
+    PRINTDBG("0x11 -- LD DE, d16 -- d16 = 0x%02x\n", d16 & 0xffff);
 };
 void (^execute0x12Instruction)(RomState *,
                                int8_t *,
@@ -48,7 +48,7 @@ void (^execute0x12Instruction)(RomState *,
 {
     // LD (DE), A -- put A into (DE)
     ram[(unsigned short)[state getDE_big]] = [state getA];
-    PRINTDBG("0x12 -- LD (DE), A -- A = %i\n", (int)[state getA]);
+    PRINTDBG("0x12 -- LD (DE), A -- A = %i\n", [state getA] & 0xff);
 };
 void (^execute0x13Instruction)(RomState *,
                                int8_t *,
@@ -61,7 +61,7 @@ void (^execute0x13Instruction)(RomState *,
 {
     // INC DE -- Increment DE
     [state setDE_big:([state getDE_big] + 1)];
-    PRINTDBG("0x13 -- INC DE; DE is now %i\n", [state getDE_big]);
+    PRINTDBG("0x13 -- INC DE; DE is now %i\n", [state getDE_big] & 0xffff);
 };
 void (^execute0x14Instruction)(RomState *,
                                int8_t *,
@@ -81,7 +81,7 @@ void (^execute0x14Instruction)(RomState *,
                   N:false
                   H:(prev > [state getD])
                   C:([state getCFlag])];
-    PRINTDBG("0x14 -- INC D; D is now %i\n", [state getD]);
+    PRINTDBG("0x14 -- INC D; D is now %i\n", [state getD] & 0xff);
 };
 void (^execute0x15Instruction)(RomState *,
                                int8_t *,
@@ -101,7 +101,7 @@ void (^execute0x15Instruction)(RomState *,
                   N:true
                   H:!((char)(prev & 0xf) < (char)((([state getD] & 0xf) & 0xf)))
                   C:([state getCFlag])];
-    PRINTDBG("0x15 -- DEC D; D was %i; D is now %i\n", prev, [state getD]);
+    PRINTDBG("0x15 -- DEC D; D was %i; D is now %i\n", prev & 0xff, [state getD] & 0xff);
 };
 void (^execute0x16Instruction)(RomState *,
                                int8_t *,
@@ -134,6 +134,7 @@ void (^execute0x17Instruction)(RomState *,
     bool C = false;
 
     // RLA -- Rotate A left through carry flag
+    int8_t prevA = [state getA];
     A = [state getA] << 1;
     C = (bool)([state getA] & 0b10000000);
     // Set LSb of A to its previous C-value
@@ -142,7 +143,7 @@ void (^execute0x17Instruction)(RomState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0x17 -- RLA -- A was 0x%02x; A is now 0x%02x\n", A, [state getA]);
+    PRINTDBG("0x17 -- RLA -- A was 0x%02x; A is now 0x%02x\n", prevA & 0xff, [state getA] & 0xff);
 };
 void (^execute0x18Instruction)(RomState *,
                                int8_t *,
@@ -159,8 +160,7 @@ void (^execute0x18Instruction)(RomState *,
     d8 = ram[[state getPC]];
     [state incrementPC];
     [state addToPC:d8];
-    PRINTDBG("0x18 -- JR r8 (r8 = %d) -- PC is now 0x%02x\n", (int)d8, [state getPC]);
-    *incrementPC = false;
+    PRINTDBG("0x18 -- JR r8 (r8 = %d) -- PC is now 0x%02x\n", d8 & 0xff, [state getPC] & 0xffff);
 };
 void (^execute0x19Instruction)(RomState *,
                                int8_t *,
@@ -190,7 +190,7 @@ void (^execute0x19Instruction)(RomState *,
                   H:H
                   C:C];
     PRINTDBG("0x19 -- ADD HL,DE -- add DE (%i) and HL (%i) = %i\n", \
-             [state getDE_big], prev_short, [state getHL_big]);
+             [state getDE_big] & 0xffff, prev_short & 0xffff, [state getHL_big] & 0xffff);
 };
 void (^execute0x1AInstruction)(RomState *,
                                int8_t *,
@@ -221,7 +221,7 @@ void (^execute0x1BInstruction)(RomState *,
     prev_int = [state getDE_big];
     [state setDE_big:([state getDE_big] - 1)];
     PRINTDBG("0x1B -- DEC DE -- DE was %i; DE is now %i\n", \
-             prev_int, [state getDE_big]);
+             prev_int & 0xffff, [state getDE_big] & 0xffff);
 };
 void (^execute0x1CInstruction)(RomState *,
                                int8_t *,
@@ -241,7 +241,7 @@ void (^execute0x1CInstruction)(RomState *,
                   N:false
                   H:(prev > [state getE])
                   C:([state getCFlag])];
-    PRINTDBG("0x1C -- INC E; E = %i\n", [state getE]);
+    PRINTDBG("0x1C -- INC E; E = %i\n", [state getE] & 0xff);
 };
 void (^execute0x1DInstruction)(RomState *,
                                int8_t *,
@@ -266,7 +266,7 @@ void (^execute0x1DInstruction)(RomState *,
                   H:H
                   C:[state getCFlag]];
     PRINTDBG("0x1D -- DEC E -- E was %i; E is now %i\n", \
-             prev, (int)[state getE]);
+             prev & 0xff, [state getE] & 0xff);
 };
 void (^execute0x1EInstruction)(RomState *,
                                int8_t *,
@@ -283,7 +283,7 @@ void (^execute0x1EInstruction)(RomState *,
     d8 = ram[[state getPC]];
     [state incrementPC];
     [state setE:d8];
-    PRINTDBG("0x1E -- LD E, d8 -- d8 = %i\n", (short)d8);
+    PRINTDBG("0x1E -- LD E, d8 -- d8 = %i\n", d8 & 0xff);
 };
 void (^execute0x1FInstruction)(RomState *,
                                int8_t *,
@@ -306,6 +306,6 @@ void (^execute0x1FInstruction)(RomState *,
                   N:false
                   H:false
                   C:C];
-    PRINTDBG("0x1F -- RRA -- A was 0x%02x; A is now 0x%02x\n", A, [state getA]);
+    PRINTDBG("0x1F -- RRA -- A was 0x%02x; A is now 0x%02x\n", A & 0xff, [state getA] & 0xff);
 };
 

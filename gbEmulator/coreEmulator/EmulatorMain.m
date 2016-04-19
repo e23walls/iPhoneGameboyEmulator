@@ -312,10 +312,7 @@ extern const unsigned short interruptEnableRegister;
             interruptsEnabled--;
         }
         setKeysInMemory(self.ram, self.buttons);
-        if (incrementPC)
-        {
-            [self.currentState incrementPC];
-        }
+        [self.currentState incrementPC];
         printf("Before:\n");
         [self.currentState printState:self.ram];
         // This could be slightly off because we don't know the
@@ -334,7 +331,6 @@ extern const unsigned short interruptEnableRegister;
 
         printf("After:\n");
         [self.currentState printState:self.ram];
-        PRINTDBG("DIV = 0x%02x%02x\n", (0xff & DIV[1]), (0xff & DIV[0]));
         printf("\n\n");
     }
     [timerThread cancel];

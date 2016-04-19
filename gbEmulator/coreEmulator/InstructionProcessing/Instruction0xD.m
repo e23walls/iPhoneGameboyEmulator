@@ -19,9 +19,9 @@ void (^execute0xD0Instruction)(RomState *,
     prev_short = [state getSP];
     if ([state getCFlag] == false)
     {
+        [state setSP:([state getSP]+2)];
         d16 = (((ram[[state getSP]]) & 0x00ff)) |
         (((ram[[state getSP]+1]) << 8) & 0xff00);
-        [state setSP:([state getSP]+2)];
         [state setPC:(unsigned short)d16];
     }
     PRINTDBG("0xD0 -- RET NC -- PC is now 0x%02x; SP was 0x%02x; SP is now 0x%02x\n",
@@ -100,9 +100,9 @@ void (^execute0xD4Instruction)(RomState *,
     [state doubleIncPC];
     if ([state getCFlag] == false)
     {
-        [state setSP:([state getSP] - 2)];
         ram[[state getSP]] = (([state getPC]) & 0xff00) >> 8;
         ram[[state getSP]+1] = ([state getPC]) & 0x00ff;
+        [state setSP:([state getSP] - 2)];
         [state setPC:d16];
     }
     PRINTDBG("0xD4 -- CALL NC,a16 -- a16 = 0x%02x -- PC is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x\n",
@@ -222,7 +222,6 @@ void (^execute0xD9Instruction)(RomState *,
     d16 = (((ram[[state getSP]]) & 0x00ff)) |
     (((ram[[state getSP]+1]) << 8) & 0xff00);
     [state setPC:(unsigned short)d16];
-    *incrementPC = false;
     enableInterrupts(true, ram);
     PRINTDBG("0xD9 -- RETI -- PC is now 0x%02x\n",
              [state getPC]);
@@ -244,7 +243,6 @@ void (^execute0xDAInstruction)(RomState *,
     if ([state getCFlag] == true)
     {
         [state setPC:d16];
-        *incrementPC = false;
     }
     PRINTDBG("0xDA -- JP C,a16 -- a16 = 0x%02x -- PC is now at 0x%02x\n",
              d16 & 0xffff, [state getPC]);
@@ -279,9 +277,9 @@ void (^execute0xDCInstruction)(RomState *,
     [state doubleIncPC];
     if ([state getCFlag] == true)
     {
-        [state setSP:([state getSP] - 2)];
         ram[[state getSP]] = (int8_t)(([state getPC]) & 0xff00) >> 8;
         ram[[state getSP]+1] = (int8_t)(([state getPC]) & 0x00ff);
+        [state setSP:([state getSP] - 2)];
         [state setPC:d16];
     }
     PRINTDBG("0xDC -- CALL C,a16 -- a16 = 0x%02x -- PC is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x\n",

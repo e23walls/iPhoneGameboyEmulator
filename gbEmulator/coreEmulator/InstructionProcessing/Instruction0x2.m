@@ -21,7 +21,6 @@ void (^execute0x20Instruction)(RomState *,
     PRINTDBG("0x20 -- JR NZ, r8 -- if !Z, PC += %i; PC is now 0x%02x\n", (int8_t)d8,
              [state getPC]);
     // TODO: Should other jump instructions also not set incrementPC to false?
-//    *incrementPC = false;
 };
 void (^execute0x21Instruction)(RomState *,
                               int8_t *,

@@ -20,9 +20,9 @@ void (^execute0xC0Instruction)(RomState *,
     prev_short = [state getSP];
     if ([state getZFlag] == false)
     {
+        [state setSP:([state getSP]+2)];
         d16 = (((ram[[state getSP]]) & 0x00ff)) |
         (((ram[[state getSP]+1]) << 8) & 0xff00);
-        [state setSP:([state getSP]+2)];
         [state setPC:(unsigned short)d16];
     }
     PRINTDBG("0xC0 -- RET NZ -- PC is now 0x%02x; SP was 0x%02x; SP is now 0x%02x\n",
@@ -69,7 +69,6 @@ void (^execute0xC2Instruction)(RomState *,
     }
     PRINTDBG("0xC2 -- JP NZ,a16 -- a16 = 0x%02x -- PC is now at 0x%02x\n",
              d16 & 0xffff, [state getPC]);
-    *incrementPC = false;
 };
 void (^execute0xC3Instruction)(RomState *,
                               int8_t *,
@@ -87,7 +86,6 @@ void (^execute0xC3Instruction)(RomState *,
     [state setPC:d16];
     PRINTDBG("0xC3 -- JP a16 -- a16 = 0x%02x -- PC is now at 0x%02x\n",
              d16 & 0xffff, [state getPC]);
-    *incrementPC = false;
 };
 void (^execute0xC4Instruction)(RomState *,
                               int8_t *,
@@ -107,9 +105,9 @@ void (^execute0xC4Instruction)(RomState *,
     [state incrementPC];
     if ([state getZFlag] == false)
     {
-        [state setSP:([state getSP] - 2)];
         ram[[state getSP]] = (int8_t)(([state getPC]) & 0xff00) >> 8;
         ram[[state getSP]+1] = (int8_t)(([state getPC]) & 0x00ff);
+        [state setSP:([state getSP] - 2)];
         [state setPC:d16];
     }
     PRINTDBG("0xC4 -- CALL NZ,a16 -- a16 = 0x%02x -- PC is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x; (SP) = 0x%02x\n",
@@ -135,7 +133,7 @@ void (^execute0xC5Instruction)(RomState *,
     ram[[state getSP]] = d16 & 0x00ff;
     [state setSP:([state getSP] - 2)];
     PRINTDBG("0xC5 -- PUSH BC -- BC = 0x%02x -- SP is now at 0x%02x; pushed 0x%02x; (SP) = 0x%02x\n",
-             [state getBC_big], [state getSP], d16,
+             [state getBC_big] & 0xffff, [state getSP] & 0xffff, d16 & 0xffff,
              (((ram[[state getSP]]) & 0x00ff)) |
              (((ram[[state getSP]+1]) << 8) & 0xff00));
 };
@@ -201,9 +199,9 @@ void (^execute0xC8Instruction)(RomState *,
     prev_short = [state getSP];
     if ([state getZFlag] == true)
     {
+        [state setSP:([state getSP]+2)];
         d16 = (((ram[[state getSP]]) & 0x00ff)) |
         (((ram[[state getSP]+1]) << 8) & 0xff00);
-        [state setSP:([state getSP]+2)];
         [state setPC:(unsigned short)d16];
     }
     PRINTDBG("0xC8 -- RET Z -- PC is now 0x%02x; SP was 0x%02x; SP is now 0x%02x\n", \
@@ -221,11 +219,10 @@ void (^execute0xC9Instruction)(RomState *,
     int16_t d16 = 0;
 
     // RET -- return from subroutine; pop two bytes from SP and go to that address
+    [state setSP:([state getSP]+2)];
     d16 = (((ram[[state getSP]]) & 0x00ff)) |
     (((ram[[state getSP]+1]) << 8) & 0xff00);
-    [state setSP:([state getSP]+2)];
     [state setPC:(unsigned short)d16];
-    *incrementPC = false;
     PRINTDBG("0xC9 -- RET -- PC is now 0x%02x; (SP) = 0x%02x\n",
              [state getPC],
              (((ram[[state getSP]]) & 0x00ff)) |
@@ -286,9 +283,9 @@ void (^execute0xCCInstruction)(RomState *,
     [state doubleIncPC];
     if ([state getZFlag] == true)
     {
-        [state setSP:([state getSP] - 2)];
         ram[[state getSP]] = (int8_t)(([state getPC]) & 0xff00) >> 8;
         ram[[state getSP]+1] = (int8_t)(([state getPC]) & 0x00ff);
+        [state setSP:([state getSP] - 2)];
         [state setPC:d16];
     }
     PRINTDBG("0xCC -- CALL Z,a16 -- a16 = 0x%02x -- PC is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x\n",
@@ -311,9 +308,9 @@ void (^execute0xCDInstruction)(RomState *,
     prev_short = [state getSP];
     d16 = (ram[[state getPC] + 1] << 8) | (ram[[state getPC]] & 0xff);
     [state doubleIncPC];
-    [state setSP:([state getSP] - 2)];
     ram[[state getSP]] = (int8_t)(([state getPC]) & 0xff);
     ram[[state getSP]+1] = (int8_t)((([state getPC]) & 0xff00) >> 8);
+    [state setSP:([state getSP] - 2)];
     [state setPC:d16];
     PRINTDBG("0xCD -- CALL a16 -- a16 = 0x%02x -- PC is now at 0x%02x; SP was 0x%02x; SP is now 0x%02x; (SP) = 0x%02x\n", d16 & 0xffff,
              [state getPC],

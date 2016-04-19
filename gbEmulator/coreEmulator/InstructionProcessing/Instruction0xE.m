@@ -201,7 +201,6 @@ void (^execute0xE9Instruction)(RomState *,
     // JP (HL) -- Jump to address in register HL
     d16 = [state getHL_big];
     [state setPC:d16];
-    *incrementPC = false;
     PRINTDBG("0xE9 -- JP (HL) -- HL = 0x%02x -- PC is now at 0x%02x\n",
              d16 & 0xffff, [state getPC]);
 };

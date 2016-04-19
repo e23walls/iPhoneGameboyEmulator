@@ -20,7 +20,6 @@ void (^execute0x30Instruction)(RomState *,
     }
     PRINTDBG("0x30 -- JR NC, r8 -- if !C, PC += %i; PC is now 0x%02x\n",
              (int8_t)d8, [state getPC]);
-    *incrementPC = false;
 };
 
 void (^execute0x31Instruction)(RomState *,
@@ -175,7 +174,6 @@ void (^execute0x38Instruction)(RomState *,
     }
     PRINTDBG("0x38 -- JR C, r8 -- if C, PC += %i; PC is now 0x%02x\n",
              (int)d8, [state getPC] & 0xffff);
-    *incrementPC = false;
 };
 
 void (^execute0x39Instruction)(RomState *,
