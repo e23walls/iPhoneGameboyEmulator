@@ -378,7 +378,12 @@ extern const unsigned short interruptEnableRegister;
 {
     assert(offset >= 0 && offset <= 7);
     self.buttons ^= 1 << offset;
-    [self setInterruptFlag:JOYPAD_PRESS];
+    // Only set the flag if interrupts are enabled for joypad input.
+    if (self.ram[interruptFlagAddress] & (1 >> JOYPAD_PRESS))
+    {
+        [self setInterruptFlag:JOYPAD_PRESS];
+        PRINTDBG("Triggered JOYPAD_PRESS interrupt.\n");
+    }
 }
 - (void) printKeys
 {
