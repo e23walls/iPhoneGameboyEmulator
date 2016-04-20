@@ -340,11 +340,6 @@ extern const unsigned short interruptEnableRegister;
         [self.currentState incrementPC];
         printf("Before:\n");
         [self.currentState printState:self.ram];
-        // This could be slightly off because we don't know the
-        // length of the current instruction at this point. It will
-        // always be pointing 1 byte ahead of the current instruction.
-        // If the current instruction is 1 byte, it should be correct.
-        // ^ That's an old comment...
         PRINTDBG("\nPC = 0x%02x\n", [self.currentState getPC]);
         incrementPC = true;
         if ([self interruptOccurred])
