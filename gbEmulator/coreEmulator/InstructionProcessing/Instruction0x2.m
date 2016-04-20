@@ -139,8 +139,27 @@ void (^execute0x27Instruction)(RomState *,
   int8_t * interruptsEnabled)
 {
     // DAA -- Decimal adjust register A; adjust A so that correct BCD obtained
-#warning Do this eventually!!!
-    PRINTDBG("0x27 - DAA -- this needs to be done sometime\n");
+
+    int8_t prevA = [state getA];
+    unsigned int temp = 0;
+    bool C = false;
+    // Each byte becomes a dec value; e.g. if A=0x1A, A=26 => convert to A=0x26.
+
+    char buffer[4];
+    sprintf(buffer, "%d", prevA);
+    sscanf(buffer, "%x", &temp);
+    if (temp > 0x0ffff)
+    {
+        // Set carry flag
+        C = true;
+    }
+    [state setFlags:([state getA] == 0)
+                  N:[state getNFlag]
+                  H:false
+                  C:C];
+    [state setA:(temp & 0xffff)];
+
+    PRINTDBG("0x27 - DAA -- A was 0x%02x = %d; A is now 0x%02x\n", prevA & 0xff, prevA & 0xff, [state getA] & 0xff);
 };
 void (^execute0x28Instruction)(RomState *,
                               int8_t *,
