@@ -183,6 +183,7 @@ extern const unsigned short interruptEnableRegister;
     LCDC = self.ram + 0x0FF40;
     STAT = self.ram + 0x0FF41;
     LY = self.ram + 0x0FF44;
+    *LY = 0;
     LYC = self.ram + 0x0FF45;
     DMA = self.ram + 0x0FF46;
     BGP = self.ram + 0x0FF47;
@@ -275,6 +276,26 @@ extern const unsigned short interruptEnableRegister;
     }
 }
 
+// Frequency is 59.7 Hz
+- (void) vBlankTimer
+{
+    // TODO: Does LY continue to increment past 0x90, or does it wait, and the V_BLANK ISR handles it?
+    while (true)
+    {
+        if ((*LY & 0xff) < 0x90)
+        {
+            *LY = (*LY + 1) & 0xff;
+        }
+        else if (self.ram[interruptEnableRegister] & (1 >> VERTICAL_BLANK) && (*LY & 0xff) >= 0x90)
+        {
+            // Generate interrupt
+            self.ram[interruptFlagAddress] |= 1 >> VERTICAL_BLANK;
+
+        }
+        sleep(0.00010875);
+    }
+}
+
 - (void) runRom
 {
     PRINTDBG("\nRunning rom '%s'\n\n", [[self.currentRom romName] cStringUsingEncoding:NSUTF8StringEncoding]);
@@ -287,6 +308,10 @@ extern const unsigned short interruptEnableRegister;
                                                  selector:@selector(fireTimers)
                                                    object:nil];
     [timerThread start];
+    NSThread* vBlankingThread = [[NSThread alloc] initWithTarget:self
+                                                        selector:@selector(vBlankTimer)
+                                                          object:nil];
+    [vBlankingThread start];
 
 
     while ([self.currentState getPC] < ramSize && isRunning)
@@ -331,6 +356,7 @@ extern const unsigned short interruptEnableRegister;
 
         printf("After:\n");
         [self.currentState printState:self.ram];
+        printf("Interrupt enable register (0xFFFF) = 0x%02x\n", self.ram[interruptEnableRegister] & 0xff);
         printf("\n\n");
     }
     [timerThread cancel];
