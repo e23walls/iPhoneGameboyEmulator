@@ -214,10 +214,14 @@ enum KeyNames
 }
 - (IBAction)run:(id)sender
 {
+    // Rom must run in a separate thread so that key pad input can be obtained.
+    NSThread* romThread = [[NSThread alloc] initWithTarget:emulator
+                                                  selector:@selector(runRom)
+                                                    object:nil];
     if (isRunningRom == false)
     {
         [self romRunning:YES];
-        [emulator runRom];
+        [romThread start];
         // Until the emulator isn't just a giant for-loop, it won't be clear that this actually
         // does change the button's text. But commenting out this following line shows it does.
 //        [self romNotRunning];
