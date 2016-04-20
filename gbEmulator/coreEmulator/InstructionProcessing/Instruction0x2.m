@@ -55,8 +55,8 @@ void (^execute0x22Instruction)(RomState *,
     ram[(unsigned short)[state getHL_big]] = [state getA];
     prevHL = [state getHL_big];
     [state setHL_big:(prevHL + 1)];
-    PRINTDBG("0x22 -- LD (HL+),A -- HL = 0x%02x; (HL) = 0x%02x; A = %i\n",
-             [state getHL_big], ram[(unsigned short)[state getHL_big]],
+    PRINTDBG("0x22 -- LD (HL+),A -- HL = 0x%02x; (HL-1) = 0x%02x; A = %i\n",
+             [state getHL_big], ram[(unsigned short)[state getHL_big]-1],
              [state getA]);
 };
 void (^execute0x23Instruction)(RomState *,
