@@ -135,7 +135,7 @@ extern const unsigned short interruptEnableRegister;
                 ch = 0;
                 printf("HIT EOF!\n");
             }
-            self.ram[counter+biosSize] = (int8_t)ch;
+            self.ram[counter] = (int8_t)ch;
             counter++;
             if (hitEOF == NO)
             {
