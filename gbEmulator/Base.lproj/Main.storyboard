@@ -63,11 +63,11 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Okn-ET-9lX">
-                                <rect key="frame" x="8" y="73" width="305" height="306"/>
+                                <rect key="frame" x="8" y="74" width="304" height="273"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gmk-nt-Ne1">
-                                <rect key="frame" x="257" y="399" width="50" height="50"/>
+                                <rect key="frame" x="257" y="384" width="50" height="50"/>
                                 <state key="normal" title=" " image="A.png">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -78,7 +78,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QmZ-ea-co7">
-                                <rect key="frame" x="194" y="442" width="50" height="50"/>
+                                <rect key="frame" x="194" y="427" width="50" height="50"/>
                                 <state key="normal" title=" " image="B.png">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -89,7 +89,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8TL-MY-f8M">
-                                <rect key="frame" x="62" y="390" width="44" height="56"/>
+                                <rect key="frame" x="66" y="372" width="44" height="56"/>
                                 <color key="tintColor" red="1" green="0.97777943992637506" blue="0.92858373979095488" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" image="up-arrow.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -100,7 +100,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5I4-yp-8ii">
-                                <rect key="frame" x="62" y="484" width="44" height="56"/>
+                                <rect key="frame" x="66" y="466" width="44" height="56"/>
                                 <color key="tintColor" red="1" green="0.97777943990000005" blue="0.92858373979999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" image="down-arrow.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -111,7 +111,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zu7-5G-ilt">
-                                <rect key="frame" x="104" y="443" width="56" height="44"/>
+                                <rect key="frame" x="108" y="425" width="56" height="44"/>
                                 <color key="tintColor" red="1" green="0.97777943990000005" blue="0.92858373979999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" image="right-arrow.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -122,7 +122,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iOP-Yt-RlK">
-                                <rect key="frame" x="8" y="443" width="56" height="44"/>
+                                <rect key="frame" x="12" y="425" width="56" height="44"/>
                                 <color key="tintColor" red="1" green="0.97777943990000005" blue="0.92858373979999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" image="left-arrow.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -133,7 +133,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Frw-8q-KsD">
-                                <rect key="frame" x="137" y="526" width="60" height="29"/>
+                                <rect key="frame" x="137" y="518" width="60" height="29"/>
                                 <state key="normal" image="SELECT.png">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -144,7 +144,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K8D-Th-cRy">
-                                <rect key="frame" x="240" y="526" width="60" height="29"/>
+                                <rect key="frame" x="240" y="518" width="60" height="29"/>
                                 <state key="normal" image="START.png">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -164,13 +164,13 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="B" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y0E-cD-zXY">
-                                <rect key="frame" x="219" y="487" width="12" height="21"/>
+                                <rect key="frame" x="219" y="472" width="12" height="21"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="A" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BM4-A2-22x">
-                                <rect key="frame" x="282" y="444" width="12" height="21"/>
+                                <rect key="frame" x="282" y="429" width="12" height="21"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -188,7 +188,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eRj-vK-rK9">
-                                <rect key="frame" x="53" y="437" width="58" height="58"/>
+                                <rect key="frame" x="57" y="419" width="58" height="58"/>
                                 <state key="normal" image="middle.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>

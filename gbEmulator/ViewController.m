@@ -53,6 +53,8 @@ static Rom * currentRom;
 	// Do any additional setup after loading the view, typically from a nib.
     romTitleLabel.text = currentRom.romName;
     emulator = [[EmulatorMain alloc] initWithRom:currentRom];
+    [emulator addObserver:self];
+    [self setupImage];
 //    [self romNotRunning];
 }
 
@@ -212,6 +214,7 @@ enum KeyNames
     printf("Hiding navigation bar\n");
     [self.navigationController setNavigationBarHidden:NO];
 }
+
 - (IBAction)run:(id)sender
 {
     // Rom must run in a separate thread so that key pad input can be obtained.
@@ -238,6 +241,27 @@ enum KeyNames
 {
     UIImage * i = [emulator getScreen];
     [imageView setImage:i];
+}
+
+- (void) update
+{
+    PRINTDBG("ViewController update...\n");
+    [imageView setImage:[emulator updateScreen:[imageView image]]];
+    [imageView setNeedsDisplay];
+}
+
+// Set the image/screen to be all black at first.
+- (void) setupImage
+{
+    CGSize imageSize = CGSizeMake(160, 144);
+    UIColor *fillColor = [UIColor blackColor];
+    UIGraphicsBeginImageContextWithOptions(imageSize, YES, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [fillColor setFill];
+    CGContextFillRect(context, CGRectMake(0, 0, imageSize.width, imageSize.height));
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [imageView setImage:image];
 }
 
 - (void) romRunning:(BOOL)isRunning

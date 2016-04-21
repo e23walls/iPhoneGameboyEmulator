@@ -1,6 +1,9 @@
 #import "Rom.h"
 #import "RomState.h"
+#import "ViewController.h"
 #import <pthread.h>
+
+@class ViewController;
 
 #define MYDEBUG
 
@@ -9,6 +12,9 @@
 #else
 #define PRINTDBG(...) ;
 #endif
+
+#define ScreenWidth 160
+#define ScreenHeight 144
 
 enum interruptFlagBitNames
 {
@@ -30,5 +36,8 @@ enum interruptFlagBitNames
 - (time_t) incrementTimerValue;
 - (void) clearTimerValue;
 - (time_t) getTimerValue;
+- (void) addObserver:(ViewController *) observer;
+- (void) notifyObservers;
+- (UIImage *) updateScreen:(UIImage*) image;
 
 @end

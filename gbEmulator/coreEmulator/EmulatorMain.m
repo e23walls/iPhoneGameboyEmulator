@@ -8,6 +8,9 @@
 
 #import "EmulatorMain.h"
 #include <sys/stat.h>
+#import <QuartzCore/QuartzCore.h>
+
+#define Clamp255(a) (a>255 ? 255 : a)
 
 const int k = 1024;
 const int ramSize = 64 * k; // For readability purposes; an unsigned short spans the same set of integers.
@@ -55,12 +58,15 @@ const int biosSize = 256;
     int8_t * TMA;
     int8_t * TAC;
     int8_t * DIV;
+    int screenBuffer[ScreenWidth][ScreenHeight];
 }
 
 @property int8_t * ram;
 @property Rom * currentRom;
 @property RomState * currentState;
 @property NSTimer * t;
+@property NSMutableArray * observers;
+
 /*
  Keys:
  [Start][Select][B][A][Down][Up][Left][Right]
@@ -88,8 +94,10 @@ extern const unsigned short interruptEnableRegister;
         isRunning = true;
         incrementPC = true;
         self.buttons = 0b00000000;
+        self.observers = [[NSMutableArray alloc] init];
         start = 0;
         timer = 0;
+        [self clearScreen];
         clock_start = clock();
         pthread_mutex_init(&timerMutex, NULL);
         self.keys = calloc(8, sizeof(int));
@@ -174,7 +182,34 @@ extern const unsigned short interruptEnableRegister;
     free(self.ram);
 }
 
--(void) setupRegisters
+- (void) addObserver:(ViewController *) observer
+{
+    if (observer != nil)
+    {
+        [self.observers addObject:observer];
+    }
+}
+
+- (void) clearScreen
+{
+    for (int i = 0; i < ScreenWidth; i++)
+    {
+        for (int j = 0; j < ScreenHeight; j++)
+        {
+            screenBuffer[i][j] = 0; // Or whatever.
+        }
+    }
+}
+
+- (void) notifyObservers
+{
+    for (ViewController * obs in self.observers)
+    {
+        [obs update];
+    }
+}
+
+- (void) setupRegisters
 {
     WX = self.ram + 0x0FF4B;
     WY = self.ram + 0x0FF4A;
@@ -203,6 +238,107 @@ extern const unsigned short interruptEnableRegister;
         return [self.currentState getScreen];
     }
     return nil;
+}
+
+- (void) redrawScreen
+{
+    if ((*LCDC) & (1 << 7))
+    {
+        // Draw image on screen
+    }
+    else
+    {
+        // Draw black screen
+    }
+}
+
+// Don't worry about bit 7 (LCD on/off) because another method handles it.
+- (UIImage *) updateScreen:(UIImage*) image
+{
+    int spriteWidth = 8;
+    int spriteHeight = 8;
+    unsigned short windowTileMapDisplaySelectStart = 0x9800;
+    unsigned short windowTileMapDisplaySelectEnd = 0x9BFF;
+    unsigned short windowTileDataSelectStart = 0x8800;
+    unsigned short windowTileDataSelectEnd = 0x97FF;
+    unsigned short bgTileMapDisplaySelectStart = 0x9800;
+    unsigned short bgTileMapDisplaySelectEnd = 0x9BFF;
+    bool spriteOn = LCDC[0] & (1 >> 1);
+    bool bgWindowDisplay = LCDC[0] & 1;
+
+    if (LCDC[0] & (1 >> 2))
+    {
+        spriteHeight = 16;
+    }
+    if (LCDC[0] & (1 >> 6))
+    {
+        windowTileMapDisplaySelectStart = 0x9C00;
+        windowTileMapDisplaySelectEnd = 0x9FFF;
+    }
+    if (LCDC[0] & (1 >> 4))
+    {
+        windowTileDataSelectStart = 0x8000;
+        windowTileDataSelectEnd = 0x8FFF;
+    }
+    if (LCDC[0] & (1 >> 3))
+    {
+        bgTileMapDisplaySelectStart = 0x9C00;
+        bgTileMapDisplaySelectEnd = 0x9FFF;
+    }
+
+    int currLine = *LY;
+    // Render line "currLine"
+
+    return nil;
+}
+
+- (UIImage*) fromImage:(UIImage*)source toColourR:(int)colR g:(int)colG b:(int)colB
+{
+    CGContextRef ctx;
+    CGImageRef imageRef = [source CGImage];
+    NSUInteger width = CGImageGetWidth(imageRef);
+    NSUInteger height = CGImageGetHeight(imageRef);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    unsigned char *rawData = malloc(height * width * 4);
+    NSUInteger bytesPerPixel = 4;
+    NSUInteger bytesPerRow = bytesPerPixel * width;
+    NSUInteger bitsPerComponent = 8;
+    CGContextRef context = CGBitmapContextCreate(rawData, width, height,
+                                                 bitsPerComponent, bytesPerRow, colorSpace,
+                                                 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+
+    CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
+    CGContextRelease(context);
+
+    int byteIndex = 0;
+    for (int ii = 0 ; ii < width * height ; ++ii)
+    {
+        int grey = (rawData[byteIndex] + rawData[byteIndex+1] + rawData[byteIndex+2]) / 3;
+
+        rawData[byteIndex] = Clamp255(colR*grey/256);
+        rawData[byteIndex+1] = Clamp255(colG*grey/256);
+        rawData[byteIndex+2] = Clamp255(colB*grey/256);
+
+        byteIndex += 4;
+    }
+
+    ctx = CGBitmapContextCreate(rawData,
+                                CGImageGetWidth( imageRef ),
+                                CGImageGetHeight( imageRef ),
+                                8,
+                                bytesPerRow,
+                                colorSpace,
+                                kCGImageAlphaPremultipliedLast );
+    CGColorSpaceRelease(colorSpace);
+
+    imageRef = CGBitmapContextCreateImage (ctx);
+    UIImage* rawImage = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);
+
+    CGContextRelease(ctx);
+    free(rawData);
+
+    return rawImage;
 }
 
 - (time_t) incrementTimerValue
@@ -292,6 +428,7 @@ extern const unsigned short interruptEnableRegister;
             self.ram[interruptFlagAddress] |= 1 >> VERTICAL_BLANK;
 
         }
+        [self notifyObservers];
         sleep(0.00010875);
     }
 }

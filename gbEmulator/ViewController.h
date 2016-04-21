@@ -10,6 +10,8 @@
 #import "Rom.h"
 #import "EmulatorMain.h"
 
+@class EmulatorMain;
+
 @interface ViewController : UIViewController <UIGestureRecognizerDelegate>
 {
     IBOutlet UIImageView * imageView;
@@ -49,5 +51,6 @@
 - (IBAction)stopButton:(id)sender;
 - (IBAction)run:(id)sender;
 - (void) changeImageView:(UIImage *)image;
+- (void) update;
 
 @end
