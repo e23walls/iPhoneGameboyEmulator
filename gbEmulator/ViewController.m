@@ -50,12 +50,12 @@ static Rom * currentRom;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    // Do any additional setup after loading the view, typically from a nib.
     romTitleLabel.text = currentRom.romName;
     emulator = [[EmulatorMain alloc] initWithRom:currentRom];
     [emulator addObserver:self];
     [self setupImage];
-//    [self romNotRunning];
+    //    [self romNotRunning];
 }
 
 - (void)didReceiveMemoryWarning
@@ -74,12 +74,12 @@ static Rom * currentRom;
  Bit 2 - P12 in port - UP    | SELECT
  Bit 1 - P11 in port - LEFT  | B
  Bit 0 - P10 in port - RIGHT | A
- 
+
  For emulator.buttons, we'll say that the lower 4 bits are for the arrows,
  D, U, L, R
  And the top 4 bits are for the other buttons,
  Start, Select, B, A
- 
+
  */
 
 enum KeyNames
@@ -227,7 +227,7 @@ enum KeyNames
         [romThread start];
         // Until the emulator isn't just a giant for-loop, it won't be clear that this actually
         // does change the button's text. But commenting out this following line shows it does.
-//        [self romNotRunning];
+        //        [self romNotRunning];
     }
     else
     {
