@@ -91,7 +91,7 @@ extern const unsigned short interruptEnableRegister;
     self = [super init];
     if (self != nil)
     {
-        isRunning = true;
+        isRunning = false;
         incrementPC = true;
         self.buttons = 0b00000000;
         self.observers = [[NSMutableArray alloc] init];
@@ -180,6 +180,8 @@ extern const unsigned short interruptEnableRegister;
 - (void) dealloc
 {
     free(self.ram);
+    free(self.keys);
+    self.observers = nil;
 }
 
 - (void) addObserver:(ViewController *) observer
@@ -229,6 +231,9 @@ extern const unsigned short interruptEnableRegister;
     TMA = self.ram + 0x0FF06;
     TAC = self.ram + 0x0FF07;
     DIV = self.ram + 0x0FF04;
+
+    // This is probably necessary...
+    self.ram[interruptFlagAddress] = 0;
 }
 
 - (UIImage *) getScreen
@@ -371,7 +376,7 @@ extern const unsigned short interruptEnableRegister;
 // Timer has frequency of 4.194304 MHz. Top 8 bits have frequency of 16.384 KHz.
 - (void) fireTimers
 {
-    while (true)
+    while (isRunning)
     {
         // Busy waiting... Gross
         // Note: TAC bits 0-1 indicate the clock input; bit 2 indicates the timer being on or off.
@@ -416,7 +421,7 @@ extern const unsigned short interruptEnableRegister;
 - (void) vBlankTimer
 {
     // TODO: Does LY continue to increment past 0x90, or does it wait, and the V_BLANK ISR handles it?
-    while (true)
+    while (isRunning)
     {
         if ((*LY & 0xff) < 0x90)
         {
@@ -435,10 +440,14 @@ extern const unsigned short interruptEnableRegister;
 
 - (void) runRom
 {
+    if (self.ram == nil)
+    {
+        printf("Error! ROM is in invalid state! Exiting function.\n");
+        return;
+    }
+    isRunning = true;
     PRINTDBG("\nRunning rom '%s'\n\n", [[self.currentRom romName] cStringUsingEncoding:NSUTF8StringEncoding]);
     interruptsEnabled = 0;
-    // This is probably necessary...
-    self.ram[interruptFlagAddress] = 0;
     // AFTER HERE: timer is protected by the "timerMutex" mutex.
 
     NSThread* timerThread = [[NSThread alloc] initWithTarget:self
@@ -492,12 +501,37 @@ extern const unsigned short interruptEnableRegister;
         printf("\n\n");
     }
     [timerThread cancel];
+    [vBlankingThread cancel];
 }
 - (void) setInterruptFlag:(int8_t) bit
 {
     assert(bit <= 5 && bit >= 0);
     self.ram[interruptFlagAddress] |= (1 << bit);
     PRINTDBG("Set IF flag bit #%i\n", bit);
+}
+
+- (void) pauseRom
+{
+    isRunning = false;
+}
+
+- (BOOL) isRunning
+{
+    return (BOOL)isRunning;
+}
+
+- (void) saveState
+{
+    PRINTDBG("Saving ROM state -- this needs to be implemented!\n");
+}
+
+- (void) stopRom
+{
+    free(self.ram);
+    self.ram = NULL;
+    free(self.keys);
+    self.keys = NULL;
+    self.observers = nil;
 }
 
 - (bool) interruptOccurred

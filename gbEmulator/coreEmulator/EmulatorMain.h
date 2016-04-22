@@ -39,5 +39,9 @@ enum interruptFlagBitNames
 - (void) addObserver:(ViewController *) observer;
 - (void) notifyObservers;
 - (UIImage *) updateScreen:(UIImage*) image;
+- (void) pauseRom;
+- (BOOL) isRunning;
+- (void) saveState;
+- (void) stopRom;
 
 @end

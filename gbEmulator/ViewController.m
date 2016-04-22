@@ -22,9 +22,6 @@
 #define NUMBEROFBUTTONS 8
 
 @interface ViewController ()
-{
-    bool isRunningRom;
-}
 
 @end
 
@@ -213,6 +210,10 @@ enum KeyNames
     [self.navigationController popToRootViewControllerAnimated:YES];
     printf("Hiding navigation bar\n");
     [self.navigationController setNavigationBarHidden:NO];
+
+    // Save the ROM state, and then stop it.
+    [emulator saveState];
+    [emulator stopRom];
 }
 
 - (IBAction)run:(id)sender
@@ -221,19 +222,15 @@ enum KeyNames
     NSThread* romThread = [[NSThread alloc] initWithTarget:emulator
                                                   selector:@selector(runRom)
                                                     object:nil];
-    if (isRunningRom == false)
+    if ([emulator isRunning] == false)
     {
         [self romRunning:YES];
         [romThread start];
-        // Until the emulator isn't just a giant for-loop, it won't be clear that this actually
-        // does change the button's text. But commenting out this following line shows it does.
-//        [self romNotRunning];
     }
     else
     {
         [self romRunning:NO];
-#warning Pause the ROM's execution!
-        // Something like [emulator pauseRom];
+        [emulator pauseRom];
     }
 }
 
@@ -245,7 +242,7 @@ enum KeyNames
 
 - (void) update
 {
-    PRINTDBG("ViewController update...\n");
+//    PRINTDBG("ViewController update...\n");
     [imageView setImage:[emulator updateScreen:[imageView image]]];
     [imageView setNeedsDisplay];
 }
@@ -266,7 +263,6 @@ enum KeyNames
 
 - (void) romRunning:(BOOL)isRunning
 {
-    isRunningRom = isRunning;
     if (isRunning)
     {
         [runButton setTitle:@"Pause" forState:UIControlStateNormal];
