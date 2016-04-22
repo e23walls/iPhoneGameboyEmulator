@@ -264,8 +264,10 @@ extern const unsigned short interruptEnableRegister;
     int spriteHeight = 8;
     unsigned short windowTileMapDisplaySelectStart = 0x9800;
     unsigned short windowTileMapDisplaySelectEnd = 0x9BFF;
+
     unsigned short windowTileDataSelectStart = 0x8800;
     unsigned short windowTileDataSelectEnd = 0x97FF;
+
     unsigned short bgTileMapDisplaySelectStart = 0x9800;
     unsigned short bgTileMapDisplaySelectEnd = 0x9BFF;
     bool spriteOn = LCDC[0] & (1 >> 1);
@@ -293,6 +295,22 @@ extern const unsigned short interruptEnableRegister;
 
     int currLine = *LY;
     // Render line "currLine"
+
+    // If BG on:
+    if (bgWindowDisplay)
+    {
+        for (unsigned int i = bgTileMapDisplaySelectStart; i < bgTileMapDisplaySelectEnd; i += 1)
+        {
+            // Put data in window buffer array
+            
+        }
+    }
+
+    // If OBJ on:
+    if (spriteOn)
+    {
+
+    }
 
     return nil;
 }
