@@ -15,7 +15,7 @@ void (^execute0xF0Instruction)(RomState *,
     int8_t prev = 0;
 
     // LDH A,(a8) -- Put (0xFF00+a8) into A
-#warning This is for I/O
+    // This is for I/O
     d8 = ram[[state getPC]];
     [state incrementPC];
     d16 = (unsigned short)0xff00 + (unsigned short)d8;
@@ -57,7 +57,7 @@ void (^execute0xF2Instruction)(RomState *,
     int8_t prev = 0;
 
     // LD A,(C) -- Put value (0xff00+C) into A
-#warning This is for I/O
+    // This is for I/O
     d16 = (unsigned short)0xff00 + (unsigned short)[state getC];
     prev = [state getA];
     [state setA:ram[(unsigned short)d16]];
