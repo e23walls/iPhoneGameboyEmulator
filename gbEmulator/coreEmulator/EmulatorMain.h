@@ -15,6 +15,8 @@
 
 #define ScreenWidth 160
 #define ScreenHeight 144
+#define BufferWidth 256
+#define BufferHeight 256
 
 enum interruptFlagBitNames
 {

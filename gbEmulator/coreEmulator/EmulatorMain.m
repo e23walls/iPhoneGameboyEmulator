@@ -58,7 +58,7 @@ const int biosSize = 256;
     int8_t * TMA;
     int8_t * TAC;
     int8_t * DIV;
-    int screenBuffer[ScreenWidth][ScreenHeight];
+    int screenBuffer[BufferWidth][BufferHeight];
 }
 
 @property int8_t * ram;
@@ -265,11 +265,40 @@ extern const unsigned short interruptEnableRegister;
     unsigned short windowTileMapDisplaySelectStart = 0x9800;
     unsigned short windowTileMapDisplaySelectEnd = 0x9BFF;
 
+    // Tile data select = tile pattern table.
+    // Where the tiles are stored.
+    // Each 8*8 image occupies 16 bytes; each 2 bytes = 1 line.
+    // The second byte contains the 2nd bits of each dot,
+    // and the first byte contains the 1st bits of each dot.
+    // I.e, if bit 6 in byte 2 is 0, and bit 6 in byte 1 is 1,
+    // then the dot has the colour 01.
+    // Tiles have signed numbering; sprites (objects) have unsigned numbering.
+    //
+    // The two tile pattern tables are at 0x8000-0x8FFF, and 0x8800-0x97FF.
+    // First one can be used for sprites, background, and window display.
+    // Its tiles are numbered 0 to 255.
+    //
+    // Second one can be used for background and window display.
+    // Its tiles are numbered -128 to 127.
+    //
+    // Window overlays the background.
+    // Background wraps around the screen.
     unsigned short windowTileDataSelectStart = 0x8800;
     unsigned short windowTileDataSelectEnd = 0x97FF;
+    bool bgMapSigned = true;
 
+    // Background tile map:
+    // Each byte contains the number of a tile to display.
+    // Tile patterns are taken from windowTileDataSelect.
     unsigned short bgTileMapDisplaySelectStart = 0x9800;
     unsigned short bgTileMapDisplaySelectEnd = 0x9BFF;
+
+    // Object/sprite attribute memory (OAM)
+    // 40 blocks, 4 bytes each. Each corresponds to a sprite.
+    // Only 10 sprites can be displayed per line.
+    unsigned short spriteAttributeTableStart = 0xFE00;
+    unsigned short spriteAttributeTableEnd = 0xFE9F;
+
     bool spriteOn = LCDC[0] & (1 >> 1);
     bool bgWindowDisplay = LCDC[0] & 1;
 
@@ -286,6 +315,7 @@ extern const unsigned short interruptEnableRegister;
     {
         windowTileDataSelectStart = 0x8000;
         windowTileDataSelectEnd = 0x8FFF;
+        bgMapSigned = false;
     }
     if (LCDC[0] & (1 >> 3))
     {
@@ -302,6 +332,32 @@ extern const unsigned short interruptEnableRegister;
         for (unsigned int i = bgTileMapDisplaySelectStart; i < bgTileMapDisplaySelectEnd; i += 1)
         {
             // Put data in window buffer array
+            unsigned short pixelx = 0;
+            unsigned short pixely = 0;
+            for (unsigned short offset = bgTileMapDisplaySelectStart; offset < bgTileMapDisplaySelectEnd; offset++)
+            {
+                // Double-check these:
+                pixelx = (offset - bgTileMapDisplaySelectStart) % 32;
+                pixely = (offset - bgTileMapDisplaySelectStart) / 32;
+                int8_t index = self.ram[offset];
+                // Each tile is 16 bytes.
+                int8_t tileIndex;
+                if (bgMapSigned) {
+                    tileIndex = index * 16 + 0x09000;
+                } else {
+                    tileIndex = offset + 16 * index;
+                }
+
+                for (int row = 0; row < 8; row++) {
+                    for (int col = 0; col < 8; col++) {
+                        int8_t colour = ((self.ram[tileIndex + row] & (1 << col))) |
+                                        ((self.ram[tileIndex + row + 1] & (1 << col)) << 1);
+                        screenBuffer[pixelx+row][pixely+col] = colour;
+                    }
+                }
+            }
+
+            // ScrollX and ScrollY hold upper left corner to area to display on screen.
             
         }
     }
