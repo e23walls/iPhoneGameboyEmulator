@@ -100,6 +100,7 @@ extern const unsigned short interruptEnableRegister;
         [self clearScreen];
         clock_start = clock();
         pthread_mutex_init(&timerMutex, NULL);
+        pthread_mutex_init(&printMutex, NULL);
         self.keys = calloc(8, sizeof(int));
         self.currentRom = theRom;
         self.ram = (int8_t *)calloc(ramSize, sizeof(char));
@@ -125,7 +126,7 @@ extern const unsigned short interruptEnableRegister;
         FILE * romFileHandler = fopen([self.currentRom.fullPath cStringUsingEncoding:NSUTF8StringEncoding], "rb");
         if (romFileHandler == NULL)
         {
-            printf("Some error occurred when opening the ROM.\n");
+            PRINTDBG("Some error occurred when opening the ROM.\n");
             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Could not load ROM!" \
                                             delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
             [alert show];
@@ -141,7 +142,7 @@ extern const unsigned short interruptEnableRegister;
             {
                 hitEOF = YES;
                 ch = 0;
-                printf("HIT EOF!\n");
+                PRINTDBG("HIT EOF!\n");
             }
             self.ram[counter] = (int8_t)ch;
             counter++;
@@ -153,11 +154,11 @@ extern const unsigned short interruptEnableRegister;
         NSLog(@"Byte counter reached value: %i\n", counter);
         if (hitEOF == YES)
         {
-            printf("Warning: EOF was reached before RAM was filled.\n");
+            PRINTDBG("Warning: EOF was reached before RAM was filled.\n");
         }
         else
         {
-            printf("As expected, EOF was not reached before end of RAM.\n");
+            PRINTDBG("As expected, EOF was not reached before end of RAM.\n");
         }
         fclose(romFileHandler);
         NSLog(@"Setting up the ROM initial state...");
@@ -172,7 +173,7 @@ extern const unsigned short interruptEnableRegister;
     }
     else
     {
-        printf("Error! Couldn't allocate memory for emulator.\n");
+        PRINTDBG("Error! Couldn't allocate memory for emulator.\n");
     }
     return self;
 }
@@ -234,6 +235,11 @@ extern const unsigned short interruptEnableRegister;
 
     // This is probably necessary...
     self.ram[interruptFlagAddress] = 0;
+//    for (int i = 0; i < ScreenWidth; i++) {
+//        for (int j = 0; j < ScreenHeight; j++) {
+//            screenBuffer[i][j] = 0;
+//        }
+//    }
 }
 
 - (UIImage *) getScreen
@@ -260,6 +266,7 @@ extern const unsigned short interruptEnableRegister;
 // Don't worry about bit 7 (LCD on/off) because another method handles it.
 - (UIImage *) updateScreen:(UIImage*) image
 {
+    PRINTDBG("Updating Screen:\n");
     int spriteWidth = 8;
     int spriteHeight = 8;
     unsigned short windowTileMapDisplaySelectStart = 0x9800;
@@ -323,8 +330,9 @@ extern const unsigned short interruptEnableRegister;
         bgTileMapDisplaySelectEnd = 0x9FFF;
     }
 
-    int currLine = *LY;
+    int currLine = *LY & 0xff;
     // Render line "currLine"
+    // TODO: Change to only render currLine, not all lines!
 
     // If BG on:
     if (bgWindowDisplay)
@@ -341,24 +349,27 @@ extern const unsigned short interruptEnableRegister;
                 pixely = (offset - bgTileMapDisplaySelectStart) / 32;
                 int8_t index = self.ram[offset];
                 // Each tile is 16 bytes.
-                int8_t tileIndex;
+                unsigned short tileIndex = 0;
                 if (bgMapSigned) {
                     tileIndex = index * 16 + 0x09000;
                 } else {
                     tileIndex = offset + 16 * index;
                 }
 
-                for (int row = 0; row < 8; row++) {
-                    for (int col = 0; col < 8; col++) {
-                        int8_t colour = ((self.ram[tileIndex + row] & (1 << col))) |
-                                        ((self.ram[tileIndex + row + 1] & (1 << col)) << 1);
+                int8_t colour = 0;
+                for (unsigned short row = 0; row < spriteHeight; row++) {
+                    for (unsigned short col = 0; col < spriteWidth; col++) {
+                        int8_t c0 = self.ram[tileIndex + row];
+                        int8_t c1 = self.ram[tileIndex + row + 1];
+                        colour = ((c0 & (1 << (spriteWidth - col)))) |
+                                 ((c1 & (1 << (spriteWidth - col))) << 1);
                         screenBuffer[pixelx+row][pixely+col] = colour;
                     }
                 }
             }
 
             // ScrollX and ScrollY hold upper left corner to area to display on screen.
-            
+            [self printScreenBufferToStandardOut];
         }
     }
 
@@ -369,6 +380,20 @@ extern const unsigned short interruptEnableRegister;
     }
 
     return nil;
+}
+
+- (void) printScreenBufferToStandardOut
+{
+    pthread_mutex_lock(&printMutex);
+    PRINTDBGNOLOCK("Screen Buffer:\n");
+    for (int i = 0; i < ScreenWidth; i++) {
+        for (int j = 0; j < ScreenHeight; j++) {
+            PRINTDBGNOLOCK("%d", screenBuffer[i][j]);
+        }
+        PRINTDBGNOLOCK("\n");
+    }
+    PRINTDBGNOLOCK("\n");
+    pthread_mutex_unlock(&printMutex);
 }
 
 - (UIImage*) fromImage:(UIImage*)source toColourR:(int)colR g:(int)colG b:(int)colB
@@ -516,7 +541,7 @@ extern const unsigned short interruptEnableRegister;
 {
     if (self.ram == nil)
     {
-        printf("Error! ROM is in invalid state! Exiting function.\n");
+        PRINTDBG("Error! ROM is in invalid state! Exiting function.\n");
         return;
     }
     isRunning = true;
@@ -558,7 +583,7 @@ extern const unsigned short interruptEnableRegister;
         }
         setKeysInMemory(self.ram, self.buttons);
         [self.currentState incrementPC];
-        printf("Before:\n");
+        PRINTDBG("Before:\n");
         [self.currentState printState:self.ram];
         PRINTDBG("\nPC = 0x%02x\n", [self.currentState getPC]);
         incrementPC = true;
@@ -569,10 +594,10 @@ extern const unsigned short interruptEnableRegister;
         }
         executeInstruction(self.currentState, self.ram, &incrementPC, &interruptsEnabled);
 
-        printf("After:\n");
+        PRINTDBG("After:\n");
         [self.currentState printState:self.ram];
-        printf("Interrupt enable register (0xFFFF) = 0x%02x\n", self.ram[interruptEnableRegister] & 0xff);
-        printf("\n\n");
+        PRINTDBG("Interrupt enable register (0xFFFF) = 0x%02x\n", self.ram[interruptEnableRegister] & 0xff);
+        PRINTDBG("\n\n");
     }
     [timerThread cancel];
     [vBlankingThread cancel];
@@ -629,7 +654,7 @@ extern const unsigned short interruptEnableRegister;
 {
     for (int8_t i = 0; i < 8; i++)
     {
-        printf("buttons[%i] = %i\n", i, self.buttons & (1 << i));
+        PRINTDBG("buttons[%i] = %i\n", i, self.buttons & (1 << i));
     }
 }
 

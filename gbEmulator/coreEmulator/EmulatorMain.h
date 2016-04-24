@@ -8,15 +8,21 @@
 #define MYDEBUG
 
 #ifdef MYDEBUG
-#define PRINTDBG(...) printf(__VA_ARGS__)
+// NOTE: DO NOT USE PRINTDBG IF "printMutex" LOCK HAS BEEN ACQUIRED! It will cause a deadlock. USE PRINTDBGNOLOCK!
+#define PRINTDBG(...) ; pthread_mutex_lock(&printMutex); printf(__VA_ARGS__); pthread_mutex_unlock(&printMutex);
+#define PRINTDBGNOLOCK(...) ; printf(__VA_ARGS__);
 #else
 #define PRINTDBG(...) ;
+#define PRINTDBGNOLOCK(...) ;
 #endif
 
 #define ScreenWidth 160
 #define ScreenHeight 144
 #define BufferWidth 256
 #define BufferHeight 256
+
+// Change where this is so that it doesn't get used before being initialized.
+pthread_mutex_t printMutex;
 
 enum interruptFlagBitNames
 {

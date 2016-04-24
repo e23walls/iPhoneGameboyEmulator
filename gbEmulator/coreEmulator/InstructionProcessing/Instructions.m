@@ -74,7 +74,7 @@ void (^executeGivenInstruction)(RomState *, int8_t, int8_t *, bool *, int8_t *, 
   int8_t * interruptsEnabled,
   bool isCB)
 {
-    printf("CURRENT INSTRUCTION = 0x%02x\n", currentInstruction & 0xff);
+    PRINTDBG("CURRENT INSTRUCTION = 0x%02x\n", currentInstruction & 0xff);
     NSDictionary * blocks = [InstructionDictionary getConstDictionary];
     if (isCB) {
         ((InstructionBlock)(blocks[@((0xcb * 0x100) | (currentInstruction & 0xff))]))(state, ram, incrementPC, interruptsEnabled);
