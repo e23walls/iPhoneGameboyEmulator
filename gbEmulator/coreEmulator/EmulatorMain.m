@@ -426,16 +426,16 @@ extern const unsigned short interruptEnableRegister;
 
 - (void) printScreenBufferToStandardOut
 {
-    pthread_mutex_lock(&printMutex);
-    printf("Screen Buffer:\n");
+    [[Debug sharedInstance] acquirePrintLock];
+    PRINTDBGNOLOCK("Screen Buffer:\n");
     for (int i = 0; i < ScreenWidth; i++) {
         for (int j = 0; j < ScreenHeight; j++) {
-            printf("%d", screenBuffer[i][j]);
+            PRINTDBGNOLOCK("%d", screenBuffer[i][j]);
         }
-        printf("\n");
+        PRINTDBGNOLOCK("\n");
     }
-    printf("\n");
-    pthread_mutex_unlock(&printMutex);
+    PRINTDBGNOLOCK("\n");
+    [[Debug sharedInstance] releasePrintLock];
 }
 
 - (UIImage*) fromImage:(UIImage*)source toColourR:(int)colR g:(int)colG b:(int)colB

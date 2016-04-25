@@ -1,5 +1,4 @@
 #import "RomState.h"
-#import <pthread.h>
 
 @interface RomState ()
 {
@@ -49,7 +48,6 @@
         self.screen = UIGraphicsGetImageFromCurrentImageContext();
         
         UIGraphicsEndImageContext();
-        pthread_mutex_init(&printMutex, NULL);
     }
     else
     {

@@ -40,6 +40,7 @@
 		9C0AB1E01A99815300479721 /* Instruction0xcbD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1D01A99815300479721 /* Instruction0xcbD.m */; };
 		9C0AB1E11A99815300479721 /* Instruction0xcbE.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1D11A99815300479721 /* Instruction0xcbE.m */; };
 		9C0AB1E21A99815300479721 /* Instruction0xcbF.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1D21A99815300479721 /* Instruction0xcbF.m */; };
+		9C1951421CCE5F230020E1C8 /* Debug.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1951411CCE5F230020E1C8 /* Debug.m */; };
 		9C79FC0E1A6D878700C76513 /* RomDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C79FC0D1A6D878700C76513 /* RomDataController.m */; };
 		9C79FC111A6D89F200C76513 /* Rom.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C79FC101A6D89F200C76513 /* Rom.m */; };
 		9C79FC2E1A6DAFC400C76513 /* START.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C79FC251A6DAFC400C76513 /* START.png */; };
@@ -118,6 +119,8 @@
 		9C0AB1D01A99815300479721 /* Instruction0xcbD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcbD.m; path = coreEmulator/InstructionProcessing/Instruction0xcbD.m; sourceTree = "<group>"; };
 		9C0AB1D11A99815300479721 /* Instruction0xcbE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcbE.m; path = coreEmulator/InstructionProcessing/Instruction0xcbE.m; sourceTree = "<group>"; };
 		9C0AB1D21A99815300479721 /* Instruction0xcbF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Instruction0xcbF.m; path = coreEmulator/InstructionProcessing/Instruction0xcbF.m; sourceTree = "<group>"; };
+		9C1951411CCE5F230020E1C8 /* Debug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Debug.m; sourceTree = "<group>"; };
+		9C1951431CCE5F3D0020E1C8 /* Debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debug.h; sourceTree = "<group>"; };
 		9C79FC0C1A6D878700C76513 /* RomDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RomDataController.h; sourceTree = "<group>"; };
 		9C79FC0D1A6D878700C76513 /* RomDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RomDataController.m; sourceTree = "<group>"; };
 		9C79FC0F1A6D89F200C76513 /* Rom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rom.h; sourceTree = "<group>"; };
@@ -332,6 +335,8 @@
 				9CB9CC211A6C9CC300DA02DD /* ViewController.m */,
 				9C79FC0C1A6D878700C76513 /* RomDataController.h */,
 				9C79FC0D1A6D878700C76513 /* RomDataController.m */,
+				9C1951431CCE5F3D0020E1C8 /* Debug.h */,
+				9C1951411CCE5F230020E1C8 /* Debug.m */,
 				9C79FC0F1A6D89F200C76513 /* Rom.h */,
 				9C79FC101A6D89F200C76513 /* Rom.m */,
 				9C79FC371A6DC64400C76513 /* coreEmulator */,
@@ -527,6 +532,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C1951421CCE5F230020E1C8 /* Debug.m in Sources */,
 				9C0AB1B61A997ECF00479721 /* Instruction0x5.m in Sources */,
 				9C79FC111A6D89F200C76513 /* Rom.m in Sources */,
 				9C0AB1BF1A997ECF00479721 /* Instruction0xE.m in Sources */,
