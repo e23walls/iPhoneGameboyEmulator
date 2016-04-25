@@ -100,7 +100,6 @@ extern const unsigned short interruptEnableRegister;
         [self clearScreen];
         clock_start = clock();
         pthread_mutex_init(&timerMutex, NULL);
-        pthread_mutex_init(&printMutex, NULL);
         self.keys = calloc(8, sizeof(int));
         self.currentRom = theRom;
         self.ram = (int8_t *)calloc(ramSize, sizeof(char));
@@ -235,11 +234,6 @@ extern const unsigned short interruptEnableRegister;
 
     // This is probably necessary...
     self.ram[interruptFlagAddress] = 0;
-//    for (int i = 0; i < ScreenWidth; i++) {
-//        for (int j = 0; j < ScreenHeight; j++) {
-//            screenBuffer[i][j] = 0;
-//        }
-//    }
 }
 
 - (UIImage *) getScreen
@@ -303,8 +297,12 @@ extern const unsigned short interruptEnableRegister;
     // Object/sprite attribute memory (OAM)
     // 40 blocks, 4 bytes each. Each corresponds to a sprite.
     // Only 10 sprites can be displayed per line.
-    unsigned short spriteAttributeTableStart = 0xFE00;
-    unsigned short spriteAttributeTableEnd = 0xFE9F;
+    unsigned short spriteAttributeTableStart = 0x0FE00;
+    unsigned short spriteAttributeTableEnd = 0x0FE9F;
+
+    // Sprite pattern table
+    unsigned short spritePatternTableStart = 0x08000;
+    unsigned short spritePatternTableEnd = 0x08FFF;
 
     bool spriteOn = LCDC[0] & (1 >> 1);
     bool bgWindowDisplay = LCDC[0] & 1;
@@ -337,12 +335,12 @@ extern const unsigned short interruptEnableRegister;
     // If BG on:
     if (bgWindowDisplay)
     {
-        for (unsigned int i = bgTileMapDisplaySelectStart; i < bgTileMapDisplaySelectEnd; i += 1)
+        for (unsigned int i = bgTileMapDisplaySelectStart; i <= bgTileMapDisplaySelectEnd; i += 1)
         {
             // Put data in window buffer array
             unsigned short pixelx = 0;
             unsigned short pixely = 0;
-            for (unsigned short offset = bgTileMapDisplaySelectStart; offset < bgTileMapDisplaySelectEnd; offset++)
+            for (unsigned short offset = bgTileMapDisplaySelectStart; offset <= bgTileMapDisplaySelectEnd; offset++)
             {
                 // Double-check these:
                 pixelx = (offset - bgTileMapDisplaySelectStart) % 32;
@@ -356,43 +354,87 @@ extern const unsigned short interruptEnableRegister;
                     tileIndex = offset + 16 * index;
                 }
 
-                int8_t colour = 0;
-                for (unsigned short row = 0; row < spriteHeight; row++) {
-                    for (unsigned short col = 0; col < spriteWidth; col++) {
-                        int8_t c0 = self.ram[tileIndex + row];
-                        int8_t c1 = self.ram[tileIndex + row + 1];
-                        colour = ((c0 & (1 << (spriteWidth - col)))) |
-                                 ((c1 & (1 << (spriteWidth - col))) << 1);
-                        screenBuffer[pixelx+row][pixely+col] = colour;
-                    }
-                }
+                [self setTileOrSprite:tileIndex height:8 width:8 pixelx:pixelx pixely:pixely];
             }
 
             // ScrollX and ScrollY hold upper left corner to area to display on screen.
-            [self printScreenBufferToStandardOut];
         }
     }
 
     // If OBJ on:
     if (spriteOn)
     {
+        // Taken from sprite pattern table, with unsigned indexing.
+        // Up to 40 sprites.
+        // Sprite pattern table:
+        //      - spritePatternTableStart
+        // 4-byte blocks in Sprite Attribute Table (OAM):
+        //      - spriteAttributeTableStart
 
+        for (unsigned int i = spriteAttributeTableStart; i <= spriteAttributeTableEnd; i += 1)
+        {
+            unsigned short pixely = self.ram[i] + spritePatternTableStart * 4;
+            unsigned short pixelx = self.ram[i+1] + spritePatternTableStart * 4;
+            int8_t spriteNumber = self.ram[i+2] + spritePatternTableStart * 4;
+            if (spriteHeight == 16) {
+                spriteNumber &= 0b01111111;
+            }
+            int8_t flags = self.ram[i+3] + spritePatternTableStart * 4;
+            bool priority = flags & (1 << 7);
+            bool y_flip = flags & (1 << 6);
+            bool x_flip = flags & (1 << 5);
+            int8_t paletteNumber = flags & (1 << 4);
+
+            [self setTileOrSprite:spriteNumber height:spriteHeight width:spriteWidth pixelx:pixelx pixely:pixely];
+
+            // ScrollX and ScrollY hold upper left corner to area to display on screen.
+        }
+
+    }
+
+    if (spriteOn || bgWindowDisplay)
+    {
+        [self printScreenBufferToStandardOut];
     }
 
     return nil;
 }
 
+- (void) setTileOrSprite:(unsigned short)index
+                  height:(int8_t)spriteHeight
+                   width:(int8_t)spriteWidth
+                  pixelx:(unsigned short)pixelx
+                  pixely:(unsigned short)pixely
+{
+    for (unsigned short row = 0; row < spriteHeight; row++) {
+        for (unsigned short col = 0; col < spriteWidth; col++) {
+            int8_t colour = 0;
+            int8_t c0 = self.ram[index + row];
+            if (c0 & (1 << (spriteWidth - col))) {
+                colour = 1;
+            } else {
+                colour = 0;
+            }
+            int8_t c1 = self.ram[index + row + 1];
+            if (c1 & (1 << (spriteWidth - col))) {
+                colour |= 0b10;
+            }
+            screenBuffer[pixelx+row][pixely+col] = colour;
+        }
+    }
+}
+
 - (void) printScreenBufferToStandardOut
 {
     pthread_mutex_lock(&printMutex);
-    PRINTDBGNOLOCK("Screen Buffer:\n");
+    printf("Screen Buffer:\n");
     for (int i = 0; i < ScreenWidth; i++) {
         for (int j = 0; j < ScreenHeight; j++) {
-            PRINTDBGNOLOCK("%d", screenBuffer[i][j]);
+            printf("%d", screenBuffer[i][j]);
         }
-        PRINTDBGNOLOCK("\n");
+        printf("\n");
     }
-    PRINTDBGNOLOCK("\n");
+    printf("\n");
     pthread_mutex_unlock(&printMutex);
 }
 
