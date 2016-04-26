@@ -213,10 +213,15 @@ extern const unsigned short interruptEnableRegister;
 
 - (void) setupRegisters
 {
+    // Window scroll
     WX = self.ram + 0x0FF4B;
     WY = self.ram + 0x0FF4A;
+
+    // These registers scroll the background by that many pixels/dots.
+    // The background wraps around to the other side of the screen if it goes off-screen.
     SCX = self.ram + 0x0FF43;
     SCY = self.ram + 0x0FF42;
+
     LCDC = self.ram + 0x0FF40;
     STAT = self.ram + 0x0FF41;
     LY = self.ram + 0x0FF44;
@@ -225,8 +230,12 @@ extern const unsigned short interruptEnableRegister;
     DMA = self.ram + 0x0FF46;
     BGP = self.ram + 0x0FF47;
     *BGP = 0x0fc; // Probably not needed because the BIOS sets it already.
+
+    // Object palettes
     OBP0 = self.ram + 0x0FF48;
     OBP1 = self.ram + 0x0FF49;
+
+    // Timer registers
     TIMA = self.ram + 0x0FF05;
     TMA = self.ram + 0x0FF06;
     TAC = self.ram + 0x0FF07;
@@ -304,7 +313,7 @@ extern const unsigned short interruptEnableRegister;
     unsigned short spritePatternTableStart = 0x08000;
     unsigned short spritePatternTableEnd = 0x08FFF;
 
-    bool spriteOn = LCDC[0] & (1 >> 1);
+    bool spriteOn = LCDC[0] & 0b10;
     bool bgWindowDisplay = LCDC[0] & 1;
 
     if (LCDC[0] & (1 >> 2))
@@ -354,7 +363,7 @@ extern const unsigned short interruptEnableRegister;
                     tileIndex = offset + 16 * index;
                 }
 
-                [self setTileOrSprite:tileIndex height:8 width:8 pixelx:pixelx pixely:pixely];
+                [self setTileOrSprite:tileIndex height:8 width:8 pixelx:pixelx pixely:pixely xflip:false yflip:false];
             }
 
             // ScrollX and ScrollY hold upper left corner to area to display on screen.
@@ -385,7 +394,12 @@ extern const unsigned short interruptEnableRegister;
             bool x_flip = flags & (1 << 5);
             int8_t paletteNumber = flags & (1 << 4);
 
-            [self setTileOrSprite:spriteNumber height:spriteHeight width:spriteWidth pixelx:pixelx pixely:pixely];
+            [self setTileOrSprite:spriteNumber height:spriteHeight
+                            width:spriteWidth
+                           pixelx:pixelx
+                           pixely:pixely
+                            xflip:x_flip
+                            yflip:y_flip];
 
             // ScrollX and ScrollY hold upper left corner to area to display on screen.
         }
@@ -405,7 +419,10 @@ extern const unsigned short interruptEnableRegister;
                    width:(int8_t)spriteWidth
                   pixelx:(unsigned short)pixelx
                   pixely:(unsigned short)pixely
+                   xflip:(bool)xflip
+                   yflip:(bool)xflip
 {
+    // TODO: Handle sprite x/y flips.
     for (unsigned short row = 0; row < spriteHeight; row++) {
         for (unsigned short col = 0; col < spriteWidth; col++) {
             int8_t colour = 0;
